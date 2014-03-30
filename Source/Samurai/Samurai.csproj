@@ -39,22 +39,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Color3.cs" />
+    <Compile Include="Color4.cs" />
+    <Compile Include="DisposableObject.cs" />
+    <Compile Include="DrawBuffer.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GL.cs" />
     <Compile Include="GLFW.cs" />
     <Compile Include="GameWindow.cs" />
+    <Compile Include="GLUtils.cs" />
     <Compile Include="GraphicsDevice.cs" />
+    <Compile Include="IGraphicsContext.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="KeyPressEventArgs.cs" />
+    <Compile Include="Matrix4.cs" />
     <Compile Include="MouseButton.cs" />
     <Compile Include="MouseButtonEventArgs.cs" />
     <Compile Include="MouseEventArgs.cs" />
     <Compile Include="MouseWheelEventArgs.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rectangle.cs" />
     <Compile Include="SamuraiException.cs" />
+    <Compile Include="Shader.cs" />
+    <Compile Include="ShaderProgram.cs" />
+    <Compile Include="ShaderType.cs" />
     <Compile Include="Size.cs" />
+    <Compile Include="Vector2.cs" />
+    <Compile Include="Vector3.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\Library\glfw3_x64.dll">

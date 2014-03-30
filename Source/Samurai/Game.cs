@@ -2,17 +2,30 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Samurai
 {
-	public abstract class Game
-	{
+	public abstract class Game : IDisposable
+	{		
 		public GameWindow Window
 		{
 			get;
 			private set;
+		}
+
+		public GraphicsDevice GraphicsDevice
+		{
+			get;
+			private set;
+		}
+
+		protected bool AutoResizeViewport
+		{
+			get;
+			set;
 		}
 
 		public Game()
@@ -25,45 +38,73 @@ namespace Samurai
 			GLFW.WindowHint(GLFW.CLIENT_API, GLFW.OPENGL_API);
 			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MAJOR, 3);
 			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MINOR, 3);
-			GLFW.WindowHint(GLFW.OPENGL_FORWARD_COMPAT, 1);
+			GLFW.WindowHint(GLFW.OPENGL_PROFILE, GLFW.OPENGL_CORE_PROFILE);
 
 			this.Window = new GameWindow();
+			this.Window.Resize += this.Window_Resize;
 
 			GL.Init();
 
-			uint program = GL.CreateProgram();
-			uint vertexShader = GL.CreateShder(GL.VertexShader);
-			GL.ShaderSource(vertexShader, File.ReadAllText("Shader.vert"));
-			GL.CompileShader(vertexShader);
+			this.GraphicsDevice = new GraphicsDevice(this.Window);
+			this.GraphicsDevice.ClearColor = Color4.CornflowerBlue;
+			this.GraphicsDevice.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 
-			if (GL.GetShader(vertexShader, GL.CompileStatus) == 0)
+			GL.Enable(GL.Blend);
+			GL.BlendFunc(GL.SrcAlpha, GL.OneMinusSrcAlpha);
+		}
+
+		~Game()
+		{
+			this.Dispose(false);
+		}
+
+		public void Dispose()
+		{
+			this.Dispose(true);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
 			{
-				string infoLog = GL.GetShaderInfoLog(vertexShader);
-				throw new SamuraiException("Failed to compile shader: " + infoLog);
+				GLFW.Terminate();
 			}
-
-
+		}
+				
+		private void Window_Resize(object sender, EventArgs e)
+		{
+			if (this.AutoResizeViewport)
+				this.GraphicsDevice.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
 		public void Run()
 		{
-			GL.ClearColor(1.0f, 0, 0, 0);
-
 			while (!this.Window.ShouldClose())
 			{
 				GLFW.PollEvents();
 
-				GL.Clear(GL.ColorBufferBit | GL.DepthBufferBit);
-
-				this.Window.SwapBuffers();
+				this.Update();
+				this.Draw();
 			}
 
-			GLFW.Terminate();
+			this.Shutdown();
 		}
 
 		public void Exit()
 		{
 			this.Window.SetShouldClose(true);
+		}
+
+		protected virtual void Update()
+		{
+		}
+
+		protected virtual void Draw()
+		{
+		}
+
+		protected virtual void Shutdown()
+		{
 		}
 	}
 }

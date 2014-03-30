@@ -2,7 +2,7 @@
 
 namespace Samurai
 {
-    public class GameWindow
+    public class GameWindow : IGraphicsContext
     {
         IntPtr window;
         string title;
@@ -226,7 +226,7 @@ namespace Samurai
             GLFW.SetWindowShouldClose(this.window, shouldClose ? 1 : 0);
         }
 
-		internal void SwapBuffers()
+		public void SwapBuffers()
 		{
 			GLFW.SwapBuffers(this.window);
 		}

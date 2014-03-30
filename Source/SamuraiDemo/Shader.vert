@@ -1,17 +1,15 @@
-﻿#version 330 
+﻿#version 330 core
 
-uniform mat4 uniProjection;
+uniform mat4 projection;
 
-in vec3 inPosition; 
-in vec4 inColor; 
-in vec2 inUV; 
+layout(location = 0) in vec3 inPosition; 
+layout(location = 1) in vec3 inColor; 
+layout(location = 2) in vec2 inUV; 
 
-smooth out vec4 vertColor;
-smooth out vec2 vertUV;
+out vec3 fragColor;
 
 void main() 
 { 
-   gl_Position = uniProjection * vec4(inPosition, 1.0); 
-   vertColor = inColor;
-   vertUV = inUV; 
+   gl_Position = projection * vec4(inPosition, 1.0);
+   fragColor = inColor;
 }

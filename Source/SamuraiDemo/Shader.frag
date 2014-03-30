@@ -1,13 +1,10 @@
-﻿#version 330 
+﻿#version 330 core
 
-uniform sampler2D uniTexture;
-
-smooth in vec4 vertColor;
-smooth in vec2 vertUV; 
+in vec3 fragColor;
 
 out vec4 outColor; 
 
 void main() 
 { 
-	outColor = texture(uniTexture, vec2(vertUV.x, vertUV.y)) * vertColor;
+	outColor = vec4(fragColor, 1.0);
 }
