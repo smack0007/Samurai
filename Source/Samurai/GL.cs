@@ -19,6 +19,7 @@ namespace Samurai
 		public const uint DynamicCopy = 0x88EA;
 		public const uint DynamicDraw = 0x88E8;
 		public const uint DynamicRead = 0x88E9;
+		public const uint ElementArrayBuffer = 0x8893;
 		public const uint FragmentShader = 0x8B30;
 		public const uint InfoLogLength = 0x8B84;
 		public const uint OneMinusSrcAlpha = 0x0303;
@@ -105,6 +106,9 @@ namespace Samurai
 
 		[DllImport(Library, EntryPoint = "glDrawArrays")]
 		private static extern void _DrawArrays(uint mode, int first, int count);
+
+		[DllImport(Library, EntryPoint = "glDrawElements")]
+		private static extern void _DrawElements(uint mode, int count, uint type, IntPtr indices);
 
 		[DllImport(Library, EntryPoint = "glEnable")]
 		private static extern void _Enable(uint cap);
@@ -332,6 +336,12 @@ namespace Samurai
 		{
 			_DrawArrays(mode, first, count);
 			CheckErrors("DrawArrays");
+		}
+
+		public static void DrawElements(uint mode, int count, uint type, IntPtr indices)
+		{
+			_DrawElements(mode, count, type, indices);
+			CheckErrors("DrawElements");
 		}
 
 		public static void Enable(uint cap)

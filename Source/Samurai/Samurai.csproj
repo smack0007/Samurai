@@ -61,7 +61,7 @@
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />
     <Compile Include="DisposableObject.cs" />
-    <Compile Include="DrawBuffer.cs" />
+    <Compile Include="VertexBuffer.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GL.cs" />
     <Compile Include="GLFW.cs" />
@@ -69,6 +69,7 @@
     <Compile Include="GLUtils.cs" />
     <Compile Include="GraphicsDevice.cs" />
     <Compile Include="IGraphicsContext.cs" />
+    <Compile Include="IndexBuffer.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="KeyPressEventArgs.cs" />

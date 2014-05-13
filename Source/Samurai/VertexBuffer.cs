@@ -4,21 +4,21 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
-	public class DrawBuffer<T> : DisposableObject
+	public sealed class VertexBuffer<T> : DisposableObject
 		where T : struct
 	{
 		GraphicsDevice graphicsDevice;
 
-		uint vertexArray;
-		uint buffer;
+		internal uint vertexArray;
+		internal uint buffer;
 
-		public int VertexCount
+		public int Count
 		{
 			get;
 			private set;
 		}
 
-		public DrawBuffer(GraphicsDevice graphicsDevice)
+		public VertexBuffer(GraphicsDevice graphicsDevice)
 		{
 			if (graphicsDevice == null)
 				throw new ArgumentNullException("graphicsDevice");
@@ -43,7 +43,7 @@ namespace Samurai
 			}
 		}
 
-		~DrawBuffer()
+		~VertexBuffer()
 		{
 			this.Dispose(false);
 		}
@@ -59,7 +59,7 @@ namespace Samurai
 			GL.BindBuffer(GL.ArrayBuffer, this.buffer);
 			GL.BufferData(GL.ArrayBuffer, data, GL.DynamicDraw);
 
-			this.VertexCount = data.Length;
+			this.Count = data.Length;
 		}
 	}
 }

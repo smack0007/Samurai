@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Samurai
 {
-	public class ShaderProgram : DisposableObject
+	public sealed class ShaderProgram : DisposableObject
 	{
 		GraphicsDevice graphicsDevice;
 		Dictionary<ShaderType, Shader> shaders;

@@ -25,15 +25,18 @@ namespace SamuraiDemo
         {
             new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 0.0f) },
             new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(0.0f, 1.0f) },
-
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) },
-            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 1.0f) },
-            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(0.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
         };
 
+		byte[] indexData = new byte[]
+		{
+			0, 1, 3, 1, 3, 2
+		};
+
 		ShaderProgram shaderProgram;
-		DrawBuffer<Vertex> drawBuffer;
+		VertexBuffer<Vertex> vertexBuffer;
+		IndexBuffer<byte> indexBuffer;
 
 		public DemoGame()
 		{
@@ -44,8 +47,11 @@ namespace SamuraiDemo
 			this.shaderProgram.AttachShader(Shader.Compile(this.GraphicsDevice, ShaderType.Fragment, File.ReadAllText("Shader.frag")));
 			this.shaderProgram.Link();
 
-			this.drawBuffer = new DrawBuffer<Vertex>(this.GraphicsDevice);
-			this.drawBuffer.SetData(this.vertexData);
+			this.vertexBuffer = new VertexBuffer<Vertex>(this.GraphicsDevice);
+			this.vertexBuffer.SetData(this.vertexData);
+
+			this.indexBuffer = new IndexBuffer<byte>(this.GraphicsDevice);
+			this.indexBuffer.SetData(this.indexData);
 		}
 
 		protected override void Draw()
@@ -58,7 +64,7 @@ namespace SamuraiDemo
 			Matrix4.CreateRotationZ(10, out projection);
 			this.shaderProgram.SetMatrix("projection", ref projection);
 
-			this.GraphicsDevice.Draw(this.drawBuffer);
+			this.GraphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);
 
 			this.GraphicsDevice.End();
 		}
@@ -66,7 +72,8 @@ namespace SamuraiDemo
 		protected override void Shutdown()
 		{
 			this.shaderProgram.Dispose();
-			this.drawBuffer.Dispose();
+			this.vertexBuffer.Dispose();
+			this.indexBuffer.Dispose();
 		}
 
 		private static void Main(string[] args)

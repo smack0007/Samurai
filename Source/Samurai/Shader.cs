@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Samurai
 {
-	public class Shader : DisposableObject
+	public sealed class Shader : DisposableObject
 	{
 		GraphicsDevice graphicsDevice;
 		string source;

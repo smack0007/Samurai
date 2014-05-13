@@ -60,13 +60,29 @@ namespace Samurai
 			GL.Clear(GL.ColorBufferBit | GL.DepthBufferBit);
 		}
 
-		public void Draw<T>(DrawBuffer<T> drawBuffer)
+		public void Draw<T>(VertexBuffer<T> vertexBuffer)
 			where T : struct
 		{
-			if (drawBuffer == null)
-				throw new ArgumentNullException("drawBuffer");
+			if (vertexBuffer == null)
+				throw new ArgumentNullException("vertexBuffer");
 
-			GL.DrawArrays(GL.Triangles, 0, drawBuffer.VertexCount);
+			GL.BindVertexArray(vertexBuffer.vertexArray);
+			GL.DrawArrays(GL.Triangles, 0, vertexBuffer.Count);
+		}
+
+		public void Draw<TVertex, TIndex>(VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer)
+			where TVertex : struct
+			where TIndex : struct
+		{
+			if (vertexBuffer == null)
+				throw new ArgumentNullException("vertexBuffer");
+
+			if (indexBuffer == null)
+				throw new ArgumentNullException("indexBuffer");
+
+			GL.BindVertexArray(vertexBuffer.vertexArray);
+			GL.BindBuffer(GL.ElementArrayBuffer, indexBuffer.buffer);
+			GL.DrawElements(GL.Triangles, indexBuffer.Count, indexBuffer.dataType, IntPtr.Zero);
 		}
 
 		public void End()
