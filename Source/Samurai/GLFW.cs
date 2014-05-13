@@ -6,394 +6,76 @@ namespace Samurai
 {
     internal static class GLFW
     {
-        private const string Library32 = "glfw3_x86.dll";
-        private const string Library64 = "glfw3_x64.dll";
+#if x86
+        private const string Library = "glfw3_x86.dll";
+#endif
 
-        #region x86 Imports
+#if x64
+        private const string Library = "glfw3_x64.dll";
+#endif
 
-        [DllImport(Library32, EntryPoint = "glfwCreateWindow", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern IntPtr CreateWindow32(int width, int height, string title, IntPtr monitor, IntPtr share);
+		[DllImport(Library, EntryPoint = "glfwCreateWindow", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
 
-        [DllImport(Library32, EntryPoint = "glfwGetProcAddress", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern IntPtr GetProcAddress32(string procName);
+        [DllImport(Library, EntryPoint = "glfwGetProcAddress", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern IntPtr GetProcAddress(string procName);
 
-        [DllImport(Library32, EntryPoint = "glfwInit", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int Init32();
+        [DllImport(Library, EntryPoint = "glfwInit", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern int Init();
 
-        [DllImport(Library32, EntryPoint = "glfwMakeContextCurrent", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void MakeContextCurrent32(IntPtr window);
+        [DllImport(Library, EntryPoint = "glfwMakeContextCurrent", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void MakeContextCurrent(IntPtr window);
 
-        [DllImport(Library32, EntryPoint = "glfwPollEvents", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void PollEvents32();
+        [DllImport(Library, EntryPoint = "glfwPollEvents", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void PollEvents();
 
-        [DllImport(Library32, EntryPoint = "glfwSetCharCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern CharFun SetCharCallback32(IntPtr window, CharFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetCharCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern CharFun SetCharCallback(IntPtr window, CharFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetCursorPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern CursorPosFun SetCursorPosCallback32(IntPtr window, CursorPosFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetCursorPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern CursorPosFun SetCursorPosCallback(IntPtr window, CursorPosFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetErrorCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern ErrorFun SetErrorCallback32(ErrorFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetErrorCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern ErrorFun SetErrorCallback(ErrorFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetKeyCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern KeyFun SetKeyCallback32(IntPtr window, KeyFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetKeyCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern KeyFun SetKeyCallback(IntPtr window, KeyFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetMouseButtonCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern MouseButtonFun SetMouseButtonCallback32(IntPtr window, MouseButtonFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetMouseButtonCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern MouseButtonFun SetMouseButtonCallback(IntPtr window, MouseButtonFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetScrollCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern ScrollFun SetSetScrollCallback32(IntPtr window, ScrollFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetScrollCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern ScrollFun SetSetScrollCallback(IntPtr window, ScrollFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetWindowPos", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowPos32(IntPtr window, int xpos, int ypos);
+        [DllImport(Library, EntryPoint = "glfwSetWindowPos", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void SetWindowPos(IntPtr window, int xpos, int ypos);
 
-        [DllImport(Library32, EntryPoint = "glfwSetWindowPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowPosCallback32(IntPtr window, WindowPosFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetWindowPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void SetWindowPosCallback(IntPtr window, WindowPosFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int SetWindowShouldClose32(IntPtr window, int value);
+        [DllImport(Library, EntryPoint = "glfwSetWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern int SetWindowShouldClose(IntPtr window, int value);
 
-        [DllImport(Library32, EntryPoint = "glfwSetWindowSize", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowSize32(IntPtr window, int width, int height);
+        [DllImport(Library, EntryPoint = "glfwSetWindowSize", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void SetWindowSize(IntPtr window, int width, int height);
 
-        [DllImport(Library32, EntryPoint = "glfwSetWindowSizeCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowSizeCallback32(IntPtr window, WindowSizeFun cbfun);
+        [DllImport(Library, EntryPoint = "glfwSetWindowSizeCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void SetWindowSizeCallback(IntPtr window, WindowSizeFun cbfun);
 
-        [DllImport(Library32, EntryPoint = "glfwSetWindowTitle", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowTitle32(IntPtr window, string title);
+        [DllImport(Library, EntryPoint = "glfwSetWindowTitle", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void SetWindowTitle(IntPtr window, string title);
 
-        [DllImport(Library32, EntryPoint = "glfwSwapBuffers", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SwapBuffers32(IntPtr window);
+        [DllImport(Library, EntryPoint = "glfwSwapBuffers", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern void SwapBuffers(IntPtr window);
 
-        [DllImport(Library32, EntryPoint = "glfwTerminate", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int Terminate32();
+        [DllImport(Library, EntryPoint = "glfwTerminate", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern int Terminate();
 
-        [DllImport(Library32, EntryPoint = "glfwWindowHint", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int WindowHint32(int target, int hint);
+        [DllImport(Library, EntryPoint = "glfwWindowHint", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern int WindowHint(int target, int hint);
 
-        [DllImport(Library32, EntryPoint = "glfwWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int WindowShouldClose32(IntPtr window);
-
-        #endregion
-
-        #region x64 Imports
-
-        [DllImport(Library64, EntryPoint="glfwCreateWindow", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern IntPtr CreateWindow64(int width, int height, string title, IntPtr monitor, IntPtr share);
-
-        [DllImport(Library64, EntryPoint = "glfwGetProcAddress", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern IntPtr GetProcAddress64(string procName);
-
-        [DllImport(Library64, EntryPoint = "glfwInit", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int Init64();
-
-        [DllImport(Library64, EntryPoint = "glfwMakeContextCurrent", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void MakeContextCurrent64(IntPtr window);
-
-        [DllImport(Library64, EntryPoint = "glfwPollEvents", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void PollEvents64();
-
-        [DllImport(Library64, EntryPoint = "glfwSetCharCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern CharFun SetCharCallback64(IntPtr window, CharFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetCursorPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern CursorPosFun SetCursorPosCallback64(IntPtr window, CursorPosFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetErrorCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern ErrorFun SetErrorCallback64(ErrorFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetKeyCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern KeyFun SetKeyCallback64(IntPtr window, KeyFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetMouseButtonCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern MouseButtonFun SetMouseButtonCallback64(IntPtr window, MouseButtonFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetScrollCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern ScrollFun SetSetScrollCallback64(IntPtr window, ScrollFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetWindowPos", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowPos64(IntPtr window, int xpos, int ypos);
-
-        [DllImport(Library64, EntryPoint = "glfwSetWindowPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowPosCallback64(IntPtr window, WindowPosFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int SetWindowShouldClose64(IntPtr window, int value);
-
-        [DllImport(Library64, EntryPoint = "glfwSetWindowSize", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowSize64(IntPtr window, int width, int height);
-
-        [DllImport(Library64, EntryPoint = "glfwSetWindowSizeCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowSizeCallback64(IntPtr window, WindowSizeFun cbfun);
-
-        [DllImport(Library64, EntryPoint = "glfwSetWindowTitle", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SetWindowTitle64(IntPtr window, string title);
-
-        [DllImport(Library64, EntryPoint = "glfwSwapBuffers", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern void SwapBuffers64(IntPtr window);
-
-        [DllImport(Library64, EntryPoint = "glfwTerminate", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int Terminate64();
-
-        [DllImport(Library64, EntryPoint = "glfwWindowHint", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int WindowHint64(int target, int hint);
-
-        [DllImport(Library64, EntryPoint = "glfwWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        private static extern int WindowShouldClose64(IntPtr window);
-
-        #endregion
-
-        internal static IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return CreateWindow32(width, height, title, monitor, share);
-            }
-            else
-            {
-                return CreateWindow64(width, height, title, monitor, share);
-            }
-        }
-                
-        internal static IntPtr GetProcAddress(string procName)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return GetProcAddress32(procName);
-            }
-            else
-            {
-                return GetProcAddress64(procName);
-            }
-        }
-
-        internal static int Init()
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return Init32();
-            }
-            else
-            {
-                return Init64();
-            }
-        }
-
-        internal static void MakeContextCurrent(IntPtr window)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                MakeContextCurrent32(window);
-            }
-            else
-            {
-                MakeContextCurrent64(window);
-            }
-        }
-
-        internal static void PollEvents()
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                PollEvents32();
-            }
-            else
-            {
-                PollEvents64();
-            }
-        }
-
-        internal static CharFun SetCharCallback(IntPtr window, CharFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetCharCallback32(window, cbfun);
-            }
-            else
-            {
-                return SetCharCallback64(window, cbfun);
-            }
-        }
-
-        internal static CursorPosFun SetCursorPosCallback(IntPtr window, CursorPosFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetCursorPosCallback32(window, cbfun);
-            }
-            else
-            {
-                return SetCursorPosCallback64(window, cbfun);
-            }
-        }
-
-        internal static ErrorFun SetErrorCallback(ErrorFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetErrorCallback32(cbfun);
-            }
-            else
-            {
-                return SetErrorCallback64(cbfun);
-            }
-        }
-
-        internal static KeyFun SetKeyCallback(IntPtr window, KeyFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetKeyCallback32(window, cbfun);
-            }
-            else
-            {
-                return SetKeyCallback64(window, cbfun);
-            }
-        }
-
-        internal static MouseButtonFun SetMouseButtonCallback(IntPtr window, MouseButtonFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetMouseButtonCallback32(window, cbfun);
-            }
-            else
-            {
-                return SetMouseButtonCallback64(window, cbfun);
-            }
-        }
-
-        internal static ScrollFun SetSetScrollCallback(IntPtr window, ScrollFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetSetScrollCallback32(window, cbfun);
-            }
-            else
-            {
-                return SetSetScrollCallback64(window, cbfun);
-            }
-        }
-
-        internal static void SetWindowPos(IntPtr window, int xpos, int ypos)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                SetWindowPos32(window, xpos, ypos);
-            }
-            else
-            {
-                SetWindowPos64(window, xpos, ypos);
-            }
-        }
-
-        internal static void SetWindowPosCallback(IntPtr window, WindowPosFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                SetWindowPosCallback32(window, cbfun);
-            }
-            else
-            {
-                SetWindowPosCallback64(window, cbfun);
-            }
-        }
-
-        internal static int SetWindowShouldClose(IntPtr window, int value)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return SetWindowShouldClose32(window, value);
-            }
-            else
-            {
-                return SetWindowShouldClose64(window, value);
-            }
-        }
-
-        internal static void SetWindowSize(IntPtr window, int width, int height)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                SetWindowSize32(window, width, height);
-            }
-            else
-            {
-                SetWindowSize64(window, width, height);
-            }
-        }
-
-        internal static void SetWindowSizeCallback(IntPtr window, WindowSizeFun cbfun)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                SetWindowSizeCallback32(window, cbfun);
-            }
-            else
-            {
-                SetWindowSizeCallback64(window, cbfun);
-            }
-        }
-
-        internal static void SetWindowTitle(IntPtr window, string title)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                SetWindowTitle32(window, title);
-            }
-            else
-            {
-                SetWindowTitle64(window, title);
-            }
-        }
-
-        internal static void SwapBuffers(IntPtr window)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                SwapBuffers32(window);
-            }
-            else
-            {
-                SwapBuffers64(window);
-            }
-        }
-
-        internal static int Terminate()
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return Terminate32();
-            }
-            else
-            {
-                return Terminate64();
-            }
-        }
-
-        internal static int WindowHint(int target, int hint)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return WindowHint32(target, hint);
-            }
-            else
-            {
-                return WindowHint64(target, hint);
-            }
-        }
-
-        internal static int WindowShouldClose(IntPtr window)
-        {
-            if (!Environment.Is64BitProcess)
-            {
-                return WindowShouldClose32(window);
-            }
-            else
-            {
-                return WindowShouldClose64(window);
-            }
-        }
+        [DllImport(Library, EntryPoint = "glfwWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		internal static extern int WindowShouldClose(IntPtr window);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal delegate void CharFun(IntPtr window, uint codepoint);
