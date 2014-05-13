@@ -77,25 +77,25 @@ namespace Samurai
 			return new Vector2(this.X / length, this.Y / length);
 		}
 
-		//public Vector2 Transform(ref Matrix4 matrix)
-		//{
-		//	Vector2 result;
-		//	Transform(ref this, ref matrix, out result);
-		//	return result;
-		//}
+		public Vector2 Transform(ref Matrix4 matrix)
+		{
+			Vector2 result;
+			Transform(ref this, ref matrix, out result);
+			return result;
+		}
 
-		//public static Vector2 Transform(ref Vector2 position, ref Matrix4 matrix)
-		//{
-		//	Vector2 result;
-		//	Transform(ref position, ref matrix, out result);
-		//	return result;
-		//}
+		public static Vector2 Transform(ref Vector2 position, ref Matrix4 matrix)
+		{
+			Vector2 result;
+			Transform(ref position, ref matrix, out result);
+			return result;
+		}
 
-		//public static void Transform(ref Vector2 position, ref Matrix4 matrix, out Vector2 result)
-		//{
-		//	result = new Vector2((position.X * matrix.M11) + (position.Y * matrix.M21) + matrix.M41,
-		//						 (position.X * matrix.M12) + (position.Y * matrix.M22) + matrix.M42);
-		//}
+		public static void Transform(ref Vector2 position, ref Matrix4 matrix, out Vector2 result)
+		{
+			result = new Vector2((position.X * matrix.M11) + (position.Y * matrix.M21) + matrix.M41,
+								 (position.X * matrix.M12) + (position.Y * matrix.M22) + matrix.M42);
+		}
 
 		#region Operator Overloads
 

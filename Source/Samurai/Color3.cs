@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Samurai
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public struct Color3
+	public struct Color3 : IEquatable<Color3>
 	{
 		public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Color3));
 
@@ -192,6 +192,24 @@ namespace Samurai
 		public override string ToString()
 		{
 			return "{ " + this.R + ", " + this.G + ", " + this.B + " }";
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+				return false;
+
+			if (!(obj is Color3))
+				return false;
+
+			return this.Equals((Color3)obj);
+		}
+
+		public bool Equals(Color3 other)
+		{
+			return this.R == other.R &&
+				   this.G == other.G &&
+				   this.B == other.B;
 		}
 	}
 }

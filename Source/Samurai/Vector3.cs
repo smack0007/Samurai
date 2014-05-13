@@ -98,26 +98,26 @@ namespace Samurai
 			return new Vector3(this.X / length, this.Y / length, this.Z / length);
 		}
 
-		//public Vector3 Transform(ref Matrix4 matrix)
-		//{
-		//	Vector3 result;
-		//	Transform(ref this, ref matrix, out result);
-		//	return result;
-		//}
+		public Vector3 Transform(ref Matrix4 matrix)
+		{
+			Vector3 result;
+			Transform(ref this, ref matrix, out result);
+			return result;
+		}
 
-		//public static Vector3 Transform(ref Vector3 position, ref Matrix4 matrix)
-		//{
-		//	Vector3 result;
-		//	Transform(ref position, ref matrix, out result);
-		//	return result;
-		//}
+		public static Vector3 Transform(ref Vector3 position, ref Matrix4 matrix)
+		{
+			Vector3 result;
+			Transform(ref position, ref matrix, out result);
+			return result;
+		}
 
-		//public static void Transform(ref Vector3 position, ref Matrix4 matrix, out Vector3 result)
-		//{
-		//	result = new Vector3((position.X * matrix.M11) + (position.Y * matrix.M21) + (position.Z * matrix.M31) + matrix.M41,
-		//						 (position.X * matrix.M12) + (position.Y * matrix.M22) + (position.Z * matrix.M32) + matrix.M42,
-		//						 (position.X * matrix.M13) + (position.Y * matrix.M23) + (position.Z * matrix.M33) + matrix.M43);
-		//}
+		public static void Transform(ref Vector3 position, ref Matrix4 matrix, out Vector3 result)
+		{
+			result = new Vector3((position.X * matrix.M11) + (position.Y * matrix.M21) + (position.Z * matrix.M31) + matrix.M41,
+								 (position.X * matrix.M12) + (position.Y * matrix.M22) + (position.Z * matrix.M32) + matrix.M42,
+								 (position.X * matrix.M13) + (position.Y * matrix.M23) + (position.Z * matrix.M33) + matrix.M43);
+		}
 
 		#region Operator Overloads
 
