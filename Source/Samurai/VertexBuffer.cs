@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
-	public sealed class VertexBuffer<T> : DisposableObject
+	public abstract class VertexBuffer<T> : DisposableObject
 		where T : struct
 	{
 		GraphicsDevice graphicsDevice;
@@ -18,7 +18,7 @@ namespace Samurai
 			private set;
 		}
 
-		public VertexBuffer(GraphicsDevice graphicsDevice)
+		internal VertexBuffer(GraphicsDevice graphicsDevice)
 		{
 			if (graphicsDevice == null)
 				throw new ArgumentNullException("graphicsDevice");
@@ -31,9 +31,9 @@ namespace Samurai
 			this.buffer = GL.GenBuffer();
 			GL.BindBuffer(GL.ArrayBuffer, this.buffer);
 
-			uint index = 0;
-
 			Type vertexType = typeof(T);
+
+			uint index = 0;
 			foreach (var fieldInfo in vertexType.GetFields(BindingFlags.Public | BindingFlags.Instance))
 			{
 				GL.EnableVertexAttribArray(index);
@@ -54,11 +54,10 @@ namespace Samurai
 			GL.DeleteBuffer(this.buffer);
 		}
 
-		public void SetData(T[] data)
+		internal void SetDataInternal(T[] data, uint usage)
 		{
 			GL.BindBuffer(GL.ArrayBuffer, this.buffer);
-			GL.BufferData(GL.ArrayBuffer, data, GL.DynamicDraw);
-
+			GL.BufferData(GL.ArrayBuffer, data, usage);
 			this.Count = data.Length;
 		}
 	}

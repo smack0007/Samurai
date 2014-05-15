@@ -26,7 +26,7 @@ namespace SamuraiDemo
             new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 0.0f) },
             new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 0.0f) },
             new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(0.0f, 1.0f) },
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
         };
 
 		byte[] indexData = new byte[]
@@ -35,8 +35,8 @@ namespace SamuraiDemo
 		};
 
 		ShaderProgram shaderProgram;
-		VertexBuffer<Vertex> vertexBuffer;
-		IndexBuffer<byte> indexBuffer;
+		StaticVertexBuffer<Vertex> vertexBuffer;
+		StaticIndexBuffer<byte> indexBuffer;
 
 		public DemoGame()
 		{
@@ -47,11 +47,8 @@ namespace SamuraiDemo
 			this.shaderProgram.AttachShader(Shader.Compile(this.GraphicsDevice, ShaderType.Fragment, File.ReadAllText("Shader.frag")));
 			this.shaderProgram.Link();
 
-			this.vertexBuffer = new VertexBuffer<Vertex>(this.GraphicsDevice);
-			this.vertexBuffer.SetData(this.vertexData);
-
-			this.indexBuffer = new IndexBuffer<byte>(this.GraphicsDevice);
-			this.indexBuffer.SetData(this.indexData);
+			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.GraphicsDevice, this.vertexData);
+			this.indexBuffer = new StaticIndexBuffer<byte>(this.GraphicsDevice, this.indexData);
 		}
 
 		protected override void Draw()
@@ -60,8 +57,8 @@ namespace SamuraiDemo
 
 			this.shaderProgram.Use();
 
-			Matrix4 projection;
-			Matrix4.CreateRotationZ(10, out projection);
+			Matrix4 projection = Matrix4.Identity;
+			//Matrix4.CreateRotationZ(10, out projection);
 			this.shaderProgram.SetMatrix("projection", ref projection);
 
 			this.GraphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);

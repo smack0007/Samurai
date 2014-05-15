@@ -61,6 +61,10 @@
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />
     <Compile Include="DisposableObject.cs" />
+    <Compile Include="DynamicIndexBuffer.cs" />
+    <Compile Include="DynamicVertexBuffer.cs" />
+    <Compile Include="StaticIndexBuffer.cs" />
+    <Compile Include="StaticVertexBuffer.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GL.cs" />

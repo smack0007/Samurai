@@ -2,7 +2,7 @@
 
 namespace Samurai
 {
-	public sealed class IndexBuffer<T> : DisposableObject
+	public abstract class IndexBuffer<T> : DisposableObject
 		where T : struct
 	{
 		GraphicsDevice graphicsDevice;
@@ -16,7 +16,7 @@ namespace Samurai
 			private set;
 		}
 
-		public IndexBuffer(GraphicsDevice graphicsDevice)
+		internal IndexBuffer(GraphicsDevice graphicsDevice)
 		{
 			if (graphicsDevice == null)
 				throw new ArgumentNullException("graphicsDevice");
@@ -39,7 +39,7 @@ namespace Samurai
 			}
 			else
 			{
-				throw new InvalidOperationException("IndexBuffer may only have a data type of byte, ushort, or uint.");
+				throw new InvalidOperationException("IndexBuffer(s) may only have a data type of byte, ushort, or uint.");
 			}
 
 			this.buffer = GL.GenBuffer();
@@ -55,11 +55,10 @@ namespace Samurai
 			GL.DeleteBuffer(this.buffer);
 		}
 
-		public void SetData(T[] data)
+		internal void SetDataInternal(T[] data, uint usage)
 		{
 			GL.BindBuffer(GL.ArrayBuffer, this.buffer);
 			GL.BufferData(GL.ArrayBuffer, data, GL.DynamicDraw);
-
 			this.Count = data.Length;
 		}
 	}
