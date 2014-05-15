@@ -11,6 +11,8 @@ namespace Samurai
 
 		public static readonly Matrix4 Identity = new Matrix4() { M11 = 1.0f, M22 = 1.0f, M33 = 1.0f, M44 = 1.0f };
 
+		public static readonly Matrix4 InvertedYAxis = new Matrix4() { M11 = 1.0f, M22 = -1.0f, M33 = 1.0f, M44 = 1.0f };
+
 		public float M11;
 		public float M12;
 		public float M13;
@@ -51,6 +53,18 @@ namespace Samurai
 			this.M44 = m44;
 		}
 
+		public static Matrix4 CreateRotationX(float radians)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M22 = (float)Math.Cos(radians);
+			returnMatrix.M23 = (float)Math.Sin(radians);
+			returnMatrix.M32 = -returnMatrix.M23;
+			returnMatrix.M33 = returnMatrix.M22;
+
+			return returnMatrix;
+		}
+
 		public static void CreateRotationX(float radians, out Matrix4 result)
 		{
 			result = Matrix4.Identity;
@@ -59,6 +73,18 @@ namespace Samurai
 			result.M23 = (float)Math.Sin(radians);
 			result.M32 = -result.M23;
 			result.M33 = result.M22;
+		}
+
+		public static Matrix4 CreateRotationY(float radians)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M11 = (float)Math.Cos(radians);
+			returnMatrix.M13 = (float)Math.Sin(radians);
+			returnMatrix.M31 = -returnMatrix.M13;
+			returnMatrix.M33 = returnMatrix.M11;
+
+			return returnMatrix;
 		}
 
 		public static void CreateRotationY(float radians, out Matrix4 result)
@@ -71,6 +97,18 @@ namespace Samurai
 			result.M33 = result.M11;
 		}
 
+		public static Matrix4 CreateRotationZ(float radians)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M11 = (float)Math.Cos(radians);
+			returnMatrix.M12 = (float)Math.Sin(radians);
+			returnMatrix.M21 = -returnMatrix.M12;
+			returnMatrix.M22 = returnMatrix.M11;
+
+			return returnMatrix;
+		}
+
 		public static void CreateRotationZ(float radians, out Matrix4 result)
 		{
 			result = Matrix4.Identity;
@@ -79,6 +117,17 @@ namespace Samurai
 			result.M12 = (float)Math.Sin(radians);
 			result.M21 = -result.M12;
 			result.M22 = result.M11;
+		}
+
+		public static Matrix4 CreateScale(float scale)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M11 = scale;
+			returnMatrix.M22 = scale;
+			returnMatrix.M33 = scale;
+
+			return returnMatrix;
 		}
 
 		public static void CreateScale(float scale, out Matrix4 result)
@@ -90,6 +139,17 @@ namespace Samurai
 			result.M33 = scale;
 		}
 
+		public static Matrix4 CreateScale(float xScale, float yScale, float zScale)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M11 = xScale;
+			returnMatrix.M22 = yScale;
+			returnMatrix.M33 = zScale;
+
+			return returnMatrix;
+		}
+
 		public static void CreateScale(float xScale, float yScale, float zScale, out Matrix4 result)
 		{
 			result = Matrix4.Identity;
@@ -97,6 +157,17 @@ namespace Samurai
 			result.M11 = xScale;
 			result.M22 = yScale;
 			result.M33 = zScale;
+		}
+
+		public static Matrix4 CreateScale(Vector3 scales)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M11 = scales.X;
+			returnMatrix.M22 = scales.Y;
+			returnMatrix.M33 = scales.Z;
+
+			return returnMatrix;
 		}
 
 		public static void CreateScale(ref Vector3 scales, out Matrix4 result)
@@ -108,12 +179,33 @@ namespace Samurai
 			result.M33 = scales.Z;
 		}
 
+		public static Matrix4 CreateTranslation(float xPosition, float yPosition)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M41 = xPosition;
+			returnMatrix.M42 = yPosition;
+
+			return returnMatrix;
+		}
+
 		public static void CreateTranslation(float xPosition, float yPosition, out Matrix4 result)
 		{
 			result = Matrix4.Identity;
 
 			result.M41 = xPosition;
 			result.M42 = yPosition;
+		}
+
+		public static Matrix4 CreateTranslation(float xPosition, float yPosition, float zPosition)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M41 = xPosition;
+			returnMatrix.M42 = yPosition;
+			returnMatrix.M43 = zPosition;
+
+			return returnMatrix;
 		}
 
 		public static void CreateTranslation(float xPosition, float yPosition, float zPosition, out Matrix4 result)
@@ -125,12 +217,33 @@ namespace Samurai
 			result.M43 = zPosition;
 		}
 
+		public static Matrix4 CreateTranslation(Vector2 position)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M41 = position.X;
+			returnMatrix.M42 = position.Y;
+
+			return returnMatrix;
+		}
+
 		public static void CreateTranslation(ref Vector2 position, out Matrix4 result)
 		{
 			result = Matrix4.Identity;
 
 			result.M41 = position.X;
 			result.M42 = position.Y;
+		}
+
+		public static Matrix4 CreateTranslation(Vector3 position)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M41 = position.X;
+			returnMatrix.M42 = position.Y;
+			returnMatrix.M43 = position.Z;
+
+			return returnMatrix;
 		}
 
 		public static void CreateTranslation(ref Vector3 position, out Matrix4 result)
@@ -140,6 +253,11 @@ namespace Samurai
 			result.M41 = position.X;
 			result.M42 = position.Y;
 			result.M43 = position.Z;
+		}
+
+		public static void InvertYAxis(ref Matrix4 matrix)
+		{
+			matrix.M22 = -matrix.M22;
 		}
 
 		/// <summary>
@@ -167,6 +285,26 @@ namespace Samurai
 			result.M42 = (left.M41 * right.M12) + (left.M42 * right.M22) + (left.M43 * right.M32) + (left.M44 * right.M42);
 			result.M43 = (left.M41 * right.M13) + (left.M42 * right.M23) + (left.M43 * right.M33) + (left.M44 * right.M43);
 			result.M44 = (left.M41 * right.M14) + (left.M42 * right.M24) + (left.M43 * right.M34) + (left.M44 * right.M44);
+		}
+
+		/// <summary>
+		/// Determines the product of two matrices.
+		/// </summary>
+		/// <param name="left">The first matrix to multiply.</param>
+		/// <param name="right">The second matrix to multiply.</param>
+		/// <returns>The product of the two matrices.</returns>
+		public static Matrix4 Multiply(Matrix4 left, Matrix4 right)
+		{
+			Matrix4 result;
+			Multiply(ref left, ref right, out result);
+			return result;
+		}
+
+		public static Matrix4 operator *(Matrix4 matrix1, Matrix4 matrix2)
+		{
+			Matrix4 returnMatrix = new Matrix4();
+			Matrix4.Multiply(ref matrix1, ref matrix2, out returnMatrix);
+			return returnMatrix;
 		}
 	}
 }

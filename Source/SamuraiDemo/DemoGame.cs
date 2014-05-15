@@ -57,8 +57,10 @@ namespace SamuraiDemo
 
 			this.shaderProgram.Use();
 
-			Matrix4 projection = Matrix4.Identity;
-			//Matrix4.CreateRotationZ(10, out projection);
+			Matrix4 projection = 
+				Matrix4.CreateRotationZ(MathHelper.ToRadians(45)) *
+				Matrix4.InvertedYAxis;
+					
 			this.shaderProgram.SetMatrix("projection", ref projection);
 
 			this.GraphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);
