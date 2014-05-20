@@ -46,7 +46,7 @@ namespace Samurai
 			private set;
 		}
 
-		public Texture(GraphicsDevice graphicsDevice, TextureParams parameters)
+		private Texture(GraphicsDevice graphicsDevice)
 		{
 			this.textureHandle = GL.GenTexture();			
 		}
@@ -76,7 +76,7 @@ namespace Samurai
 			if (stream == null)
 				throw new ArgumentNullException("stream");
 
-			Texture texture = new Texture(context, parameters);
+			Texture texture = new Texture(context);
 			GL.BindTexture(GL.Texture2D, texture.textureHandle);
 
 			Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream);

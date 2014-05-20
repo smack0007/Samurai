@@ -42,6 +42,7 @@ namespace Samurai
 
 			this.Window = new GameWindow();
 			this.Window.Resize += this.Window_Resize;
+			this.AutoResizeViewport = true;
 
 			GL.Init();
 

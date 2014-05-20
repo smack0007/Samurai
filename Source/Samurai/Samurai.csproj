@@ -64,6 +64,7 @@
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DynamicIndexBuffer.cs" />
     <Compile Include="DynamicVertexBuffer.cs" />
+    <Compile Include="FragmentShader.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="StaticIndexBuffer.cs" />
     <Compile Include="StaticVertexBuffer.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Size.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
+    <Compile Include="VertexShader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\Library\glfw3_x64.dll">

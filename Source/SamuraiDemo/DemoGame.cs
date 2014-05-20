@@ -24,9 +24,9 @@ namespace SamuraiDemo
 		Vertex[] vertexData = new Vertex[]
         {
             new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(1.0f, 1.0f) },
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(2.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(2.0f, 2.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 2.0f) }
         };
 
 		byte[] indexData = new byte[]
@@ -43,17 +43,17 @@ namespace SamuraiDemo
 		{
 			this.Window.Title = "Samurai Demo";
 
-			this.shaderProgram = new ShaderProgram(this.GraphicsDevice);
-			this.shaderProgram.AttachShader(Shader.Compile(this.GraphicsDevice, ShaderType.Vertex, File.ReadAllText("Shader.vert")));
-			this.shaderProgram.AttachShader(Shader.Compile(this.GraphicsDevice, ShaderType.Fragment, File.ReadAllText("Shader.frag")));
-			this.shaderProgram.Link();
+			this.shaderProgram = new ShaderProgram(
+				this.GraphicsDevice,
+				VertexShader.Compile(this.GraphicsDevice, File.ReadAllText("Shader.vert")),
+				FragmentShader.Compile(this.GraphicsDevice, File.ReadAllText("Shader.frag")));
 
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.GraphicsDevice, this.vertexData);
 			this.indexBuffer = new StaticIndexBuffer<byte>(this.GraphicsDevice, this.indexData);
 
 			this.texture = Texture.FromFile(this.GraphicsDevice, "Texture.png", new TextureParams() {
-				WrapS = TextureWrap.Clamp,
-				WrapT = TextureWrap.Clamp
+				WrapS = TextureWrap.Repeat,
+				WrapT = TextureWrap.Repeat
 			});
 		}
 
@@ -64,7 +64,7 @@ namespace SamuraiDemo
 			this.shaderProgram.Use();
 
 			Matrix4 projection = 
-				Matrix4.CreateRotationZ(MathHelper.ToRadians(0)) *
+				Matrix4.CreateRotationZ(MathHelper.ToRadians(45)) *
 				Matrix4.InvertedYAxis;
 					
 			this.shaderProgram.SetMatrix("projection", ref projection);

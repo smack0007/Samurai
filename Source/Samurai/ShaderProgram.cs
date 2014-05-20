@@ -6,29 +6,36 @@ namespace Samurai
 	public sealed class ShaderProgram : DisposableObject
 	{
 		GraphicsDevice graphicsDevice;
-		Dictionary<ShaderType, Shader> shaders;
+		VertexShader vertexShader;
+		FragmentShader fragmentShader;
 
 		internal uint Handle
 		{
 			get;
 			private set;
 		}
-
-		public bool IsLinked
-		{
-			get;
-			private set;
-		}
-
-		public ShaderProgram(GraphicsDevice graphicsDevice)
+		
+		public ShaderProgram(GraphicsDevice graphicsDevice, VertexShader vertexShader, FragmentShader fragmentShader)
 		{
 			if (graphicsDevice == null)
 				throw new ArgumentNullException("graphicsDevice");
 
+			if (vertexShader == null)
+				throw new ArgumentNullException("vertexShader");
+
+			if (fragmentShader == null)
+				throw new ArgumentNullException("fragmentShader");
+
 			this.graphicsDevice = graphicsDevice;
 			this.Handle = GL.CreateProgram();
 
-			this.shaders = new Dictionary<ShaderType, Shader>();
+			this.vertexShader = vertexShader;
+			GL.AttachShader(this.Handle, this.vertexShader.Handle);
+
+			this.fragmentShader = fragmentShader;
+			GL.AttachShader(this.Handle, this.fragmentShader.Handle);
+
+			GL.LinkProgram(this.Handle);
 		}
 
 		~ShaderProgram()
@@ -38,39 +45,16 @@ namespace Samurai
 
 		protected override void DisposeManagedResources()
 		{
-			foreach (Shader shader in this.shaders.Values)
-			{
-				if (!shader.IsDisposed)
-					shader.Dispose();
-			}
+			if (!this.vertexShader.IsDisposed)
+				this.vertexShader.Dispose();
+
+			if (!this.fragmentShader.IsDisposed)
+				this.fragmentShader.Dispose();
 		}
 
 		protected override void DisposeUnmanagedResources()
 		{
 			GL.DeleteProgram(this.Handle);
-		}
-
-		public void AttachShader(Shader shader)
-		{
-			if (shader == null)
-				throw new ArgumentNullException("shader");
-
-			if (this.shaders.ContainsKey(shader.Type))
-				throw new SamuraiException(string.Format("ShaderProgram already contains a Shader of type {0}.", shader.Type.ToString()));
-
-			GL.AttachShader(this.Handle, shader.Handle);
-
-			this.shaders[shader.Type] = shader;
-		}
-
-		public void Link()
-		{
-			if (this.IsLinked)
-				throw new SamuraiException("ShaderProgram has already been linked.");
-
-			GL.LinkProgram(this.Handle);
-
-			this.IsLinked = true;
 		}
 
 		public void Use()
