@@ -51,6 +51,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,12 +67,16 @@
     <Compile Include="MathHelper.cs" />
     <Compile Include="StaticIndexBuffer.cs" />
     <Compile Include="StaticVertexBuffer.cs" />
+    <Compile Include="Texture.cs" />
+    <Compile Include="TextureFilter.cs" />
+    <Compile Include="TextureParams.cs" />
+    <Compile Include="TextureWrap.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GL.cs" />
     <Compile Include="GLFW.cs" />
     <Compile Include="GameWindow.cs" />
-    <Compile Include="GLUtils.cs" />
+    <Compile Include="GLHelper.cs" />
     <Compile Include="GraphicsDevice.cs" />
     <Compile Include="IGraphicsContext.cs" />
     <Compile Include="IndexBuffer.cs" />

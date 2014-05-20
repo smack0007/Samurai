@@ -37,7 +37,7 @@ namespace Samurai
 			foreach (var fieldInfo in vertexType.GetFields(BindingFlags.Public | BindingFlags.Instance))
 			{
 				GL.EnableVertexAttribArray(index);
-				uint type = GLUtils.GetVertexAttribPointerTypeForType(fieldInfo.FieldType);
+				uint type = GLHelper.GetVertexAttribPointerTypeForType(fieldInfo.FieldType);
 				GL.VertexAttribPointer(index, Marshal.SizeOf(fieldInfo.FieldType) / 4, type, true, Marshal.SizeOf(vertexType), Marshal.OffsetOf(vertexType, fieldInfo.Name));
 				index++;
 			}

@@ -83,5 +83,14 @@ namespace Samurai
 			int location = GL.GetUniformLocation(this.Handle, name);
 			GL.UniformMatrix4(location, ref value);
 		}
+
+		public void SetSampler(string name, Texture texture)
+		{
+			GL.ActiveTexture(GL.Texture0);
+			GL.BindTexture(GL.Texture2D, texture.textureHandle);
+
+			int location = GL.GetUniformLocation(this.Handle, name);
+			GL.Uniform1i(location, 0);
+		}
 	}
 }

@@ -45,6 +45,21 @@ namespace Samurai
 		public const uint StackUnderflow = 0x0504;
 		public const uint TableTooLarge = 0x8031;
 
+		// Pixels
+		public const uint Rgba = 0x1908;
+
+		// Textures
+		public const uint Clamp = 0x2900;
+		public const uint Linear = 0x2601;
+		public const uint Nearest = 0x2600;
+		public const uint Repeat = 0x2901;
+		public const uint Texture0 = 0x84C0;
+		public const uint Texture2D = 0x0DE1;
+		public const uint TextureMagFilter = 0x2800;
+		public const uint TextureMinFilter = 0x2801;
+		public const uint TextureWrapS = 0x2802;
+		public const uint TextureWrapT = 0x2803;
+
 		// VertexAttribPointerType
 		public const uint Byte = 0x1400;
 		public const uint UnsignedByte = 0x1401;
@@ -59,6 +74,9 @@ namespace Samurai
 		
 		private static readonly uint[] UintArraySizeOne = new uint[1];
 
+		private delegate void __ActiveTexture(uint texture);
+		private static __ActiveTexture _ActiveTexture;
+
 		private delegate void __AttachShader(uint program, uint shader);
 		private static __AttachShader _AttachShader;
 
@@ -67,6 +85,9 @@ namespace Samurai
 
 		private delegate void __BindBuffer(uint target, uint buffer);
 		private static __BindBuffer _BindBuffer;
+
+		[DllImport(Library, EntryPoint = "glBindTexture")]
+		private static extern void _BindTexture(uint target, uint texture);
 
 		private delegate void __BindVertexArray(uint array);
 		private static __BindVertexArray _BindVertexArray;
@@ -94,9 +115,12 @@ namespace Samurai
 
 		private delegate void __DeleteBuffers(int n, uint[] buffers);
 		private static __DeleteBuffers _DeleteBuffers;
-
+				
 		private delegate void __DeleteProgram(uint program);
 		private static __DeleteProgram _DeleteProgram;
+
+		[DllImport(Library, EntryPoint = "glDeleteTextures")]
+		private static extern void _DeleteTextures(int n, uint[] textures);
 
 		private delegate void __DeleteShader(uint shader);
 		private static __DeleteShader _DeleteShader;
@@ -119,6 +143,9 @@ namespace Samurai
 		private delegate void __GenBuffers(int n, [Out] uint[] buffers);
 		private static __GenBuffers _GenBuffers;
 
+		[DllImport(Library, EntryPoint = "glGenTextures")]
+		private static extern void _GenTextures(int n, [Out] uint[] textures);
+
 		private delegate void __GenVertexArrays(int n, [Out] uint[] arrays);
 		private static __GenVertexArrays _GenVertexArrays;
 
@@ -139,6 +166,18 @@ namespace Samurai
 
 		private delegate void __ShaderSource(uint shader, int count, string[] @string, ref int length);
 		private static __ShaderSource _ShaderSource;
+
+		[DllImport(Library, EntryPoint = "glTexImage2D")]
+		private static extern void _TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels);
+
+		[DllImport(Library, EntryPoint = "glTexParameterf")]
+		private static extern void _TexParameterf(uint target, uint pname, float param);
+				
+		[DllImport(Library, EntryPoint = "glTexParameteri")]
+		private static extern void _TexParameteri(uint target, uint pname, int param);
+
+		private delegate void __Uniform1i(int location, uint v0);
+		private static __Uniform1i _Uniform1i;
 
 		private delegate void __UniformMatrix4fv(int location, int count, bool transpose, ref float value);
 		private static __UniformMatrix4fv _UniformMatrix4fv;
@@ -166,6 +205,7 @@ namespace Samurai
 
 		public static void Init()
 		{
+			_ActiveTexture = (__ActiveTexture)GetProcAddress<__ActiveTexture>("glActiveTexture");
 			_AttachShader = (__AttachShader)GetProcAddress<__AttachShader>("glAttachShader");
 			_BindAttribLocation = (__BindAttribLocation)GetProcAddress<__BindAttribLocation>("glBindAttribLocation");
 			_BindBuffer = (__BindBuffer)GetProcAddress<__BindBuffer>("glBindBuffer");
@@ -186,6 +226,7 @@ namespace Samurai
 			_GetUniformLocation = (__GetUniformLocation)GetProcAddress<__GetUniformLocation>("glGetUniformLocation");
 			_LinkProgram = (__LinkProgram)GetProcAddress<__LinkProgram>("glLinkProgram");
 			_ShaderSource = (__ShaderSource)GetProcAddress<__ShaderSource>("glShaderSource");
+			_Uniform1i = (__Uniform1i)GetProcAddress<__Uniform1i>("glUniform1i");
 			_UniformMatrix4fv = (__UniformMatrix4fv)GetProcAddress<__UniformMatrix4fv>("glUniformMatrix4fv");
 			_UseProgram = (__UseProgram)GetProcAddress<__UseProgram>("glUseProgram");
 			_VertexAttribPointer = (__VertexAttribPointer)GetProcAddress<__VertexAttribPointer>("glVertexAttribPointer");
@@ -218,6 +259,12 @@ namespace Samurai
 				ThrowExceptionForErrorCode(functionName, errorCode);
 		}
 
+		public static void ActiveTexture(uint texture)
+		{
+			_ActiveTexture(texture);
+			CheckErrors("ActiveTexture");
+		}
+
 		public static void AttachShader(uint program, uint shader)
 		{
 			_AttachShader(program, shader);
@@ -234,6 +281,12 @@ namespace Samurai
 		{
 			_BindBuffer(target, buffer);
 			CheckErrors("BindBuffer");
+		}
+
+		public static void BindTexture(uint target, uint texture)
+		{
+			_BindTexture(target, texture);
+			CheckErrors("BindTexture");
 		}
 
 		public static void BindVertexArray(uint array)
@@ -313,6 +366,19 @@ namespace Samurai
 			CheckErrors("DeleteProgram");
 		}
 
+		public static void DeleteTexture(uint texture)
+		{
+			UintArraySizeOne[0] = texture;
+			_DeleteTextures(1, UintArraySizeOne);
+			CheckErrors("DeleteTextures");
+		}
+
+		public static void DeleteTextures(uint[] textures)
+		{
+			_DeleteBuffers(textures.Length, textures);
+			CheckErrors("DeleteTextures");
+		}
+
 		public static void DeleteShader(uint shader)
 		{
 			_DeleteShader(shader);
@@ -371,6 +437,21 @@ namespace Samurai
 			return buffers;
 		}
 
+		public static uint GenTexture()
+		{
+			_GenTextures(1, UintArraySizeOne);
+			CheckErrors("GenTextures");
+			return UintArraySizeOne[0];
+		}
+
+		public static uint[] GenTextures(int n)
+		{
+			uint[] textures = new uint[n];
+			_GenTextures(n, textures);
+			CheckErrors("GenTextures");
+			return textures;
+		}
+
 		public static uint GenVertexArray()
 		{
 			_GenVertexArrays(1, UintArraySizeOne);
@@ -424,6 +505,30 @@ namespace Samurai
 			_ShaderSource(shader, 1, sources, ref length);
 
 			CheckErrors("ShaderSource");
+		}
+
+		public static void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels)
+		{
+			_TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+			CheckErrors("TexImage2D");
+		}
+
+		public static void TexParameterf(uint target, uint pname, float param)
+		{
+			_TexParameterf(target, pname, param);
+			CheckErrors("TexParameterf");
+		}
+
+		public static void TexParameteri(uint target, uint pname, int param)
+		{
+			_TexParameteri(target, pname, param);
+			CheckErrors("TexParameteri");
+		}
+
+		public static void Uniform1i(int location, uint v0)
+		{
+			_Uniform1i(location, v0);
+			CheckErrors("Uniform1i");
 		}
 
 		public static void UniformMatrix4(int location, ref Matrix4 matrix4)

@@ -25,7 +25,7 @@ namespace SamuraiDemo
         {
             new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 0.0f) },
             new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(0.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(1.0f, 1.0f) },
             new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
         };
 
@@ -37,6 +37,7 @@ namespace SamuraiDemo
 		ShaderProgram shaderProgram;
 		StaticVertexBuffer<Vertex> vertexBuffer;
 		StaticIndexBuffer<byte> indexBuffer;
+		Texture texture;
 
 		public DemoGame()
 		{
@@ -49,6 +50,11 @@ namespace SamuraiDemo
 
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.GraphicsDevice, this.vertexData);
 			this.indexBuffer = new StaticIndexBuffer<byte>(this.GraphicsDevice, this.indexData);
+
+			this.texture = Texture.FromFile(this.GraphicsDevice, "Texture.png", new TextureParams() {
+				WrapS = TextureWrap.Clamp,
+				WrapT = TextureWrap.Clamp
+			});
 		}
 
 		protected override void Draw()
@@ -58,10 +64,11 @@ namespace SamuraiDemo
 			this.shaderProgram.Use();
 
 			Matrix4 projection = 
-				Matrix4.CreateRotationZ(MathHelper.ToRadians(45)) *
+				Matrix4.CreateRotationZ(MathHelper.ToRadians(0)) *
 				Matrix4.InvertedYAxis;
 					
 			this.shaderProgram.SetMatrix("projection", ref projection);
+			this.shaderProgram.SetSampler("texture1", this.texture);
 
 			this.GraphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);
 
@@ -73,6 +80,7 @@ namespace SamuraiDemo
 			this.shaderProgram.Dispose();
 			this.vertexBuffer.Dispose();
 			this.indexBuffer.Dispose();
+			this.texture.Dispose();
 		}
 
 		private static void Main(string[] args)
