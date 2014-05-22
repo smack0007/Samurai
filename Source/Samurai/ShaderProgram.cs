@@ -70,11 +70,8 @@ namespace Samurai
 
 		public void SetSampler(string name, Texture texture)
 		{
-			GL.ActiveTexture(GL.Texture0);
-			GL.BindTexture(GL.Texture2D, texture.textureHandle);
-
 			int location = GL.GetUniformLocation(this.Handle, name);
-			GL.Uniform1i(location, 0);
+			GL.Uniform1i(location, (int)texture.Index);
 		}
 	}
 }

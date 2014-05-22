@@ -9,6 +9,9 @@ namespace Samurai
 		Color4 clearColor;
 		Rectangle viewport;
 
+		bool[] textures;
+		uint nextTexture;
+
 		public Color4 ClearColor
 		{
 			get { return this.clearColor; }
@@ -37,6 +40,8 @@ namespace Samurai
 				throw new ArgumentNullException("context");
 
 			this.context = context;
+
+			this.textures = new bool[32];
 		}
 
 		~GraphicsDevice()
@@ -54,7 +59,15 @@ namespace Samurai
 		{
 
 		}
-				
+		
+		internal uint AllocateTextureIndex()
+		{
+			uint index = this.nextTexture;
+			this.textures[this.nextTexture] = true;
+			this.nextTexture++;
+			return index;
+		}
+		
 		public void Begin()
 		{
 			GL.Clear(GL.ColorBufferBit | GL.DepthBufferBit);

@@ -24,9 +24,9 @@ namespace SamuraiDemo
 		Vertex[] vertexData = new Vertex[]
         {
             new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(2.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(2.0f, 2.0f) },
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 2.0f) }
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
         };
 
 		byte[] indexData = new byte[]
@@ -37,7 +37,8 @@ namespace SamuraiDemo
 		ShaderProgram shaderProgram;
 		StaticVertexBuffer<Vertex> vertexBuffer;
 		StaticIndexBuffer<byte> indexBuffer;
-		Texture texture;
+		Texture texture0;
+		Texture texture1;
 
 		public DemoGame()
 		{
@@ -51,9 +52,16 @@ namespace SamuraiDemo
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.GraphicsDevice, this.vertexData);
 			this.indexBuffer = new StaticIndexBuffer<byte>(this.GraphicsDevice, this.indexData);
 
-			this.texture = Texture.FromFile(this.GraphicsDevice, "Texture.png", new TextureParams() {
+			this.texture0 = Texture.FromFile(this.GraphicsDevice, "Texture0.png", new TextureParams()
+			{
 				WrapS = TextureWrap.Repeat,
 				WrapT = TextureWrap.Repeat
+			});
+
+			this.texture1 = Texture.FromFile(this.GraphicsDevice, "Texture1.png", new TextureParams()
+			{
+				WrapS = TextureWrap.Clamp,
+				WrapT = TextureWrap.Clamp
 			});
 		}
 
@@ -68,7 +76,7 @@ namespace SamuraiDemo
 				Matrix4.InvertedYAxis;
 					
 			this.shaderProgram.SetMatrix("projection", ref projection);
-			this.shaderProgram.SetSampler("texture1", this.texture);
+			this.shaderProgram.SetSampler("texture0", this.texture0);
 
 			this.GraphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);
 
@@ -80,7 +88,7 @@ namespace SamuraiDemo
 			this.shaderProgram.Dispose();
 			this.vertexBuffer.Dispose();
 			this.indexBuffer.Dispose();
-			this.texture.Dispose();
+			this.texture0.Dispose();
 		}
 
 		private static void Main(string[] args)

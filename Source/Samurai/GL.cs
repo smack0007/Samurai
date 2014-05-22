@@ -176,7 +176,7 @@ namespace Samurai
 		[DllImport(Library, EntryPoint = "glTexParameteri")]
 		private static extern void _TexParameteri(uint target, uint pname, int param);
 
-		private delegate void __Uniform1i(int location, uint v0);
+		private delegate void __Uniform1i(int location, int v0);
 		private static __Uniform1i _Uniform1i;
 
 		private delegate void __UniformMatrix4fv(int location, int count, bool transpose, ref float value);
@@ -525,7 +525,7 @@ namespace Samurai
 			CheckErrors("TexParameteri");
 		}
 
-		public static void Uniform1i(int location, uint v0)
+		public static void Uniform1i(int location, int v0)
 		{
 			_Uniform1i(location, v0);
 			CheckErrors("Uniform1i");

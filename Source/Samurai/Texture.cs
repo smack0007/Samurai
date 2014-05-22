@@ -8,7 +8,19 @@ namespace Samurai
 {
 	public class Texture : DisposableObject
 	{
-		internal uint textureHandle;
+		GraphicsDevice graphicsDevice;
+
+		internal uint Index
+		{
+			get;
+			private set;
+		}
+
+		internal uint Handle
+		{
+			get;
+			private set;
+		}
 		
 		public TextureFilter MinFilter
 		{
@@ -48,36 +60,43 @@ namespace Samurai
 
 		private Texture(GraphicsDevice graphicsDevice)
 		{
-			this.textureHandle = GL.GenTexture();			
+			if (graphicsDevice == null)
+				throw new ArgumentNullException("graphicsDevice");
+
+			this.graphicsDevice = graphicsDevice;
+			this.Index = this.graphicsDevice.AllocateTextureIndex();
+
+			this.Handle = GL.GenTexture();
 		}
 
 		protected override void DisposeUnmanagedResources()
 		{
-			GL.DeleteTexture(this.textureHandle);
+			GL.DeleteTexture(this.Handle);
 		}
 
-		public static Texture FromFile(GraphicsDevice context, string fileName, TextureParams parameters)
+		public static Texture FromFile(GraphicsDevice graphicsDevice, string fileName, TextureParams parameters)
 		{
-			if (context == null)
-				throw new ArgumentNullException("context");
+			if (graphicsDevice == null)
+				throw new ArgumentNullException("graphicsDevice");
 
 			if (fileName == null)
 				throw new ArgumentNullException("fileName");
 
 			using (FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-				return FromStream(context, file, parameters);
+				return FromStream(graphicsDevice, file, parameters);
 		}
 
-		public static Texture FromStream(GraphicsDevice context, Stream stream, TextureParams parameters)
+		public static Texture FromStream(GraphicsDevice graphicsDevice, Stream stream, TextureParams parameters)
 		{
-			if (context == null)
-				throw new ArgumentNullException("context");
+			if (graphicsDevice == null)
+				throw new ArgumentNullException("graphicsDevice");
 
 			if (stream == null)
 				throw new ArgumentNullException("stream");
 
-			Texture texture = new Texture(context);
-			GL.BindTexture(GL.Texture2D, texture.textureHandle);
+			Texture texture = new Texture(graphicsDevice);
+			GL.ActiveTexture(GL.Texture0 + texture.Index);
+			GL.BindTexture(GL.Texture2D, texture.Handle);
 
 			Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream);
 
