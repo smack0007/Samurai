@@ -69,6 +69,12 @@ namespace Samurai
 			this.Handle = GL.GenTexture();
 		}
 
+		protected override void DisposeManagedResources()
+		{
+			if (!this.graphicsDevice.IsDisposed)
+				this.graphicsDevice.DeallocateTextureIndex(this.Index);
+		}
+
 		protected override void DisposeUnmanagedResources()
 		{
 			GL.DeleteTexture(this.Handle);

@@ -2,7 +2,7 @@
 
 namespace Samurai
 {
-	public class GraphicsDevice : IDisposable
+	public class GraphicsDevice : DisposableObject
 	{
 		IGraphicsContext context;
 
@@ -48,24 +48,34 @@ namespace Samurai
 		{
 			this.Dispose(false);
 		}
-
-		public void Dispose()
-		{
-			this.Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-
-		}
 		
 		internal uint AllocateTextureIndex()
 		{
-			uint index = this.nextTexture;
-			this.textures[this.nextTexture] = true;
-			this.nextTexture++;
-			return index;
+			for (uint i = 0; i < this.textures.Length; i++)
+			{
+				uint index = this.nextTexture + i;
+
+				if (index >= this.textures.Length)
+					index -= (uint)this.textures.Length;
+
+				if (!this.textures[index])
+				{					
+					this.textures[index] = true;
+					this.nextTexture = index + 1;
+
+					if (this.nextTexture >= this.textures.Length)
+						this.nextTexture -= (uint)this.textures.Length;
+					
+					return index;
+				}
+			}
+
+			throw new SamuraiException("Maximum number of Textures allocated. Dispose of at least one Texture before allocating another.");
+		}
+
+		internal void DeallocateTextureIndex(uint index)
+		{
+			this.textures[index] = false;
 		}
 		
 		public void Begin()
