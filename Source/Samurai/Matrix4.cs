@@ -159,6 +159,24 @@ namespace Samurai
 			result.M33 = zScale;
 		}
 
+		public static Matrix4 CreateScale(Vector2 scales)
+		{
+			Matrix4 returnMatrix = Matrix4.Identity;
+
+			returnMatrix.M11 = scales.X;
+			returnMatrix.M22 = scales.Y;
+
+			return returnMatrix;
+		}
+
+		public static void CreateScale(ref Vector2 scales, out Matrix4 result)
+		{
+			result = Matrix4.Identity;
+
+			result.M11 = scales.X;
+			result.M22 = scales.Y;
+		}
+
 		public static Matrix4 CreateScale(Vector3 scales)
 		{
 			Matrix4 returnMatrix = Matrix4.Identity;

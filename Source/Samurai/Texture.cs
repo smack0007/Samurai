@@ -106,8 +106,11 @@ namespace Samurai
 
 			Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream);
 
-			byte[] bytes = new byte[bitmap.Width * bitmap.Height * 4];
+			texture.Width = bitmap.Width;
+			texture.Height = bitmap.Height;
 
+			byte[] bytes = new byte[bitmap.Width * bitmap.Height * 4];
+			
 			BitmapData bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 			Marshal.Copy(bitmapData.Scan0, bytes, 0, bytes.Length);
 			bitmap.UnlockBits(bitmapData);
