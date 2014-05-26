@@ -31,7 +31,6 @@ namespace Samurai
 		public const uint StreamCopy = 0x88E2;
 		public const uint StreamDraw = 0x88E0;
 		public const uint StreamRead = 0x88E1;
-		public const uint Triangles = 0x0004;
 		public const uint VertexShader = 0x8B31;
 		
 		// Error Codes
@@ -47,6 +46,11 @@ namespace Samurai
 
 		// Pixels
 		public const uint Rgba = 0x1908;
+
+		// Primitive Types
+		public const uint Lines = 0x0001;
+		public const uint Points = 0x0000;
+		public const uint Triangles = 0x0004;
 
 		// Textures
 		public const uint ClampToEdge = 0x812F;
@@ -301,17 +305,21 @@ namespace Samurai
 			CheckErrors("BlendFunc");
 		}
 
-		public static void BufferData<T>(uint target, T[] data, uint usage)
+		public static void BufferData<T>(uint target, T[] data, int index, int length, uint usage)
 		{
+			int sizeOfT = Marshal.SizeOf(typeof(T));
 			GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
+			IntPtr ptr = IntPtr.Add(dataPtr.AddrOfPinnedObject(), index * sizeOfT);
+
 			try
 			{
-				_BufferData(target, (IntPtr)(Marshal.SizeOf(typeof(T)) * data.Length), dataPtr.AddrOfPinnedObject(), usage);
+				_BufferData(target, (IntPtr)(sizeOfT * length), ptr, usage);
 			}
 			finally
 			{
 				dataPtr.Free();
 			}
+
 			CheckErrors("BufferData");
 		}
 

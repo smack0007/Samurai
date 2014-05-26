@@ -55,11 +55,11 @@ namespace Samurai
 			GL.DeleteBuffer(this.buffer);
 		}
 
-		internal void SetDataInternal(T[] data, uint usage)
+		internal void SetDataInternal(T[] data, int index, int count, uint usage)
 		{
 			GL.BindBuffer(GL.ArrayBuffer, this.buffer);
-			GL.BufferData(GL.ArrayBuffer, data, GL.DynamicDraw);
-			this.Count = data.Length;
+			GL.BufferData(GL.ArrayBuffer, data, index, count, GL.DynamicDraw);
+			this.Count = count;
 		}
 	}
 }

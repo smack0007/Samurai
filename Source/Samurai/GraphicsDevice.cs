@@ -83,17 +83,17 @@ namespace Samurai
 			GL.Clear(GL.ColorBufferBit | GL.DepthBufferBit);
 		}
 
-		public void Draw<T>(VertexBuffer<T> vertexBuffer)
+		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer)
 			where T : struct
 		{
 			if (vertexBuffer == null)
 				throw new ArgumentNullException("vertexBuffer");
 
 			GL.BindVertexArray(vertexBuffer.vertexArray);
-			GL.DrawArrays(GL.Triangles, 0, vertexBuffer.Count);
+			GL.DrawArrays((uint)type, 0, vertexBuffer.Count);
 		}
 
-		public void Draw<TVertex, TIndex>(VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer)
+		public void Draw<TVertex, TIndex>(PrimitiveType type, VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer)
 			where TVertex : struct
 			where TIndex : struct
 		{
@@ -105,7 +105,7 @@ namespace Samurai
 
 			GL.BindVertexArray(vertexBuffer.vertexArray);
 			GL.BindBuffer(GL.ElementArrayBuffer, indexBuffer.buffer);
-			GL.DrawElements(GL.Triangles, indexBuffer.Count, indexBuffer.dataType, IntPtr.Zero);
+			GL.DrawElements((uint)type, indexBuffer.Count, indexBuffer.dataType, IntPtr.Zero);
 		}
 
 		public void End()

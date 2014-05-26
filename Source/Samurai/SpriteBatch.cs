@@ -243,7 +243,7 @@ namespace Samurai
 		{
 			if (this.vertexCount > 0)
 			{
-				this.vertexBuffer.SetData(this.vertices);
+				this.vertexBuffer.SetData(this.vertices, 0, this.vertexCount);
 
 				this.shader.Use();
 
@@ -254,7 +254,7 @@ namespace Samurai
 				this.shader.SetProjectionMatrix(ref this.projection);
 				this.shader.SetSampler(this.texture);
 
-				this.graphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);
+				this.graphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 
 				this.vertexCount = 0;
 			}

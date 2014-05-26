@@ -12,7 +12,12 @@ namespace Samurai
 
 		public void SetData(T[] data)
 		{
-			this.SetDataInternal(data, GL.DynamicDraw);
+			this.SetDataInternal(data, 0, data.Length, GL.DynamicDraw);
+		}
+
+		public void SetData(T[] data, int startIndex, int length)
+		{
+			this.SetDataInternal(data, startIndex, length, GL.DynamicDraw);
 		}
 	}
 }

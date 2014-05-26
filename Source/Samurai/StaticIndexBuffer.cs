@@ -8,7 +8,7 @@ namespace Samurai
 		public StaticIndexBuffer(GraphicsDevice graphicsDevice, T[] data)
 			: base(graphicsDevice)
 		{
-			this.SetDataInternal(data, GL.StaticDraw);
+			this.SetDataInternal(data, 0, data.Length, GL.StaticDraw);
 		}
 	}
 }

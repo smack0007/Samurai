@@ -68,6 +68,7 @@
     <Compile Include="FragmentShader.cs" />
     <Compile Include="ISpriteBatchShaderProgram.cs" />
     <Compile Include="MathHelper.cs" />
+    <Compile Include="PrimitiveType.cs" />
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="StaticIndexBuffer.cs" />
     <Compile Include="StaticVertexBuffer.cs" />
