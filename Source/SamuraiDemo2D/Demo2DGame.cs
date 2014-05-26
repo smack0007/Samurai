@@ -17,7 +17,9 @@ namespace SamuraiDemo2D
 
 			this.planesTexture = Texture.FromFile(this.GraphicsDevice, "Planes.png", new TextureParams()
 				{
-					ColorKey = GLHelper.MakePixelRGBA(255, 0, 255, 255)
+					ColorKey = GLHelper.MakePixelRGBA(255, 0, 255, 255),
+					WrapS = TextureWrap.Repeat,
+					WrapT = TextureWrap.Repeat
 				});
 		}
 

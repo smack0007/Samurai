@@ -4,7 +4,7 @@ namespace Samurai
 {
 	public enum TextureWrap : uint
 	{
-		Clamp = GL.Clamp,
+		Clamp = GL.ClampToEdge,
 
 		Repeat = GL.Repeat
 	}

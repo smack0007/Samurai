@@ -49,7 +49,7 @@ namespace Samurai
 		public const uint Rgba = 0x1908;
 
 		// Textures
-		public const uint Clamp = 0x2900;
+		public const uint ClampToEdge = 0x812F;
 		public const uint Linear = 0x2601;
 		public const uint Nearest = 0x2600;
 		public const uint Repeat = 0x2901;

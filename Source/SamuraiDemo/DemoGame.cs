@@ -76,7 +76,7 @@ namespace SamuraiDemo
 				Matrix4.InvertedYAxis;
 					
 			this.shaderProgram.SetMatrix("projection", ref projection);
-			this.shaderProgram.SetSampler("texture0", this.texture0);
+			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.GraphicsDevice.Draw(this.vertexBuffer, this.indexBuffer);
 
