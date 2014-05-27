@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Samurai
 {
@@ -89,8 +90,17 @@ namespace Samurai
 			if (vertexBuffer == null)
 				throw new ArgumentNullException("vertexBuffer");
 
+			this.Draw(type, vertexBuffer, 0, vertexBuffer.Count);
+		}
+
+		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer, int startVertex, int vertexCount)
+			where T : struct
+		{
+			if (vertexBuffer == null)
+				throw new ArgumentNullException("vertexBuffer");
+
 			GL.BindVertexArray(vertexBuffer.vertexArray);
-			GL.DrawArrays((uint)type, 0, vertexBuffer.Count);
+			GL.DrawArrays((uint)type, startVertex, vertexCount);
 		}
 
 		public void Draw<TVertex, TIndex>(PrimitiveType type, VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer)
@@ -103,9 +113,24 @@ namespace Samurai
 			if (indexBuffer == null)
 				throw new ArgumentNullException("indexBuffer");
 
+			this.Draw(type, vertexBuffer, indexBuffer, 0, indexBuffer.Count);
+		}
+
+		public void Draw<TVertex, TIndex>(PrimitiveType type, VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer, int startIndex, int indexCount)
+			where TVertex : struct
+			where TIndex : struct
+		{
+			if (vertexBuffer == null)
+				throw new ArgumentNullException("vertexBuffer");
+
+			if (indexBuffer == null)
+				throw new ArgumentNullException("indexBuffer");
+
+			int sizeOfTIndex = Marshal.SizeOf(typeof(TIndex));
+
 			GL.BindVertexArray(vertexBuffer.vertexArray);
 			GL.BindBuffer(GL.ElementArrayBuffer, indexBuffer.buffer);
-			GL.DrawElements((uint)type, indexBuffer.Count, indexBuffer.dataType, IntPtr.Zero);
+			GL.DrawElements((uint)type, indexCount, indexBuffer.dataType, (IntPtr)(startIndex * sizeOfTIndex));
 		}
 
 		public void End()
