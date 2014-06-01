@@ -15,312 +15,312 @@ namespace Samurai
 #endif
 
 		[DllImport(Library, EntryPoint = "glfwCreateWindow", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal static extern IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
+        public static extern IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
 
         [DllImport(Library, EntryPoint = "glfwGetProcAddress", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern IntPtr GetProcAddress(string procName);
+		public static extern IntPtr GetProcAddress(string procName);
 
         [DllImport(Library, EntryPoint = "glfwInit", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern int Init();
+		public static extern int Init();
 
         [DllImport(Library, EntryPoint = "glfwMakeContextCurrent", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void MakeContextCurrent(IntPtr window);
+		public static extern void MakeContextCurrent(IntPtr window);
 
         [DllImport(Library, EntryPoint = "glfwPollEvents", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void PollEvents();
+		public static extern void PollEvents();
 
         [DllImport(Library, EntryPoint = "glfwSetCharCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern CharFun SetCharCallback(IntPtr window, CharFun cbfun);
+		public static extern CharFun SetCharCallback(IntPtr window, CharFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetCursorPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern CursorPosFun SetCursorPosCallback(IntPtr window, CursorPosFun cbfun);
+		public static extern CursorPosFun SetCursorPosCallback(IntPtr window, CursorPosFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetErrorCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern ErrorFun SetErrorCallback(ErrorFun cbfun);
+		public static extern ErrorFun SetErrorCallback(ErrorFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetKeyCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern KeyFun SetKeyCallback(IntPtr window, KeyFun cbfun);
+		public static extern KeyFun SetKeyCallback(IntPtr window, KeyFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetMouseButtonCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern MouseButtonFun SetMouseButtonCallback(IntPtr window, MouseButtonFun cbfun);
+		public static extern MouseButtonFun SetMouseButtonCallback(IntPtr window, MouseButtonFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetScrollCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern ScrollFun SetSetScrollCallback(IntPtr window, ScrollFun cbfun);
+		public static extern ScrollFun SetScrollCallback(IntPtr window, ScrollFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetWindowPos", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void SetWindowPos(IntPtr window, int xpos, int ypos);
+		public static extern void SetWindowPos(IntPtr window, int xpos, int ypos);
 
         [DllImport(Library, EntryPoint = "glfwSetWindowPosCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void SetWindowPosCallback(IntPtr window, WindowPosFun cbfun);
+		public static extern void SetWindowPosCallback(IntPtr window, WindowPosFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern int SetWindowShouldClose(IntPtr window, int value);
+		public static extern int SetWindowShouldClose(IntPtr window, int value);
 
         [DllImport(Library, EntryPoint = "glfwSetWindowSize", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void SetWindowSize(IntPtr window, int width, int height);
+		public static extern void SetWindowSize(IntPtr window, int width, int height);
 
         [DllImport(Library, EntryPoint = "glfwSetWindowSizeCallback", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void SetWindowSizeCallback(IntPtr window, WindowSizeFun cbfun);
+		public static extern void SetWindowSizeCallback(IntPtr window, WindowSizeFun cbfun);
 
         [DllImport(Library, EntryPoint = "glfwSetWindowTitle", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void SetWindowTitle(IntPtr window, string title);
+		public static extern void SetWindowTitle(IntPtr window, string title);
 
         [DllImport(Library, EntryPoint = "glfwSwapBuffers", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern void SwapBuffers(IntPtr window);
+		public static extern void SwapBuffers(IntPtr window);
 
         [DllImport(Library, EntryPoint = "glfwTerminate", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern int Terminate();
+		public static extern int Terminate();
 
         [DllImport(Library, EntryPoint = "glfwWindowHint", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern int WindowHint(int target, int hint);
+		public static extern int WindowHint(int target, int hint);
 
         [DllImport(Library, EntryPoint = "glfwWindowShouldClose", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		internal static extern int WindowShouldClose(IntPtr window);
+		public static extern int WindowShouldClose(IntPtr window);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void CharFun(IntPtr window, uint codepoint);
+        public delegate void CharFun(IntPtr window, uint codepoint);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void CursorEnterFun(IntPtr window, int entered);
+        public delegate void CursorEnterFun(IntPtr window, int entered);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void CursorPosFun(IntPtr window, double xpos, double ypos);
+        public delegate void CursorPosFun(IntPtr window, double xpos, double ypos);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void ErrorFun(int error, string description);
+        public delegate void ErrorFun(int error, string description);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void KeyFun(IntPtr window, int key, int scancode, int action, int mods);
+        public delegate void KeyFun(IntPtr window, int key, int scancode, int action, int mods);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void MouseButtonFun(IntPtr window, int button, int action, int mods);
+        public delegate void MouseButtonFun(IntPtr window, int button, int action, int mods);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void ScrollFun(IntPtr window, double xoffset, double yoffset);
+        public delegate void ScrollFun(IntPtr window, double xoffset, double yoffset);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void WindowPosFun(IntPtr window, int xpos, int ypos);
+        public delegate void WindowPosFun(IntPtr window, int xpos, int ypos);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-        internal delegate void WindowSizeFun(IntPtr window, int width, int height);
+        public delegate void WindowSizeFun(IntPtr window, int width, int height);
 
-        internal const int RELEASE = 0;
-        internal const int PRESS = 1;
-        internal const int REPEAT = 2;
+        public const int RELEASE = 0;
+        public const int PRESS = 1;
+        public const int REPEAT = 2;
 
-        internal const int KEY_UNKNOWN = -1;
-        internal const int KEY_SPACE = 32;
-        internal const int KEY_APOSTROPHE = 39;
-        internal const int KEY_COMMA = 44;
-        internal const int KEY_MINUS = 45;
-        internal const int KEY_PERIOD = 46;
-        internal const int KEY_SLASH = 47;
-        internal const int KEY_0 = 48;
-        internal const int KEY_1 = 49;
-        internal const int KEY_2 = 50;
-        internal const int KEY_3 = 51;
-        internal const int KEY_4 = 52;
-        internal const int KEY_5 = 53;
-        internal const int KEY_6 = 54;
-        internal const int KEY_7 = 55;
-        internal const int KEY_8 = 56;
-        internal const int KEY_9 = 57;
-        internal const int KEY_SEMICOLON = 59;
-        internal const int KEY_EQUAL = 61;
-        internal const int KEY_A = 65;
-        internal const int KEY_B = 66;
-        internal const int KEY_C = 67;
-        internal const int KEY_D = 68;
-        internal const int KEY_E = 69;
-        internal const int KEY_F = 70;
-        internal const int KEY_G = 71;
-        internal const int KEY_H = 72;
-        internal const int KEY_I = 73;
-        internal const int KEY_J = 74;
-        internal const int KEY_K = 75;
-        internal const int KEY_L = 76;
-        internal const int KEY_M = 77;
-        internal const int KEY_N = 78;
-        internal const int KEY_O = 79;
-        internal const int KEY_P = 80;
-        internal const int KEY_Q = 81;
-        internal const int KEY_R = 82;
-        internal const int KEY_S = 83;
-        internal const int KEY_T = 84;
-        internal const int KEY_U = 85;
-        internal const int KEY_V = 86;
-        internal const int KEY_W = 87;
-        internal const int KEY_X = 88;
-        internal const int KEY_Y = 89;
-        internal const int KEY_Z = 90;
-        internal const int KEY_LEFT_BRACKET = 91;
-        internal const int KEY_BACKSLASH = 92;
-        internal const int KEY_RIGHT_BRACKET = 93;
-        internal const int KEY_GRAVE_ACCENT = 96;
-        internal const int KEY_WORLD_1 = 161;
-        internal const int KEY_WORLD_2 = 162;
-        internal const int KEY_ESCAPE = 256;
-        internal const int KEY_ENTER = 257;
-        internal const int KEY_TAB = 258;
-        internal const int KEY_BACKSPACE = 259;
-        internal const int KEY_INSERT = 260;
-        internal const int KEY_DELETE = 261;
-        internal const int KEY_RIGHT = 262;
-        internal const int KEY_LEFT = 263;
-        internal const int KEY_DOWN = 264;
-        internal const int KEY_UP = 265;
-        internal const int KEY_PAGE_UP = 266;
-        internal const int KEY_PAGE_DOWN = 267;
-        internal const int KEY_HOME = 268;
-        internal const int KEY_END = 269;
-        internal const int KEY_CAPS_LOCK = 280;
-        internal const int KEY_SCROLL_LOCK = 281;
-        internal const int KEY_NUM_LOCK = 282;
-        internal const int KEY_PRINT_SCREEN = 283;
-        internal const int KEY_PAUSE = 284;
-        internal const int KEY_F1 = 290;
-        internal const int KEY_F2 = 291;
-        internal const int KEY_F3 = 292;
-        internal const int KEY_F4 = 293;
-        internal const int KEY_F5 = 294;
-        internal const int KEY_F6 = 295;
-        internal const int KEY_F7 = 296;
-        internal const int KEY_F8 = 297;
-        internal const int KEY_F9 = 298;
-        internal const int KEY_F10 = 299;
-        internal const int KEY_F11 = 300;
-        internal const int KEY_F12 = 301;
-        internal const int KEY_F13 = 302;
-        internal const int KEY_F14 = 303;
-        internal const int KEY_F15 = 304;
-        internal const int KEY_F16 = 305;
-        internal const int KEY_F17 = 306;
-        internal const int KEY_F18 = 307;
-        internal const int KEY_F19 = 308;
-        internal const int KEY_F20 = 309;
-        internal const int KEY_F21 = 310;
-        internal const int KEY_F22 = 311;
-        internal const int KEY_F23 = 312;
-        internal const int KEY_F24 = 313;
-        internal const int KEY_F25 = 314;
-        internal const int KEY_KP_0 = 320;
-        internal const int KEY_KP_1 = 321;
-        internal const int KEY_KP_2 = 322;
-        internal const int KEY_KP_3 = 323;
-        internal const int KEY_KP_4 = 324;
-        internal const int KEY_KP_5 = 325;
-        internal const int KEY_KP_6 = 326;
-        internal const int KEY_KP_7 = 327;
-        internal const int KEY_KP_8 = 328;
-        internal const int KEY_KP_9 = 329;
-        internal const int KEY_KP_DECIMAL = 330;
-        internal const int KEY_KP_DIVIDE = 331;
-        internal const int KEY_KP_MULTIPLY = 332;
-        internal const int KEY_KP_SUBTRACT = 333;
-        internal const int KEY_KP_ADD = 334;
-        internal const int KEY_KP_ENTER = 335;
-        internal const int KEY_KP_EQUAL = 336;
-        internal const int KEY_LEFT_SHIFT = 340;
-        internal const int KEY_LEFT_CONTROL = 341;
-        internal const int KEY_LEFT_ALT = 342;
-        internal const int KEY_LEFT_SUPER = 343;
-        internal const int KEY_RIGHT_SHIFT = 344;
-        internal const int KEY_RIGHT_CONTROL = 345;
-        internal const int KEY_RIGHT_ALT = 346;
-        internal const int KEY_RIGHT_SUPER = 347;
-        internal const int KEY_MENU = 348;
-        internal const int KEY_LAST = KEY_MENU;
-        internal const int MOD_SHIFT = 0x0001;
-        internal const int MOD_CONTROL = 0x0002;
-        internal const int MOD_ALT = 0x0004;
-        internal const int MOD_SUPER = 0x0008;
+        public const int KEY_UNKNOWN = -1;
+        public const int KEY_SPACE = 32;
+        public const int KEY_APOSTROPHE = 39;
+        public const int KEY_COMMA = 44;
+        public const int KEY_MINUS = 45;
+        public const int KEY_PERIOD = 46;
+        public const int KEY_SLASH = 47;
+        public const int KEY_0 = 48;
+        public const int KEY_1 = 49;
+        public const int KEY_2 = 50;
+        public const int KEY_3 = 51;
+        public const int KEY_4 = 52;
+        public const int KEY_5 = 53;
+        public const int KEY_6 = 54;
+        public const int KEY_7 = 55;
+        public const int KEY_8 = 56;
+        public const int KEY_9 = 57;
+        public const int KEY_SEMICOLON = 59;
+        public const int KEY_EQUAL = 61;
+        public const int KEY_A = 65;
+        public const int KEY_B = 66;
+        public const int KEY_C = 67;
+        public const int KEY_D = 68;
+        public const int KEY_E = 69;
+        public const int KEY_F = 70;
+        public const int KEY_G = 71;
+        public const int KEY_H = 72;
+        public const int KEY_I = 73;
+        public const int KEY_J = 74;
+        public const int KEY_K = 75;
+        public const int KEY_L = 76;
+        public const int KEY_M = 77;
+        public const int KEY_N = 78;
+        public const int KEY_O = 79;
+        public const int KEY_P = 80;
+        public const int KEY_Q = 81;
+        public const int KEY_R = 82;
+        public const int KEY_S = 83;
+        public const int KEY_T = 84;
+        public const int KEY_U = 85;
+        public const int KEY_V = 86;
+        public const int KEY_W = 87;
+        public const int KEY_X = 88;
+        public const int KEY_Y = 89;
+        public const int KEY_Z = 90;
+        public const int KEY_LEFT_BRACKET = 91;
+        public const int KEY_BACKSLASH = 92;
+        public const int KEY_RIGHT_BRACKET = 93;
+        public const int KEY_GRAVE_ACCENT = 96;
+        public const int KEY_WORLD_1 = 161;
+        public const int KEY_WORLD_2 = 162;
+        public const int KEY_ESCAPE = 256;
+        public const int KEY_ENTER = 257;
+        public const int KEY_TAB = 258;
+        public const int KEY_BACKSPACE = 259;
+        public const int KEY_INSERT = 260;
+        public const int KEY_DELETE = 261;
+        public const int KEY_RIGHT = 262;
+        public const int KEY_LEFT = 263;
+        public const int KEY_DOWN = 264;
+        public const int KEY_UP = 265;
+        public const int KEY_PAGE_UP = 266;
+        public const int KEY_PAGE_DOWN = 267;
+        public const int KEY_HOME = 268;
+        public const int KEY_END = 269;
+        public const int KEY_CAPS_LOCK = 280;
+        public const int KEY_SCROLL_LOCK = 281;
+        public const int KEY_NUM_LOCK = 282;
+        public const int KEY_PRINT_SCREEN = 283;
+        public const int KEY_PAUSE = 284;
+        public const int KEY_F1 = 290;
+        public const int KEY_F2 = 291;
+        public const int KEY_F3 = 292;
+        public const int KEY_F4 = 293;
+        public const int KEY_F5 = 294;
+        public const int KEY_F6 = 295;
+        public const int KEY_F7 = 296;
+        public const int KEY_F8 = 297;
+        public const int KEY_F9 = 298;
+        public const int KEY_F10 = 299;
+        public const int KEY_F11 = 300;
+        public const int KEY_F12 = 301;
+        public const int KEY_F13 = 302;
+        public const int KEY_F14 = 303;
+        public const int KEY_F15 = 304;
+        public const int KEY_F16 = 305;
+        public const int KEY_F17 = 306;
+        public const int KEY_F18 = 307;
+        public const int KEY_F19 = 308;
+        public const int KEY_F20 = 309;
+        public const int KEY_F21 = 310;
+        public const int KEY_F22 = 311;
+        public const int KEY_F23 = 312;
+        public const int KEY_F24 = 313;
+        public const int KEY_F25 = 314;
+        public const int KEY_KP_0 = 320;
+        public const int KEY_KP_1 = 321;
+        public const int KEY_KP_2 = 322;
+        public const int KEY_KP_3 = 323;
+        public const int KEY_KP_4 = 324;
+        public const int KEY_KP_5 = 325;
+        public const int KEY_KP_6 = 326;
+        public const int KEY_KP_7 = 327;
+        public const int KEY_KP_8 = 328;
+        public const int KEY_KP_9 = 329;
+        public const int KEY_KP_DECIMAL = 330;
+        public const int KEY_KP_DIVIDE = 331;
+        public const int KEY_KP_MULTIPLY = 332;
+        public const int KEY_KP_SUBTRACT = 333;
+        public const int KEY_KP_ADD = 334;
+        public const int KEY_KP_ENTER = 335;
+        public const int KEY_KP_EQUAL = 336;
+        public const int KEY_LEFT_SHIFT = 340;
+        public const int KEY_LEFT_CONTROL = 341;
+        public const int KEY_LEFT_ALT = 342;
+        public const int KEY_LEFT_SUPER = 343;
+        public const int KEY_RIGHT_SHIFT = 344;
+        public const int KEY_RIGHT_CONTROL = 345;
+        public const int KEY_RIGHT_ALT = 346;
+        public const int KEY_RIGHT_SUPER = 347;
+        public const int KEY_MENU = 348;
+        public const int KEY_LAST = KEY_MENU;
+        public const int MOD_SHIFT = 0x0001;
+        public const int MOD_CONTROL = 0x0002;
+        public const int MOD_ALT = 0x0004;
+        public const int MOD_SUPER = 0x0008;
         
-        internal const int MOUSE_BUTTON_1 = 0;
-        internal const int MOUSE_BUTTON_2 = 1;
-        internal const int MOUSE_BUTTON_3 = 2;
-        internal const int MOUSE_BUTTON_4 = 3;
-        internal const int MOUSE_BUTTON_5 = 4;
-        internal const int MOUSE_BUTTON_6 = 5;
-        internal const int MOUSE_BUTTON_7 = 6;
-        internal const int MOUSE_BUTTON_8 = 7;
-        internal const int MOUSE_BUTTON_LAST = MOUSE_BUTTON_8;
-        internal const int MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1;
-        internal const int MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2;
-        internal const int MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3;
+        public const int MOUSE_BUTTON_1 = 0;
+        public const int MOUSE_BUTTON_2 = 1;
+        public const int MOUSE_BUTTON_3 = 2;
+        public const int MOUSE_BUTTON_4 = 3;
+        public const int MOUSE_BUTTON_5 = 4;
+        public const int MOUSE_BUTTON_6 = 5;
+        public const int MOUSE_BUTTON_7 = 6;
+        public const int MOUSE_BUTTON_8 = 7;
+        public const int MOUSE_BUTTON_LAST = MOUSE_BUTTON_8;
+        public const int MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1;
+        public const int MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2;
+        public const int MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3;
         
-        internal const int JOYSTICK_1 = 0;
-        internal const int JOYSTICK_2 = 1;
-        internal const int JOYSTICK_3 = 2;
-        internal const int JOYSTICK_4 = 3;
-        internal const int JOYSTICK_5 = 4;
-        internal const int JOYSTICK_6 = 5;
-        internal const int JOYSTICK_7 = 6;
-        internal const int JOYSTICK_8 = 7;
-        internal const int JOYSTICK_9 = 8;
-        internal const int JOYSTICK_10 = 9;
-        internal const int JOYSTICK_11 = 10;
-        internal const int JOYSTICK_12 = 11;
-        internal const int JOYSTICK_13 = 12;
-        internal const int JOYSTICK_14 = 13;
-        internal const int JOYSTICK_15 = 14;
-        internal const int JOYSTICK_16 = 15;
-        internal const int JOYSTICK_LAST = JOYSTICK_16;
+        public const int JOYSTICK_1 = 0;
+        public const int JOYSTICK_2 = 1;
+        public const int JOYSTICK_3 = 2;
+        public const int JOYSTICK_4 = 3;
+        public const int JOYSTICK_5 = 4;
+        public const int JOYSTICK_6 = 5;
+        public const int JOYSTICK_7 = 6;
+        public const int JOYSTICK_8 = 7;
+        public const int JOYSTICK_9 = 8;
+        public const int JOYSTICK_10 = 9;
+        public const int JOYSTICK_11 = 10;
+        public const int JOYSTICK_12 = 11;
+        public const int JOYSTICK_13 = 12;
+        public const int JOYSTICK_14 = 13;
+        public const int JOYSTICK_15 = 14;
+        public const int JOYSTICK_16 = 15;
+        public const int JOYSTICK_LAST = JOYSTICK_16;
         
-        internal const int NOT_INITIALIZED = 0x00010001;
-        internal const int NO_CURRENT_CONTEXT = 0x00010002;
-        internal const int INVALID_ENUM = 0x00010003;
-        internal const int INVALID_VALUE = 0x00010004;
-        internal const int OUT_OF_MEMORY = 0x00010005;
-        internal const int API_UNAVAILABLE = 0x00010006;
-        internal const int VERSION_UNAVAILABLE = 0x00010007;
-        internal const int PLATFORM_ERROR = 0x00010008;
-        internal const int FORMAT_UNAVAILABLE = 0x00010009;
-        internal const int FOCUSED = 0x00020001;
-        internal const int ICONIFIED = 0x00020002;
-        internal const int RESIZABLE = 0x00020003;
-        internal const int VISIBLE = 0x00020004;
-        internal const int DECORATED = 0x00020005;
-        internal const int RED_BITS = 0x00021001;
-        internal const int GREEN_BITS = 0x00021002;
-        internal const int BLUE_BITS = 0x00021003;
-        internal const int ALPHA_BITS = 0x00021004;
-        internal const int DEPTH_BITS = 0x00021005;
-        internal const int STENCIL_BITS = 0x00021006;
-        internal const int ACCUM_RED_BITS = 0x00021007;
-        internal const int ACCUM_GREEN_BITS = 0x00021008;
-        internal const int ACCUM_BLUE_BITS = 0x00021009;
-        internal const int ACCUM_ALPHA_BITS = 0x0002100A;
-        internal const int AUX_BUFFERS = 0x0002100B;
-        internal const int STEREO = 0x0002100C;
-        internal const int SAMPLES = 0x0002100D;
-        internal const int SRGB_CAPABLE = 0x0002100E;
-        internal const int REFRESH_RATE = 0x0002100F;
-        internal const int CLIENT_API = 0x00022001;
-        internal const int CONTEXT_VERSION_MAJOR = 0x00022002;
-        internal const int CONTEXT_VERSION_MINOR = 0x00022003;
-        internal const int CONTEXT_REVISION = 0x00022004;
-        internal const int CONTEXT_ROBUSTNESS = 0x00022005;
-        internal const int OPENGL_FORWARD_COMPAT = 0x00022006;
-        internal const int OPENGL_DEBUG_CONTEXT = 0x00022007;
-        internal const int OPENGL_PROFILE = 0x00022008;
-        internal const int OPENGL_API = 0x00030001;
-        internal const int OPENGL_ES_API = 0x00030002;
-        internal const int NO_ROBUSTNESS = 0;
-        internal const int NO_RESET_NOTIFICATION = 0x00031001;
-        internal const int LOSE_CONTEXT_ON_RESET = 0x00031002;
-        internal const int OPENGL_ANY_PROFILE = 0;
-        internal const int OPENGL_CORE_PROFILE = 0x00032001;
-        internal const int OPENGL_COMPAT_PROFILE = 0x00032002;
-        internal const int CURSOR = 0x00033001;
-        internal const int STICKY_KEYS = 0x00033002;
-        internal const int STICKY_MOUSE_BUTTONS = 0x00033003;
-        internal const int CURSOR_NORMAL = 0x00034001;
-        internal const int CURSOR_HIDDEN = 0x00034002;
-        internal const int CURSOR_DISABLED = 0x00034003;
-        internal const int CONNECTED = 0x00040001;
-        internal const int DISCONNECTED = 0x00040002;
+        public const int NOT_INITIALIZED = 0x00010001;
+        public const int NO_CURRENT_CONTEXT = 0x00010002;
+        public const int INVALID_ENUM = 0x00010003;
+        public const int INVALID_VALUE = 0x00010004;
+        public const int OUT_OF_MEMORY = 0x00010005;
+        public const int API_UNAVAILABLE = 0x00010006;
+        public const int VERSION_UNAVAILABLE = 0x00010007;
+        public const int PLATFORM_ERROR = 0x00010008;
+        public const int FORMAT_UNAVAILABLE = 0x00010009;
+        public const int FOCUSED = 0x00020001;
+        public const int ICONIFIED = 0x00020002;
+        public const int RESIZABLE = 0x00020003;
+        public const int VISIBLE = 0x00020004;
+        public const int DECORATED = 0x00020005;
+        public const int RED_BITS = 0x00021001;
+        public const int GREEN_BITS = 0x00021002;
+        public const int BLUE_BITS = 0x00021003;
+        public const int ALPHA_BITS = 0x00021004;
+        public const int DEPTH_BITS = 0x00021005;
+        public const int STENCIL_BITS = 0x00021006;
+        public const int ACCUM_RED_BITS = 0x00021007;
+        public const int ACCUM_GREEN_BITS = 0x00021008;
+        public const int ACCUM_BLUE_BITS = 0x00021009;
+        public const int ACCUM_ALPHA_BITS = 0x0002100A;
+        public const int AUX_BUFFERS = 0x0002100B;
+        public const int STEREO = 0x0002100C;
+        public const int SAMPLES = 0x0002100D;
+        public const int SRGB_CAPABLE = 0x0002100E;
+        public const int REFRESH_RATE = 0x0002100F;
+        public const int CLIENT_API = 0x00022001;
+        public const int CONTEXT_VERSION_MAJOR = 0x00022002;
+        public const int CONTEXT_VERSION_MINOR = 0x00022003;
+        public const int CONTEXT_REVISION = 0x00022004;
+        public const int CONTEXT_ROBUSTNESS = 0x00022005;
+        public const int OPENGL_FORWARD_COMPAT = 0x00022006;
+        public const int OPENGL_DEBUG_CONTEXT = 0x00022007;
+        public const int OPENGL_PROFILE = 0x00022008;
+        public const int OPENGL_API = 0x00030001;
+        public const int OPENGL_ES_API = 0x00030002;
+        public const int NO_ROBUSTNESS = 0;
+        public const int NO_RESET_NOTIFICATION = 0x00031001;
+        public const int LOSE_CONTEXT_ON_RESET = 0x00031002;
+        public const int OPENGL_ANY_PROFILE = 0;
+        public const int OPENGL_CORE_PROFILE = 0x00032001;
+        public const int OPENGL_COMPAT_PROFILE = 0x00032002;
+        public const int CURSOR = 0x00033001;
+        public const int STICKY_KEYS = 0x00033002;
+        public const int STICKY_MOUSE_BUTTONS = 0x00033003;
+        public const int CURSOR_NORMAL = 0x00034001;
+        public const int CURSOR_HIDDEN = 0x00034002;
+        public const int CURSOR_DISABLED = 0x00034003;
+        public const int CONNECTED = 0x00040001;
+        public const int DISCONNECTED = 0x00040002;
  
-        internal static void RegisterErrorCallback()
+        public static void RegisterErrorCallback()
         {
             SetErrorCallback(errorCallback);
         }
@@ -333,7 +333,7 @@ namespace Samurai
             throw new SamuraiException(string.Format("GLFW Error: ({0}) {1}", error, description));
         }
 
-        internal static Key ConvertKeyCode(int keyCode)
+        public static Key ConvertKeyCode(int keyCode)
         {
             switch (keyCode)
             {
@@ -462,7 +462,7 @@ namespace Samurai
             return Key.Unknown;
         }
 
-        internal static MouseButton ConvertMouseButton(int button)
+        public static MouseButton ConvertMouseButton(int button)
         {
             switch (button)
             {

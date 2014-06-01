@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Samurai
@@ -22,6 +24,12 @@ namespace Samurai
 			private set;
 		}
 
+		protected int FramesPerSecond
+		{
+			get;
+			set;
+		}
+
 		protected bool AutoResizeViewport
 		{
 			get;
@@ -30,6 +38,9 @@ namespace Samurai
 
 		public Game()
 		{
+			this.FramesPerSecond = 60;
+			this.AutoResizeViewport = true;
+
 			if (GLFW.Init() == 0)
 				throw new SamuraiException("GLFW initialization failed.");
 
@@ -42,8 +53,7 @@ namespace Samurai
 
 			this.Window = new GameWindow();
 			this.Window.Resize += this.Window_Resize;
-			this.AutoResizeViewport = true;
-
+			
 			GL.Init();
 
 			this.GraphicsDevice = new GraphicsDevice(this.Window);
@@ -80,12 +90,26 @@ namespace Samurai
 
 		public void Run()
 		{
+			Stopwatch stopwatch = new Stopwatch();
+
+			long nextTick;
+			int timeBetweenTicks = 1000 / this.FramesPerSecond;
+			TimeSpan elapsed = TimeSpan.FromMilliseconds(timeBetweenTicks);
+
+			stopwatch.Start();
+			nextTick = stopwatch.ElapsedMilliseconds;
+						
 			while (!this.Window.ShouldClose())
 			{
 				GLFW.PollEvents();
 
-				this.Update();
-				this.Draw();
+				if (stopwatch.ElapsedMilliseconds >= nextTick)
+				{
+					this.Update(elapsed);
+					this.Draw(elapsed);
+
+					nextTick += timeBetweenTicks;
+				}
 			}
 
 			this.Shutdown();
@@ -96,11 +120,11 @@ namespace Samurai
 			this.Window.SetShouldClose(true);
 		}
 
-		protected virtual void Update()
+		protected virtual void Update(TimeSpan elapsed)
 		{
 		}
 
-		protected virtual void Draw()
+		protected virtual void Draw(TimeSpan elapsed)
 		{
 		}
 

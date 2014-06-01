@@ -1,6 +1,7 @@
 ﻿using Samurai;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -65,14 +66,21 @@ namespace SamuraiDemo
 			});
 		}
 
-		protected override void Draw()
+		float rotation;
+
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.GraphicsDevice.Begin();
 
 			this.shaderProgram.Use();
 
+			rotation += (float)(360.0 * elapsed.TotalSeconds);
+
+			if (rotation >= 360.0f)
+				rotation -= 360.0f;
+
 			Matrix4 projection = 
-				Matrix4.CreateRotationZ(MathHelper.ToRadians(45)) *
+				Matrix4.CreateRotationZ(MathHelper.ToRadians(rotation)) *
 				Matrix4.InvertedYAxis;
 					
 			this.shaderProgram.SetMatrix("projection", ref projection);

@@ -1,4 +1,5 @@
 ﻿using Samurai;
+using System;
 
 namespace SamuraiDemo2D
 {
@@ -23,7 +24,7 @@ namespace SamuraiDemo2D
 				});
 		}
 
-		protected override void Draw()
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.GraphicsDevice.Begin();
 

@@ -110,7 +110,7 @@ namespace Samurai
             GLFW.SetMouseButtonCallback(this.window, this.mouseButtonCallback);
 
             this.scrollCallback = this.OnScroll;
-            GLFW.SetSetScrollCallback(this.window, this.scrollCallback);
+            GLFW.SetScrollCallback(this.window, this.scrollCallback);
             
             GLFW.MakeContextCurrent(this.window);
 
