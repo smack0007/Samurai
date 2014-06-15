@@ -26,7 +26,7 @@ namespace SamuraiDemo2D
 
 		protected override void Draw(TimeSpan elapsed)
 		{
-			this.Graphics.Clear();
+			this.Graphics.Clear(Color4.Black);
 
 			this.spriteBatch.Begin(this.shaderProgram);
 

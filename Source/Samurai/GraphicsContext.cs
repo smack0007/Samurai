@@ -13,17 +13,6 @@ namespace Samurai
 		bool[] textures;
 		uint nextTexture;
 
-		public Color4 ClearColor
-		{
-			get { return this.clearColor; }
-
-			set
-			{
-				this.clearColor = value;
-				GL.ClearColor(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f);
-			}
-		}
-
 		public Rectangle Viewport
 		{
 			get { return this.viewport; }
@@ -43,6 +32,9 @@ namespace Samurai
 			this.host = context;
 
 			this.textures = new bool[32];
+
+			this.clearColor = Color4.CornflowerBlue;
+			GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
 		}
 
 		~GraphicsContext()
@@ -79,8 +71,14 @@ namespace Samurai
 			this.textures[index] = false;
 		}
 		
-		public void Clear()
+		public void Clear(Color4 color)
 		{
+			if (!color.Equals(this.clearColor))
+			{
+				this.clearColor = color;
+				GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
+			}
+
 			GL.Clear(GL.ColorBufferBit | GL.DepthBufferBit);
 		}
 

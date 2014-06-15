@@ -72,7 +72,7 @@ namespace SamuraiDemo
 
 		protected override void Draw(TimeSpan elapsed)
 		{
-			this.Graphics.Clear();
+			this.Graphics.Clear(Color4.CornflowerBlue);
 
 			rotation += (float)(360.0 * elapsed.TotalSeconds);
 
