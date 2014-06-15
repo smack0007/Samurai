@@ -38,7 +38,8 @@ namespace Samurai
 			{
 				GL.EnableVertexAttribArray(index);
 				uint type = GLHelper.GetVertexAttribPointerTypeForType(fieldInfo.FieldType);
-				GL.VertexAttribPointer(index, Marshal.SizeOf(fieldInfo.FieldType) / 4, type, true, Marshal.SizeOf(vertexType), Marshal.OffsetOf(vertexType, fieldInfo.Name));
+				int size = GLHelper.GetVertexAttribPointerSizeForType(fieldInfo.FieldType);
+				GL.VertexAttribPointer(index, size, type, true, Marshal.SizeOf(vertexType), Marshal.OffsetOf(vertexType, fieldInfo.Name));
 				index++;
 			}
 		}

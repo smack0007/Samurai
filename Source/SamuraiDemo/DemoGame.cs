@@ -24,10 +24,10 @@ namespace SamuraiDemo
 
 		Vertex[] vertexData = new Vertex[]
         {
-            new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(1.0f, 0.0f, 0.0f), UV = new Vector2(0.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0.0f, 1.0f, 0.0f), UV = new Vector2(1.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0.0f, 0.0f, 1.0f), UV = new Vector2(1.0f, 1.0f) },
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(1.0f, 1.0f, 0.0f), UV = new Vector2(0.0f, 1.0f) }
+            new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(255, 0, 0), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0, 255, 0), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0, 0, 255), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(255, 255, 0), UV = new Vector2(0.0f, 1.0f) }
         };
 
 		byte[] indexData = new byte[]

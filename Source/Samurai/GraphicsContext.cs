@@ -20,7 +20,7 @@ namespace Samurai
 			set
 			{
 				this.clearColor = value;
-				GL.ClearColor(value.R, value.G, value.B, value.A);
+				GL.ClearColor(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f);
 			}
 		}
 

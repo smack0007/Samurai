@@ -11,7 +11,7 @@ namespace Samurai
 		/// <summary>
 		/// A color in the source image which should be replaced with transparent pixels.
 		/// </summary>
-		public uint? ColorKey
+		public Color4? ColorKey
 		{
 			get;
 			set;
@@ -20,7 +20,7 @@ namespace Samurai
 		/// <summary>
 		/// The pixel to use for transparency when color keying.
 		/// </summary>
-		public uint TransparentPixel
+		public Color4 TransparentPixel
 		{
 			get;
 			set;
@@ -52,6 +52,7 @@ namespace Samurai
 
 		public TextureParams()
 		{
+			this.TransparentPixel = Color4.Transparent;
 			this.MagFilter = TextureFilter.Linear;
 			this.MinFilter = TextureFilter.Linear;
 			this.WrapS = TextureWrap.Clamp;

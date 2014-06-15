@@ -128,8 +128,8 @@ namespace Samurai
 				{
 					uint pixel = GLHelper.MakePixelRGBA(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
 
-					if (pixel == parameters.ColorKey.Value)
-						GLHelper.DecomposePixelRGBA(parameters.TransparentPixel, out bytes[i], out bytes[i + 1], out bytes[i + 2], out bytes[i + 3]);
+					if (pixel == parameters.ColorKey.Value.ToRgba())
+						GLHelper.DecomposePixelRGBA(parameters.TransparentPixel.ToRgba(), out bytes[i], out bytes[i + 1], out bytes[i + 2], out bytes[i + 3]);
 				}
 			}
 
