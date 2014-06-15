@@ -5,7 +5,11 @@ namespace Samurai
 {
 	public class BasicSpriteBatchShaderProgram : DisposableObject, ISpriteBatchShaderProgram
 	{
-		ShaderProgram program;
+		public ShaderProgram ShaderProgram
+		{
+			get;
+			private set;
+		}
 
 		public BasicSpriteBatchShaderProgram(GraphicsDevice graphicsDevice)
 		{
@@ -13,7 +17,7 @@ namespace Samurai
 				throw new ArgumentNullException("graphicsDevice");
 
 			Assembly assembly = typeof(BasicSpriteBatchShaderProgram).Assembly;
-			this.program = new ShaderProgram(
+			this.ShaderProgram = new ShaderProgram(
 				graphicsDevice,
 				VertexShader.Compile(graphicsDevice, assembly.GetManifestResourceStream("Samurai.BasicSpriteBatchShader.vert")),
 				FragmentShader.Compile(graphicsDevice, assembly.GetManifestResourceStream("Samurai.BasicSpriteBatchShader.frag")));
@@ -21,23 +25,18 @@ namespace Samurai
 
 		protected override void DisposeManagedResources()
 		{
-			this.program.Dispose();
-			this.program = null;
+			this.ShaderProgram.Dispose();
+			this.ShaderProgram = null;
 		}
-		
-		public void Use()
-		{
-			this.program.Use();
-		}
-
+				
 		public void SetProjectionMatrix(ref Matrix4 projection)
 		{
-			this.program.SetMatrix("inProjection", ref projection);
+			this.ShaderProgram.SetMatrix("inProjection", ref projection);
 		}
 
 		public void SetSampler(Texture texture)
 		{
-			this.program.SetSampler("fragSampler", texture);
+			this.ShaderProgram.SetSampler("fragSampler", texture);
 		}
 	}
 }

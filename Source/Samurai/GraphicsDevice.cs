@@ -79,9 +79,22 @@ namespace Samurai
 			this.textures[index] = false;
 		}
 		
-		public void Begin()
+		public void Clear()
 		{
 			GL.Clear(GL.ColorBufferBit | GL.DepthBufferBit);
+		}
+
+		public void SwapBuffers()
+		{
+			this.context.SwapBuffers();
+		}
+
+		public void SetShaderProgram(ShaderProgram shader)
+		{
+			if (shader == null)
+				throw new ArgumentNullException("shader");
+
+			GL.UseProgram(shader.Handle);
 		}
 
 		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer)
@@ -131,11 +144,6 @@ namespace Samurai
 			GL.BindVertexArray(vertexBuffer.vertexArray);
 			GL.BindBuffer(GL.ElementArrayBuffer, indexBuffer.buffer);
 			GL.DrawElements((uint)type, indexCount, indexBuffer.dataType, (IntPtr)(startIndex * sizeOfTIndex));
-		}
-
-		public void End()
-		{
-			this.context.SwapBuffers();
 		}
 	}
 }

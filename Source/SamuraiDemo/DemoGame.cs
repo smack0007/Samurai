@@ -50,6 +50,8 @@ namespace SamuraiDemo
 				VertexShader.Compile(this.GraphicsDevice, File.ReadAllText("Shader.vert")),
 				FragmentShader.Compile(this.GraphicsDevice, File.ReadAllText("Shader.frag")));
 
+			this.GraphicsDevice.SetShaderProgram(this.shaderProgram);
+
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.GraphicsDevice, this.vertexData);
 			this.indexBuffer = new StaticIndexBuffer<byte>(this.GraphicsDevice, this.indexData);
 
@@ -70,9 +72,7 @@ namespace SamuraiDemo
 
 		protected override void Draw(TimeSpan elapsed)
 		{
-			this.GraphicsDevice.Begin();
-
-			this.shaderProgram.Use();
+			this.GraphicsDevice.Clear();
 
 			rotation += (float)(360.0 * elapsed.TotalSeconds);
 
@@ -89,7 +89,7 @@ namespace SamuraiDemo
 			this.GraphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 			//this.GraphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, 0, 3);
 
-			this.GraphicsDevice.End();
+			this.GraphicsDevice.SwapBuffers();
 		}
 
 		protected override void Shutdown()

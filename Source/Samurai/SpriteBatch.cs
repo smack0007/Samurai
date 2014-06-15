@@ -245,7 +245,7 @@ namespace Samurai
 			{
 				this.vertexBuffer.SetData(this.vertices, 0, this.vertexCount);
 
-				this.shader.Use();
+				this.graphicsDevice.SetShaderProgram(this.shader.ShaderProgram);
 
 				Rectangle viewport = this.graphicsDevice.Viewport;
 				this.projection.M11 = 2f / viewport.Width;

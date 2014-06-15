@@ -56,12 +56,7 @@ namespace Samurai
 		{
 			GL.DeleteProgram(this.Handle);
 		}
-
-		public void Use()
-		{
-			GL.UseProgram(this.Handle);
-		}
-
+				
 		public void SetMatrix(string name, ref Matrix4 value)
 		{
 			int location = GL.GetUniformLocation(this.Handle, name);

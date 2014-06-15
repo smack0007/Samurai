@@ -26,7 +26,7 @@ namespace SamuraiDemo2D
 
 		protected override void Draw(TimeSpan elapsed)
 		{
-			this.GraphicsDevice.Begin();
+			this.GraphicsDevice.Clear();
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
@@ -34,7 +34,7 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.End();
 
-			this.GraphicsDevice.End();
+			this.GraphicsDevice.SwapBuffers();
 		}
 
 		protected override void Shutdown()
