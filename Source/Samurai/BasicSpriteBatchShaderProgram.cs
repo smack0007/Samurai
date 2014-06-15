@@ -11,16 +11,16 @@ namespace Samurai
 			private set;
 		}
 
-		public BasicSpriteBatchShaderProgram(GraphicsDevice graphicsDevice)
+		public BasicSpriteBatchShaderProgram(GraphicsContext graphics)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
 			Assembly assembly = typeof(BasicSpriteBatchShaderProgram).Assembly;
 			this.ShaderProgram = new ShaderProgram(
-				graphicsDevice,
-				VertexShader.Compile(graphicsDevice, assembly.GetManifestResourceStream("Samurai.BasicSpriteBatchShader.vert")),
-				FragmentShader.Compile(graphicsDevice, assembly.GetManifestResourceStream("Samurai.BasicSpriteBatchShader.frag")));
+				graphics,
+				VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.BasicSpriteBatchShader.vert")),
+				FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.BasicSpriteBatchShader.frag")));
 		}
 
 		protected override void DisposeManagedResources()

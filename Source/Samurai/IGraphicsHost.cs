@@ -2,7 +2,7 @@
 
 namespace Samurai
 {
-	public interface IGraphicsContext
+	public interface IGraphicsHost
 	{
 		void SwapBuffers();
 	}

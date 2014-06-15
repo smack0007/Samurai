@@ -5,8 +5,8 @@ namespace Samurai
 	public class DynamicVertexBuffer<T> : VertexBuffer<T>
 		where T : struct
 	{
-		public DynamicVertexBuffer(GraphicsDevice graphicsDevice)
-			: base(graphicsDevice)
+		public DynamicVertexBuffer(GraphicsContext graphics)
+			: base(graphics)
 		{
 		}
 

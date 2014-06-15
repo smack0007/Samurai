@@ -19,7 +19,7 @@ namespace Samurai
 			public Vector2 UV;
 		}
 
-		GraphicsDevice graphicsDevice;
+		GraphicsContext graphics;
 
 		Vertex[] vertices;
 		int vertexCount;
@@ -33,16 +33,16 @@ namespace Samurai
 
 		Matrix4 projection;
 										
-		public SpriteBatch(GraphicsDevice graphicsDevice)
+		public SpriteBatch(GraphicsContext graphics)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
-			this.graphicsDevice = graphicsDevice;
+			this.graphics = graphics;
 
 			this.vertices = new Vertex[1024 * 4];
 
-			this.vertexBuffer = new DynamicVertexBuffer<Vertex>(this.graphicsDevice);
+			this.vertexBuffer = new DynamicVertexBuffer<Vertex>(this.graphics);
 
 			ushort[] indices = new ushort[1024 * 6];
 			for (ushort i = 0, vertex = 0; i < indices.Length; i += 6, vertex += 4)
@@ -55,7 +55,7 @@ namespace Samurai
 				indices[i + 5] = (ushort)(vertex + 1);
 			}
 
-			this.indexBuffer = new StaticIndexBuffer<ushort>(this.graphicsDevice, indices);
+			this.indexBuffer = new StaticIndexBuffer<ushort>(this.graphics, indices);
 
 			this.projection = new Matrix4()
 			{
@@ -245,16 +245,16 @@ namespace Samurai
 			{
 				this.vertexBuffer.SetData(this.vertices, 0, this.vertexCount);
 
-				this.graphicsDevice.SetShaderProgram(this.shader.ShaderProgram);
+				this.graphics.SetShaderProgram(this.shader.ShaderProgram);
 
-				Rectangle viewport = this.graphicsDevice.Viewport;
+				Rectangle viewport = this.graphics.Viewport;
 				this.projection.M11 = 2f / viewport.Width;
 				this.projection.M22 = -2f / viewport.Height;
 								
 				this.shader.SetProjectionMatrix(ref this.projection);
 				this.shader.SetSampler(this.texture);
 
-				this.graphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
+				this.graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 
 				this.vertexCount = 0;
 			}

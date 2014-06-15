@@ -9,22 +9,22 @@ namespace Samurai
 {
 	public class FragmentShader : Shader
 	{
-		private FragmentShader(GraphicsDevice graphicsDevice)
-			: base(graphicsDevice, GL.FragmentShader)
+		private FragmentShader(GraphicsContext graphics)
+			: base(graphics, GL.FragmentShader)
 		{
 		}
 
-		public static FragmentShader Compile(GraphicsDevice graphicsDevice, string source)
+		public static FragmentShader Compile(GraphicsContext graphics, string source)
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
 
-			FragmentShader shader = new FragmentShader(graphicsDevice);
+			FragmentShader shader = new FragmentShader(graphics);
 			Shader.Compile<FragmentShader>(shader, source);
 			return shader;
 		}
 
-		public static FragmentShader Compile(GraphicsDevice graphicsDevice, Stream stream)
+		public static FragmentShader Compile(GraphicsContext graphics, Stream stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException("stream");
@@ -32,7 +32,7 @@ namespace Samurai
 			using (StreamReader sr = new StreamReader(stream))
 			{
 				string source = sr.ReadToEnd();
-				return Compile(graphicsDevice, source);
+				return Compile(graphics, source);
 			}
 		}
 	}

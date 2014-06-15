@@ -8,7 +8,7 @@ namespace Samurai
 {
 	public class Texture : DisposableObject
 	{
-		GraphicsDevice graphicsDevice;
+		GraphicsContext graphics;
 
 		internal uint Index
 		{
@@ -58,21 +58,21 @@ namespace Samurai
 			private set;
 		}
 
-		private Texture(GraphicsDevice graphicsDevice)
+		private Texture(GraphicsContext graphics)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
-			this.graphicsDevice = graphicsDevice;
-			this.Index = this.graphicsDevice.AllocateTextureIndex();
+			this.graphics = graphics;
+			this.Index = this.graphics.AllocateTextureIndex();
 
 			this.Handle = GL.GenTexture();
 		}
 
 		protected override void DisposeManagedResources()
 		{
-			if (!this.graphicsDevice.IsDisposed)
-				this.graphicsDevice.DeallocateTextureIndex(this.Index);
+			if (!this.graphics.IsDisposed)
+				this.graphics.DeallocateTextureIndex(this.Index);
 		}
 
 		protected override void DisposeUnmanagedResources()
@@ -80,27 +80,27 @@ namespace Samurai
 			GL.DeleteTexture(this.Handle);
 		}
 
-		public static Texture FromFile(GraphicsDevice graphicsDevice, string fileName, TextureParams parameters)
+		public static Texture FromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
 			if (fileName == null)
 				throw new ArgumentNullException("fileName");
 
 			using (FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-				return FromStream(graphicsDevice, file, parameters);
+				return FromStream(graphics, file, parameters);
 		}
 
-		public static Texture FromStream(GraphicsDevice graphicsDevice, Stream stream, TextureParams parameters)
+		public static Texture FromStream(GraphicsContext graphics, Stream stream, TextureParams parameters)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
 			if (stream == null)
 				throw new ArgumentNullException("stream");
 
-			Texture texture = new Texture(graphicsDevice);
+			Texture texture = new Texture(graphics);
 			GL.ActiveTexture(GL.Texture0 + texture.Index);
 			GL.BindTexture(GL.Texture2D, texture.Handle);
 

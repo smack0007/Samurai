@@ -5,8 +5,8 @@ namespace Samurai
 	public class StaticIndexBuffer<T> : IndexBuffer<T>
 		where T : struct
 	{
-		public StaticIndexBuffer(GraphicsDevice graphicsDevice, T[] data)
-			: base(graphicsDevice)
+		public StaticIndexBuffer(GraphicsContext graphics, T[] data)
+			: base(graphics)
 		{
 			this.SetDataInternal(data, 0, data.Length, GL.StaticDraw);
 		}

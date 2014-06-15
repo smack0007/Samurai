@@ -13,10 +13,10 @@ namespace SamuraiDemo2D
 		{
 			this.Window.Title = "Samurai 2D Demo";
 
-			this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
-			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.GraphicsDevice);
+			this.spriteBatch = new SpriteBatch(this.Graphics);
+			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
 
-			this.planesTexture = Texture.FromFile(this.GraphicsDevice, "Planes.png", new TextureParams()
+			this.planesTexture = Texture.FromFile(this.Graphics, "Planes.png", new TextureParams()
 				{
 					ColorKey = GLHelper.MakePixelRGBA(255, 0, 255, 255),
 					WrapS = TextureWrap.Repeat,
@@ -26,7 +26,7 @@ namespace SamuraiDemo2D
 
 		protected override void Draw(TimeSpan elapsed)
 		{
-			this.GraphicsDevice.Clear();
+			this.Graphics.Clear();
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
@@ -34,7 +34,7 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.End();
 
-			this.GraphicsDevice.SwapBuffers();
+			this.Graphics.SwapBuffers();
 		}
 
 		protected override void Shutdown()

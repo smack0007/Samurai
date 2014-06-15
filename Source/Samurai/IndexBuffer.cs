@@ -5,7 +5,7 @@ namespace Samurai
 	public abstract class IndexBuffer<T> : DisposableObject
 		where T : struct
 	{
-		GraphicsDevice graphicsDevice;
+		GraphicsContext graphics;
 		
 		internal uint dataType;
 		internal uint buffer;
@@ -16,12 +16,12 @@ namespace Samurai
 			private set;
 		}
 
-		internal IndexBuffer(GraphicsDevice graphicsDevice)
+		internal IndexBuffer(GraphicsContext graphics)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
-			this.graphicsDevice = graphicsDevice;
+			this.graphics = graphics;
 
 			Type dataType = typeof(T);
 

@@ -82,8 +82,8 @@
     <Compile Include="GLFW.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="GLHelper.cs" />
-    <Compile Include="GraphicsDevice.cs" />
-    <Compile Include="IGraphicsContext.cs" />
+    <Compile Include="GraphicsContext.cs" />
+    <Compile Include="IGraphicsHost.cs" />
     <Compile Include="IndexBuffer.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="KeyEventArgs.cs" />

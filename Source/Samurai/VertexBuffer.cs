@@ -7,7 +7,7 @@ namespace Samurai
 	public abstract class VertexBuffer<T> : DisposableObject
 		where T : struct
 	{
-		GraphicsDevice graphicsDevice;
+		GraphicsContext graphicsDevice;
 
 		internal uint vertexArray;
 		internal uint buffer;
@@ -18,12 +18,12 @@ namespace Samurai
 			private set;
 		}
 
-		internal VertexBuffer(GraphicsDevice graphicsDevice)
+		internal VertexBuffer(GraphicsContext graphics)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
-			this.graphicsDevice = graphicsDevice;
+			this.graphicsDevice = graphics;
 
 			this.vertexArray = GL.GenVertexArray();
 			GL.BindVertexArray(this.vertexArray);

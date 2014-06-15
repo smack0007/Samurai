@@ -5,22 +5,22 @@ namespace Samurai
 {
 	public class VertexShader : Shader
 	{
-		private VertexShader(GraphicsDevice graphicsDevice)
-			: base(graphicsDevice, GL.VertexShader)
+		private VertexShader(GraphicsContext graphics)
+			: base(graphics, GL.VertexShader)
 		{
 		}
 
-		public static VertexShader Compile(GraphicsDevice graphicsDevice, string source)
+		public static VertexShader Compile(GraphicsContext graphics, string source)
 		{
 			if (source == null)
 				throw new ArgumentNullException("source");
 
-			VertexShader shader = new VertexShader(graphicsDevice);
+			VertexShader shader = new VertexShader(graphics);
 			Shader.Compile<VertexShader>(shader, source);
 			return shader;
 		}
 
-		public static VertexShader Compile(GraphicsDevice graphicsDevice, Stream stream)
+		public static VertexShader Compile(GraphicsContext graphics, Stream stream)
 		{
 			if (stream == null)
 				throw new ArgumentNullException("stream");
@@ -28,7 +28,7 @@ namespace Samurai
 			using (StreamReader sr = new StreamReader(stream))
 			{
 				string source = sr.ReadToEnd();
-				return Compile(graphicsDevice, source);
+				return Compile(graphics, source);
 			}
 		}
 	}

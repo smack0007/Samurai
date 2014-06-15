@@ -6,7 +6,7 @@ namespace Samurai
 {
 	public class Shader : DisposableObject
 	{
-		GraphicsDevice graphicsDevice;
+		GraphicsContext graphics;
 		string source;
 
 		internal uint Handle
@@ -15,12 +15,12 @@ namespace Samurai
 			private set;
 		}
 
-		internal Shader(GraphicsDevice graphicsDevice, uint shaderType)
+		internal Shader(GraphicsContext graphics, uint shaderType)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
-			this.graphicsDevice = graphicsDevice;
+			this.graphics = graphics;
 					
 			this.Handle = GL.CreateShder(shaderType);
 		}

@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
-	public class GraphicsDevice : DisposableObject
+	public class GraphicsContext : DisposableObject
 	{
-		IGraphicsContext context;
+		IGraphicsHost host;
 
 		Color4 clearColor;
 		Rectangle viewport;
@@ -35,17 +35,17 @@ namespace Samurai
 			}
 		}
 
-		public GraphicsDevice(IGraphicsContext context)
+		public GraphicsContext(IGraphicsHost context)
 		{
 			if (context == null)
 				throw new ArgumentNullException("context");
 
-			this.context = context;
+			this.host = context;
 
 			this.textures = new bool[32];
 		}
 
-		~GraphicsDevice()
+		~GraphicsContext()
 		{
 			this.Dispose(false);
 		}
@@ -86,7 +86,7 @@ namespace Samurai
 
 		public void SwapBuffers()
 		{
-			this.context.SwapBuffers();
+			this.host.SwapBuffers();
 		}
 
 		public void SetShaderProgram(ShaderProgram shader)

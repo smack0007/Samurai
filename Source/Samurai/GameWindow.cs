@@ -2,7 +2,7 @@
 
 namespace Samurai
 {
-    public class GameWindow : IGraphicsContext
+    public class GameWindow : IGraphicsHost
     {
         IntPtr window;
         string title;

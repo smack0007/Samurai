@@ -18,7 +18,7 @@ namespace Samurai
 			private set;
 		}
 
-		public GraphicsDevice GraphicsDevice
+		public GraphicsContext Graphics
 		{
 			get;
 			private set;
@@ -56,9 +56,9 @@ namespace Samurai
 			
 			GL.Init();
 
-			this.GraphicsDevice = new GraphicsDevice(this.Window);
-			this.GraphicsDevice.ClearColor = Color4.CornflowerBlue;
-			this.GraphicsDevice.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
+			this.Graphics = new GraphicsContext(this.Window);
+			this.Graphics.ClearColor = Color4.CornflowerBlue;
+			this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 
 			GL.Enable(GL.Blend);
 			GL.BlendFunc(GL.SrcAlpha, GL.OneMinusSrcAlpha);
@@ -85,7 +85,7 @@ namespace Samurai
 		private void Window_Resize(object sender, EventArgs e)
 		{
 			if (this.AutoResizeViewport)
-				this.GraphicsDevice.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
+				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
 		public void Run()

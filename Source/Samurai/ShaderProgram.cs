@@ -5,7 +5,7 @@ namespace Samurai
 {
 	public sealed class ShaderProgram : DisposableObject
 	{
-		GraphicsDevice graphicsDevice;
+		GraphicsContext graphicsDevice;
 		VertexShader vertexShader;
 		FragmentShader fragmentShader;
 
@@ -15,10 +15,10 @@ namespace Samurai
 			private set;
 		}
 		
-		public ShaderProgram(GraphicsDevice graphicsDevice, VertexShader vertexShader, FragmentShader fragmentShader)
+		public ShaderProgram(GraphicsContext graphics, VertexShader vertexShader, FragmentShader fragmentShader)
 		{
-			if (graphicsDevice == null)
-				throw new ArgumentNullException("graphicsDevice");
+			if (graphics == null)
+				throw new ArgumentNullException("graphics");
 
 			if (vertexShader == null)
 				throw new ArgumentNullException("vertexShader");
@@ -26,7 +26,7 @@ namespace Samurai
 			if (fragmentShader == null)
 				throw new ArgumentNullException("fragmentShader");
 
-			this.graphicsDevice = graphicsDevice;
+			this.graphicsDevice = graphics;
 			this.Handle = GL.CreateProgram();
 
 			this.vertexShader = vertexShader;

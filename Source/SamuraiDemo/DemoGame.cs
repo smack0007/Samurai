@@ -46,22 +46,22 @@ namespace SamuraiDemo
 			this.Window.Title = "Samurai Demo";
 
 			this.shaderProgram = new ShaderProgram(
-				this.GraphicsDevice,
-				VertexShader.Compile(this.GraphicsDevice, File.ReadAllText("Shader.vert")),
-				FragmentShader.Compile(this.GraphicsDevice, File.ReadAllText("Shader.frag")));
+				this.Graphics,
+				VertexShader.Compile(this.Graphics, File.ReadAllText("Shader.vert")),
+				FragmentShader.Compile(this.Graphics, File.ReadAllText("Shader.frag")));
 
-			this.GraphicsDevice.SetShaderProgram(this.shaderProgram);
+			this.Graphics.SetShaderProgram(this.shaderProgram);
 
-			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.GraphicsDevice, this.vertexData);
-			this.indexBuffer = new StaticIndexBuffer<byte>(this.GraphicsDevice, this.indexData);
+			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, this.vertexData);
+			this.indexBuffer = new StaticIndexBuffer<byte>(this.Graphics, this.indexData);
 
-			this.texture0 = Texture.FromFile(this.GraphicsDevice, "Texture0.png", new TextureParams()
+			this.texture0 = Texture.FromFile(this.Graphics, "Texture0.png", new TextureParams()
 			{
 				WrapS = TextureWrap.Repeat,
 				WrapT = TextureWrap.Repeat
 			});
 
-			this.texture1 = Texture.FromFile(this.GraphicsDevice, "Texture1.png", new TextureParams()
+			this.texture1 = Texture.FromFile(this.Graphics, "Texture1.png", new TextureParams()
 			{
 				WrapS = TextureWrap.Clamp,
 				WrapT = TextureWrap.Clamp
@@ -72,7 +72,7 @@ namespace SamuraiDemo
 
 		protected override void Draw(TimeSpan elapsed)
 		{
-			this.GraphicsDevice.Clear();
+			this.Graphics.Clear();
 
 			rotation += (float)(360.0 * elapsed.TotalSeconds);
 
@@ -86,10 +86,10 @@ namespace SamuraiDemo
 			this.shaderProgram.SetMatrix("projection", ref projection);
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
-			this.GraphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
+			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 			//this.GraphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, 0, 3);
 
-			this.GraphicsDevice.SwapBuffers();
+			this.Graphics.SwapBuffers();
 		}
 
 		protected override void Shutdown()
