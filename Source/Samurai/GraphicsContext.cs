@@ -10,6 +10,10 @@ namespace Samurai
 		Color4 clearColor;
 		Rectangle viewport;
 
+		bool blendEnabled;
+		SourceBlendFactor sourceBlendFactor = SourceBlendFactor.One;
+		DestinationBlendFactor destinationBlendFactor = DestinationBlendFactor.Zero;
+
 		bool[] textures;
 		uint nextTexture;
 
@@ -21,6 +25,56 @@ namespace Samurai
 			{
 				this.viewport = value;
 				GL.Viewport(value.X, value.Y, value.Width, value.Height);
+			}
+		}
+
+		public bool BlendEnabled
+		{
+			get { return this.blendEnabled; }
+
+			set
+			{
+				if (value != this.blendEnabled)
+				{
+					this.blendEnabled = value;
+
+					if (value)
+					{
+						GL.Enable(GL.Blend);
+					}
+					else
+					{
+						GL.Disable(GL.Blend);
+					}
+				}
+			}
+		}
+
+		public SourceBlendFactor SourceBlendFactor
+		{
+			get { return this.sourceBlendFactor; }
+
+			set
+			{
+				if (value != this.sourceBlendFactor)
+				{
+					this.sourceBlendFactor = value;
+					GL.BlendFunc((uint)this.sourceBlendFactor, (uint)this.destinationBlendFactor);
+				}
+			}
+		}
+
+		public DestinationBlendFactor DestinationBlendFactor
+		{
+			get { return this.destinationBlendFactor; }
+
+			set
+			{
+				if (value != this.destinationBlendFactor)
+				{
+					this.destinationBlendFactor = value;
+					GL.BlendFunc((uint)this.sourceBlendFactor, (uint)this.destinationBlendFactor);
+				}
 			}
 		}
 
@@ -85,6 +139,16 @@ namespace Samurai
 		public void SwapBuffers()
 		{
 			this.host.SwapBuffers();
+		}
+
+		public void SetBlendFunction(SourceBlendFactor source, DestinationBlendFactor destination)
+		{
+			if (source != this.sourceBlendFactor || destination != this.destinationBlendFactor)
+			{
+				this.sourceBlendFactor = source;
+				this.destinationBlendFactor = destination;
+				GL.BlendFunc((uint)this.sourceBlendFactor, (uint)this.destinationBlendFactor);
+			}
 		}
 
 		public void SetShaderProgram(ShaderProgram shader)

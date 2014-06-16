@@ -13,6 +13,9 @@ namespace SamuraiDemo2D
 		{
 			this.Window.Title = "Samurai 2D Demo";
 
+			this.Graphics.BlendEnabled = true;
+			this.Graphics.SetBlendFunction(SourceBlendFactor.SourceAlpha, DestinationBlendFactor.OneMinusSourceAlpha);
+
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
 
@@ -30,7 +33,7 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
-			this.spriteBatch.Draw(this.planesTexture, Color4.White, Vector2.Zero);	
+			this.spriteBatch.Draw(this.planesTexture, new Color4(255, 255, 255, 128), Vector2.Zero);	
 
 			this.spriteBatch.End();
 

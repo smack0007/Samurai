@@ -22,8 +22,6 @@ namespace Samurai
 		public const uint ElementArrayBuffer = 0x8893;
 		public const uint FragmentShader = 0x8B30;
 		public const uint InfoLogLength = 0x8B84;
-		public const uint OneMinusSrcAlpha = 0x0303;
-		public const uint SrcAlpha = 0x0302;
 		public const uint StaticCopy = 0x88E6;
 		public const uint StaticDraw = 0x88E4;
 		public const uint StaticRead = 0x88E5;
@@ -33,6 +31,19 @@ namespace Samurai
 		public const uint StreamRead = 0x88E1;
 		public const uint VertexShader = 0x8B31;
 		
+		// Blend
+		public const uint DstAlpha = 0x0304;
+		public const uint DstColor = 0x0306;
+		public const uint One = 1;
+		public const uint OneMinusDstAlpha = 0x0305;
+		public const uint OneMinusDstColor = 0x0307;
+		public const uint OneMinusSrcAlpha = 0x0303;
+		public const uint OneMinusSrcColor = 0x0301;
+		public const uint SrcAlpha = 0x0302;
+		public const uint SrcAlphaSaturate = 0x0308;
+		public const uint SrcColor = 0x0300;
+		public const uint Zero = 0;
+
 		// Error Codes
 		public const uint InvalidEnum = 0x0500;
 		public const uint InvalidFramebufferOperation = 0x0506;
@@ -131,6 +142,9 @@ namespace Samurai
 
 		private delegate void __DeleteVertexArrays(int n, uint[] arrays);
 		private static __DeleteVertexArrays _DeleteVertexArrays;
+
+		[DllImport(Library, EntryPoint = "glDisable")]
+		private static extern void _Disable(uint cap);
 
 		[DllImport(Library, EntryPoint = "glDrawArrays")]
 		private static extern void _DrawArrays(uint mode, int first, int count);
@@ -404,6 +418,12 @@ namespace Samurai
 		{
 			_DeleteVertexArrays(arrays.Length, arrays);
 			CheckErrors("DeleteVertexArrays");
+		}
+
+		public static void Disable(uint cap)
+		{
+			_Disable(cap);
+			CheckErrors("Disable");
 		}
 
 		public static void DrawArrays(uint mode, int first, int count)

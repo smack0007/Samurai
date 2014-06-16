@@ -58,9 +58,6 @@ namespace Samurai
 
 			this.Graphics = new GraphicsContext(this.Window);
 			this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
-
-			GL.Enable(GL.Blend);
-			GL.BlendFunc(GL.SrcAlpha, GL.OneMinusSrcAlpha);
 		}
 
 		~Game()
