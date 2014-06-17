@@ -31,7 +31,7 @@ namespace Samurai
 				
 		public void SetProjectionMatrix(ref Matrix4 projection)
 		{
-			this.ShaderProgram.SetMatrix("inProjection", ref projection);
+			this.ShaderProgram.SetValue("inProjection", ref projection);
 		}
 
 		public void SetSampler(Texture texture)

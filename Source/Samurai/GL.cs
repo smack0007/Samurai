@@ -194,6 +194,9 @@ namespace Samurai
 		[DllImport(Library, EntryPoint = "glTexParameteri")]
 		private static extern void _TexParameteri(uint target, uint pname, int param);
 
+		private delegate void __Uniform1f(int location, float v0);
+		private static __Uniform1f _Uniform1f;
+
 		private delegate void __Uniform1i(int location, int v0);
 		private static __Uniform1i _Uniform1i;
 
@@ -244,6 +247,7 @@ namespace Samurai
 			_GetUniformLocation = (__GetUniformLocation)GetProcAddress<__GetUniformLocation>("glGetUniformLocation");
 			_LinkProgram = (__LinkProgram)GetProcAddress<__LinkProgram>("glLinkProgram");
 			_ShaderSource = (__ShaderSource)GetProcAddress<__ShaderSource>("glShaderSource");
+			_Uniform1f = (__Uniform1f)GetProcAddress<__Uniform1f>("glUniform1f");
 			_Uniform1i = (__Uniform1i)GetProcAddress<__Uniform1i>("glUniform1i");
 			_UniformMatrix4fv = (__UniformMatrix4fv)GetProcAddress<__UniformMatrix4fv>("glUniformMatrix4fv");
 			_UseProgram = (__UseProgram)GetProcAddress<__UseProgram>("glUseProgram");
@@ -551,6 +555,12 @@ namespace Samurai
 		{
 			_TexParameteri(target, pname, param);
 			CheckErrors("TexParameteri");
+		}
+
+		public static void Uniform1f(int location, float v0)
+		{
+			_Uniform1f(location, v0);
+			CheckErrors("Uniform1f");
 		}
 
 		public static void Uniform1i(int location, int v0)

@@ -83,7 +83,7 @@ namespace SamuraiDemo
 				Matrix4.CreateRotationZ(MathHelper.ToRadians(rotation)) *
 				Matrix4.InvertedYAxis;
 					
-			this.shaderProgram.SetMatrix("projection", ref projection);
+			this.shaderProgram.SetValue("projection", ref projection);
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
