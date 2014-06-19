@@ -1,41 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Samurai
 {
+	/// <summary>
+	/// Base clsas for Samurai games.
+	/// </summary>
 	public abstract class Game : IDisposable
 	{		
+		/// <summary>
+		/// Gets the GameWindow.
+		/// </summary>
 		public GameWindow Window
 		{
 			get;
 			private set;
 		}
 
+		/// <summary>
+		/// Gets the GraphicsContext.
+		/// </summary>
 		public GraphicsContext Graphics
 		{
 			get;
 			private set;
 		}
 
+		/// <summary>
+		/// Gets or sets the desired frames per second.
+		/// </summary>
 		protected int FramesPerSecond
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets whether the Viewport of the GraphicsContext should be automatically resized.
+		/// </summary>
 		protected bool AutoResizeViewport
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
 		public Game()
 		{
 			this.FramesPerSecond = 60;
@@ -60,11 +71,17 @@ namespace Samurai
 			this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
+		/// <summary>
+		/// Destructor.
+		/// </summary>
 		~Game()
 		{
 			this.Dispose(false);
 		}
 
+		/// <summary>
+		/// Disposes of the Game.
+		/// </summary>
 		public void Dispose()
 		{
 			this.Dispose(true);
@@ -84,6 +101,9 @@ namespace Samurai
 				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
+		/// <summary>
+		/// Starts the game loop.
+		/// </summary>
 		public void Run()
 		{
 			Stopwatch stopwatch = new Stopwatch();
@@ -111,19 +131,33 @@ namespace Samurai
 			this.Shutdown();
 		}
 
+		/// <summary>
+		/// Signals the game loop should exit.
+		/// </summary>
 		public void Exit()
 		{
 			this.Window.SetShouldClose(true);
 		}
 
+		/// <summary>
+		/// Called when game logic should run.
+		/// </summary>
+		/// <param name="elapsed"></param>
 		protected virtual void Update(TimeSpan elapsed)
 		{
 		}
 
+		/// <summary>
+		/// Called when the game should draw.
+		/// </summary>
+		/// <param name="elapsed"></param>
 		protected virtual void Draw(TimeSpan elapsed)
 		{
 		}
 
+		/// <summary>
+		/// Called when the game is ending.
+		/// </summary>
 		protected virtual void Shutdown()
 		{
 		}

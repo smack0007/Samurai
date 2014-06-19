@@ -3,14 +3,24 @@ using System.Reflection;
 
 namespace Samurai
 {
+	/// <summary>
+	/// Implements the most basic ShaderProgram needed to use SpriteBatch.
+	/// </summary>
 	public class BasicSpriteBatchShaderProgram : DisposableObject, ISpriteBatchShaderProgram
 	{
+		/// <summary>
+		/// Gets the underlying ShaderProgram.
+		/// </summary>
 		public ShaderProgram ShaderProgram
 		{
 			get;
 			private set;
 		}
-
+		
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="graphics">Handle to the GraphicsContext.</param>
 		public BasicSpriteBatchShaderProgram(GraphicsContext graphics)
 		{
 			if (graphics == null)
@@ -29,11 +39,19 @@ namespace Samurai
 			this.ShaderProgram = null;
 		}
 				
+		/// <summary>
+		/// Sets the projection matrix.
+		/// </summary>
+		/// <param name="projection"></param>
 		public void SetProjectionMatrix(ref Matrix4 projection)
 		{
 			this.ShaderProgram.SetValue("inProjection", ref projection);
 		}
 
+		/// <summary>
+		/// Sets the sampler texture to be used.
+		/// </summary>
+		/// <param name="texture"></param>
 		public void SetSampler(Texture texture)
 		{
 			this.ShaderProgram.SetSampler("fragSampler", texture);

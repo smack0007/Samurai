@@ -1,19 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Samurai
 {
+	/// <summary>
+	/// Shader which processes a fragment from the rasterization process into a set of colors and a single depth value.
+	/// </summary>
 	public class FragmentShader : Shader
 	{
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="graphics">A handle to the GraphicsContext.</param>
 		private FragmentShader(GraphicsContext graphics)
 			: base(graphics, GL.FragmentShader)
 		{
 		}
 
+		/// <summary>
+		/// Compiles a FragmentShader from a string.
+		/// </summary>
+		/// <param name="graphics">A handle to the GraphicsContext.</param>
+		/// <param name="source">The source of the shader.</param>
+		/// <returns></returns>
 		public static FragmentShader Compile(GraphicsContext graphics, string source)
 		{
 			if (source == null)
@@ -24,6 +33,12 @@ namespace Samurai
 			return shader;
 		}
 
+		/// <summary>
+		/// Compiles a FragmentShader from a stream.
+		/// </summary>
+		/// <param name="graphics">A handle to the GraphicsContext.</param>
+		/// <param name="stream">A stream containing the source of the shader.</param>
+		/// <returns></returns>
 		public static FragmentShader Compile(GraphicsContext graphics, Stream stream)
 		{
 			if (stream == null)

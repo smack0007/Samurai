@@ -3,9 +3,15 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
+	/// <summary>
+	/// Represents an RGB color.
+	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Color3 : IEquatable<Color3>
 	{
+		/// <summary>
+		/// Size of Color3 in bytes.
+		/// </summary>
 		public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Color3));
 
 		#region Static Colors
@@ -205,6 +211,11 @@ namespace Samurai
 			return this.Equals((Color3)obj);
 		}
 
+		/// <summary>
+		/// Returns true if other represents the same RGB color.
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public bool Equals(Color3 other)
 		{
 			return this.R == other.R &&

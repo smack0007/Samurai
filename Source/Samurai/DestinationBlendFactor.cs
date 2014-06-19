@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Samurai
 {
+	/// <summary>
+	/// Contains possible values for the destination factor of the blend function.
+	/// </summary>
 	public enum DestinationBlendFactor : uint
 	{
 		DestinationAlpha = GL.DstAlpha,

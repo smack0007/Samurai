@@ -3,9 +3,15 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
+	/// <summary>
+	/// Represents an RGBA color.
+	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Color4 : IEquatable<Color4>
 	{
+		/// <summary>
+		/// Size of Color4 in bytes.
+		/// </summary>
 		public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Color4));
 
 		#region Static Colors
@@ -201,7 +207,11 @@ namespace Samurai
 			return "{ " + this.R + ", " + this.G + ", " + this.B + ", " + this.A + " }";
 		}
 
-		public uint ToRgba()
+		/// <summary>
+		/// Converts the Color4 to a uint.
+		/// </summary>
+		/// <returns></returns>
+		public uint ToUint()
 		{
 			return GLHelper.MakePixelRGBA(this.R, this.G, this.B, this.A);
 		}
@@ -217,6 +227,11 @@ namespace Samurai
 			return this.Equals((Color4)obj);
 		}
 
+		/// <summary>
+		/// Returns true if other represents the same RGBA color.
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public bool Equals(Color4 other)
 		{
 			return this.R == other.R &&
