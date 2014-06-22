@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Samurai
 {
-	public class Shader : DisposableObject
+	public class Shader : GraphicsObject
 	{
-		GraphicsContext graphics;
 		string source;
 
 		internal uint Handle
@@ -16,12 +15,8 @@ namespace Samurai
 		}
 
 		internal Shader(GraphicsContext graphics, uint shaderType)
-		{
-			if (graphics == null)
-				throw new ArgumentNullException("graphics");
-
-			this.graphics = graphics;
-					
+			: base(graphics)
+		{					
 			this.Handle = GL.CreateShder(shaderType);
 		}
 

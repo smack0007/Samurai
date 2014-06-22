@@ -91,6 +91,7 @@ namespace Samurai
 		{
 			if (disposing)
 			{
+				this.Graphics.Dispose();
 				GLFW.Terminate();
 			}
 		}
@@ -114,7 +115,9 @@ namespace Samurai
 
 			stopwatch.Start();
 			nextTick = stopwatch.ElapsedMilliseconds;
-						
+
+			this.Initialize();
+
 			while (!this.Window.ShouldClose())
 			{
 				GLFW.PollEvents();
@@ -140,7 +143,14 @@ namespace Samurai
 		}
 
 		/// <summary>
-		/// Called when game logic should run.
+		/// Called by the Run method when the game is starting. 
+		/// </summary>
+		protected virtual void Initialize()
+		{
+		}
+
+		/// <summary>
+		/// Called by the Run method when game logic should run.
 		/// </summary>
 		/// <param name="elapsed"></param>
 		protected virtual void Update(TimeSpan elapsed)
@@ -148,7 +158,7 @@ namespace Samurai
 		}
 
 		/// <summary>
-		/// Called when the game should draw.
+		/// Called by the Run method when the game should draw.
 		/// </summary>
 		/// <param name="elapsed"></param>
 		protected virtual void Draw(TimeSpan elapsed)
@@ -156,7 +166,7 @@ namespace Samurai
 		}
 
 		/// <summary>
-		/// Called when the game is ending.
+		/// Called by the Run method when the game is ending.
 		/// </summary>
 		protected virtual void Shutdown()
 		{

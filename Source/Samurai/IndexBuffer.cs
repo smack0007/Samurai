@@ -2,7 +2,7 @@
 
 namespace Samurai
 {
-	public abstract class IndexBuffer<T> : DisposableObject
+	public abstract class IndexBuffer<T> : GraphicsObject
 		where T : struct
 	{
 		GraphicsContext graphics;
@@ -17,12 +17,8 @@ namespace Samurai
 		}
 
 		internal IndexBuffer(GraphicsContext graphics)
+			: base(graphics)
 		{
-			if (graphics == null)
-				throw new ArgumentNullException("graphics");
-
-			this.graphics = graphics;
-
 			Type dataType = typeof(T);
 
 			if (dataType == typeof(byte))

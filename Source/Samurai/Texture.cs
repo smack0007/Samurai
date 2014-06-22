@@ -6,10 +6,8 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
-	public class Texture : DisposableObject
+	public class Texture : GraphicsObject
 	{
-		GraphicsContext graphics;
-
 		internal uint Index
 		{
 			get;
@@ -59,20 +57,17 @@ namespace Samurai
 		}
 
 		private Texture(GraphicsContext graphics)
+			: base(graphics)
 		{
-			if (graphics == null)
-				throw new ArgumentNullException("graphics");
-
-			this.graphics = graphics;
-			this.Index = this.graphics.AllocateTextureIndex();
+			this.Index = this.Graphics.AllocateTextureIndex();
 
 			this.Handle = GL.GenTexture();
 		}
 
 		protected override void DisposeManagedResources()
 		{
-			if (!this.graphics.IsDisposed)
-				this.graphics.DeallocateTextureIndex(this.Index);
+			if (!this.Graphics.IsDisposed)
+				this.Graphics.DeallocateTextureIndex(this.Index);
 		}
 
 		protected override void DisposeUnmanagedResources()

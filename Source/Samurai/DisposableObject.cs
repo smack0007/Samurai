@@ -29,7 +29,7 @@ namespace Samurai
 		/// Can be called by child classes to dispose of the class.
 		/// </summary>
 		/// <param name="disposing">If true, managed resources will be disposed as well as unmanaged resources.</param>
-		protected void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 			if (!this.IsDisposed)
 			{

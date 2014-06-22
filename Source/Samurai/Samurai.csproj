@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="BasicSpriteBatchShaderProgram.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
+    <Compile Include="GraphicsObject.cs" />
     <Compile Include="SourceBlendFactor.cs" />
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />

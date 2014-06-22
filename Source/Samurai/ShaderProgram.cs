@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace Samurai
 {
-	public sealed class ShaderProgram : DisposableObject
+	public sealed class ShaderProgram : GraphicsObject
 	{
-		GraphicsContext graphicsDevice;
 		VertexShader vertexShader;
 		FragmentShader fragmentShader;
 
@@ -16,17 +15,14 @@ namespace Samurai
 		}
 		
 		public ShaderProgram(GraphicsContext graphics, VertexShader vertexShader, FragmentShader fragmentShader)
+			: base(graphics)
 		{
-			if (graphics == null)
-				throw new ArgumentNullException("graphics");
-
 			if (vertexShader == null)
 				throw new ArgumentNullException("vertexShader");
 
 			if (fragmentShader == null)
 				throw new ArgumentNullException("fragmentShader");
 
-			this.graphicsDevice = graphics;
 			this.Handle = GL.CreateProgram();
 
 			this.vertexShader = vertexShader;

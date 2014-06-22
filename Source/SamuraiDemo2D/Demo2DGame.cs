@@ -33,18 +33,11 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
-			this.spriteBatch.Draw(this.planesTexture, new Color4(255, 255, 255, 128), Vector2.Zero);	
+			this.spriteBatch.Draw(this.planesTexture, new Color4(255, 255, 255, 255), Vector2.Zero, new Rectangle(0, 0, 32, 32));	
 
 			this.spriteBatch.End();
 
 			this.Graphics.SwapBuffers();
-		}
-
-		protected override void Shutdown()
-		{
-			this.spriteBatch.Dispose();
-			this.shaderProgram.Dispose();
-			this.planesTexture.Dispose();
 		}
 
 		private static void Main(string[] args)

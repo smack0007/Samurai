@@ -101,14 +101,6 @@ namespace WavingFlagSample
 			this.Graphics.SwapBuffers();
 		}
 
-		protected override void Shutdown()
-		{
-			this.shader.Dispose();
-			this.texture.Dispose();
-			this.vertexBuffer.Dispose();
-			this.indexBuffer.Dispose();
-		}
-
 		public static void Main()
 		{
 			using (WavingFlagSample sample = new WavingFlagSample())

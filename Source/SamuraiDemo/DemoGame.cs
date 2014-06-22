@@ -92,14 +92,6 @@ namespace SamuraiDemo
 			this.Graphics.SwapBuffers();
 		}
 
-		protected override void Shutdown()
-		{
-			this.shaderProgram.Dispose();
-			this.vertexBuffer.Dispose();
-			this.indexBuffer.Dispose();
-			this.texture0.Dispose();
-		}
-
 		private static void Main(string[] args)
 		{
 			using (DemoGame game = new DemoGame())

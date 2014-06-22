@@ -4,10 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace Samurai
 {
-	public abstract class VertexBuffer<T> : DisposableObject
+	public abstract class VertexBuffer<T> : GraphicsObject
 		where T : struct
 	{
-		GraphicsContext graphicsDevice;
+		GraphicsContext graphics;
 
 		internal uint vertexArray;
 		internal uint buffer;
@@ -19,12 +19,8 @@ namespace Samurai
 		}
 
 		internal VertexBuffer(GraphicsContext graphics)
+			: base(graphics)
 		{
-			if (graphics == null)
-				throw new ArgumentNullException("graphics");
-
-			this.graphicsDevice = graphics;
-
 			this.vertexArray = GL.GenVertexArray();
 			GL.BindVertexArray(this.vertexArray);
 

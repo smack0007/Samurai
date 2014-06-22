@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Samurai
@@ -16,6 +17,14 @@ namespace Samurai
 
 		bool[] textures;
 		uint nextTexture;
+
+		List<GraphicsObject> graphicsObjects;
+
+		internal bool IsDisposing
+		{
+			get;
+			private set;
+		}
 
 		public Rectangle Viewport
 		{
@@ -78,24 +87,53 @@ namespace Samurai
 			}
 		}
 
-		public GraphicsContext(IGraphicsHost context)
+		public GraphicsContext(IGraphicsHost host)
 		{
-			if (context == null)
-				throw new ArgumentNullException("context");
+			if (host == null)
+				throw new ArgumentNullException("host");
 
-			this.host = context;
+			this.host = host;
 
 			this.textures = new bool[32];
 
 			this.clearColor = Color4.CornflowerBlue;
 			GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
+
+			this.graphicsObjects = new List<GraphicsObject>();
 		}
 
 		~GraphicsContext()
 		{
 			this.Dispose(false);
 		}
+
+		protected override void Dispose(bool disposing)
+		{
+			this.IsDisposing = true;
+			base.Dispose(disposing);
+		}
+
+		protected override void DisposeManagedResources()
+		{
+			foreach (GraphicsObject obj in this.graphicsObjects)
+			{
+				if (!obj.IsDisposed)
+					obj.Dispose();
+			}
+
+			this.graphicsObjects.Clear();
+		}
 		
+		internal void RegisterGraphicsObject(GraphicsObject obj)
+		{
+			this.graphicsObjects.Add(obj);
+		}
+
+		internal void UnregisterGraphicsObject(GraphicsObject obj)
+		{
+			this.graphicsObjects.Remove(obj);
+		}
+
 		internal uint AllocateTextureIndex()
 		{
 			for (uint i = 0; i < this.textures.Length; i++)
