@@ -7,7 +7,6 @@ uniform float time;
 layout(location = 0) in vec2 inPosition; 
 layout(location = 1) in vec2 inUV; 
 
-out vec3 fragColor;
 out vec2 fragUV;
 
 void main() 
