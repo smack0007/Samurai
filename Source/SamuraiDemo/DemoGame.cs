@@ -40,6 +40,7 @@ namespace SamuraiDemo
 		StaticIndexBuffer<byte> indexBuffer;
 		Texture texture0;
 		Texture texture1;
+		GamePad gamePad1;
 
 		public DemoGame()
 		{
@@ -66,19 +67,23 @@ namespace SamuraiDemo
 				WrapS = TextureWrap.Clamp,
 				WrapT = TextureWrap.Clamp
 			});
+
+			this.gamePad1 = new GamePad(GamePadIndex.One);
 		}
 
 		float rotation;
 
+		protected override void Update(TimeSpan elapsed)
+		{
+			this.gamePad1.Update();
+
+			this.rotation += (float)(360.0 * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.X);
+		}
+		
 		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
-
-			rotation += (float)(360.0 * elapsed.TotalSeconds);
-
-			if (rotation >= 360.0f)
-				rotation -= 360.0f;
-
+						
 			Matrix4 projection = 
 				Matrix4.CreateRotationZ(MathHelper.ToRadians(rotation)) *
 				Matrix4.InvertedYAxis;

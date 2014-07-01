@@ -52,6 +52,14 @@
     <DocumentationFile>bin\x64\Release\Samurai.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharpDX, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.XInput, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\SharpDX.XInput.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -64,6 +72,10 @@
   <ItemGroup>
     <Compile Include="BasicSpriteBatchShaderProgram.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
+    <Compile Include="GamePad.cs" />
+    <Compile Include="GamePadButtons.cs" />
+    <Compile Include="GamePadDeadZone.cs" />
+    <Compile Include="GamePadIndex.cs" />
     <Compile Include="GraphicsObject.cs" />
     <Compile Include="SourceBlendFactor.cs" />
     <Compile Include="Color3.cs" />
