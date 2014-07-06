@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2501D6A6-6937-492A-A633-0DB0294604B4}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{206D7C47-54B6-4562-B49F-C15009D6B8C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SamuraiDemo2D</RootNamespace>
-    <AssemblyName>SamuraiDemo2D</AssemblyName>
+    <RootNamespace>Samurai.Graphics</RootNamespace>
+    <AssemblyName>Samurai.Graphics</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,16 +22,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -42,7 +37,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -52,7 +46,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -62,7 +55,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -72,11 +64,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -84,30 +76,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Demo2DGame.cs" />
+    <Compile Include="BasicSpriteBatchShaderProgram.cs" />
+    <Compile Include="DestinationBlendFactor.cs" />
+    <Compile Include="DynamicIndexBuffer.cs" />
+    <Compile Include="DynamicVertexBuffer.cs" />
+    <Compile Include="FragmentShader.cs" />
+    <Compile Include="GLContext.cs" />
+    <Compile Include="GLHelper.cs" />
+    <Compile Include="GraphicsContext.cs" />
+    <Compile Include="GraphicsObject.cs" />
+    <Compile Include="IndexBuffer.cs" />
+    <Compile Include="ISpriteBatchShaderProgram.cs" />
+    <Compile Include="PrimitiveType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shader.cs" />
+    <Compile Include="ShaderProgram.cs" />
+    <Compile Include="ShaderType.cs" />
+    <Compile Include="SourceBlendFactor.cs" />
+    <Compile Include="SpriteBatch.cs" />
+    <Compile Include="StaticIndexBuffer.cs" />
+    <Compile Include="StaticVertexBuffer.cs" />
+    <Compile Include="Texture.cs" />
+    <Compile Include="TextureFilter.cs" />
+    <Compile Include="TextureParams.cs" />
+    <Compile Include="TextureWrap.cs" />
+    <Compile Include="VertexBuffer.cs" />
+    <Compile Include="VertexShader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Samurai.GameFramework\Samurai.GameFramework.csproj">
-      <Project>{449baa7e-2062-49b3-9d48-f57606057629}</Project>
-      <Name>Samurai.GameFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samurai.Graphics\Samurai.Graphics.csproj">
-      <Project>{206d7c47-54b6-4562-b49f-c15009d6b8c6}</Project>
-      <Name>Samurai.Graphics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Samurai\Samurai.csproj">
       <Project>{0d380a23-56eb-4a8f-a32b-c081592ed576}</Project>
       <Name>Samurai</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Planes.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="BasicSpriteBatchShader.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BasicSpriteBatchShader.vert" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

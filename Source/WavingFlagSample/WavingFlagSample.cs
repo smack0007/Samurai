@@ -1,4 +1,6 @@
 ﻿using Samurai;
+using Samurai.GameFramework;
+using Samurai.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;

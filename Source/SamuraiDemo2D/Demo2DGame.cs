@@ -1,4 +1,6 @@
 ﻿using Samurai;
+using Samurai.GameFramework;
+using Samurai.Graphics;
 using System;
 
 namespace SamuraiDemo2D

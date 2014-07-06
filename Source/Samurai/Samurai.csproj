@@ -70,72 +70,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicSpriteBatchShaderProgram.cs" />
-    <Compile Include="DestinationBlendFactor.cs" />
+    <Compile Include="Color3.cs" />
+    <Compile Include="Color4.cs" />
     <Compile Include="GamePad.cs" />
     <Compile Include="GamePadButtons.cs" />
     <Compile Include="GamePadDeadZone.cs" />
     <Compile Include="GamePadIndex.cs" />
-    <Compile Include="GraphicsObject.cs" />
-    <Compile Include="SourceBlendFactor.cs" />
-    <Compile Include="Color3.cs" />
-    <Compile Include="Color4.cs" />
     <Compile Include="DisposableObject.cs" />
-    <Compile Include="DynamicIndexBuffer.cs" />
-    <Compile Include="DynamicVertexBuffer.cs" />
-    <Compile Include="FragmentShader.cs" />
-    <Compile Include="ISpriteBatchShaderProgram.cs" />
     <Compile Include="MathHelper.cs" />
-    <Compile Include="PrimitiveType.cs" />
-    <Compile Include="SpriteBatch.cs" />
-    <Compile Include="StaticIndexBuffer.cs" />
-    <Compile Include="StaticVertexBuffer.cs" />
-    <Compile Include="Texture.cs" />
-    <Compile Include="TextureFilter.cs" />
-    <Compile Include="TextureParams.cs" />
-    <Compile Include="TextureWrap.cs" />
-    <Compile Include="VertexBuffer.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GL.cs" />
-    <Compile Include="GLFW.cs" />
-    <Compile Include="GameWindow.cs" />
-    <Compile Include="GLHelper.cs" />
-    <Compile Include="GraphicsContext.cs" />
-    <Compile Include="IGraphicsHost.cs" />
-    <Compile Include="IndexBuffer.cs" />
     <Compile Include="Key.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="KeyPressEventArgs.cs" />
     <Compile Include="Matrix4.cs" />
     <Compile Include="MouseButton.cs" />
-    <Compile Include="MouseButtonEventArgs.cs" />
-    <Compile Include="MouseEventArgs.cs" />
-    <Compile Include="MouseWheelEventArgs.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="SamuraiException.cs" />
-    <Compile Include="Shader.cs" />
-    <Compile Include="ShaderProgram.cs" />
-    <Compile Include="ShaderType.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
-    <Compile Include="VertexShader.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Library\glfw3_x64.dll">
-      <Link>glfw3_x64.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Library\glfw3_x86.dll">
-      <Link>glfw3_x86.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="BasicSpriteBatchShader.frag" />
-    <EmbeddedResource Include="BasicSpriteBatchShader.vert" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
