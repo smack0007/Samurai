@@ -213,7 +213,7 @@ namespace Samurai
 		/// <returns></returns>
 		public uint ToUint()
 		{
-			return ((uint)this.R << 24) + ((uint)this.G << 16) + ((uint)this.G << 8) + (uint)this.A;
+			return ((uint)this.R << 24) + ((uint)this.G << 16) + ((uint)this.B << 8) + (uint)this.A;
 		}
 
 		public override bool Equals(object obj)
