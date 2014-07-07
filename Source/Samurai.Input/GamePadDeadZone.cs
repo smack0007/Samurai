@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Samurai
+namespace Samurai.Input
 {
 	/// <summary>
 	/// Provides dead zone values for GamePad.

@@ -1,7 +1,7 @@
 ﻿using System;
 using XInput = SharpDX.XInput;
 
-namespace Samurai
+namespace Samurai.Input
 {
 	/// <summary>
 	/// Reads from a GamePad input device.
