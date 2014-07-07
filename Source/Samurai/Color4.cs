@@ -211,7 +211,7 @@ namespace Samurai
 		/// Converts the Color4 to a uint.
 		/// </summary>
 		/// <returns></returns>
-		public uint ToUint()
+		public uint ToRgba()
 		{
 			return ((uint)this.R << 24) + ((uint)this.G << 16) + ((uint)this.B << 8) + (uint)this.A;
 		}
@@ -239,5 +239,24 @@ namespace Samurai
 				   this.B == other.B &&
 				   this.A == other.A;
 		}
+
+		public override int GetHashCode()
+		{
+			return this.R.GetHashCode() ^ this.G.GetHashCode() ^ this.B.GetHashCode() ^ this.A.GetHashCode();
+		}
+
+		#region Operator Overloads
+
+		public static bool operator ==(Color4 c1, Color4 c2)
+		{
+			return c1.Equals(c2);
+		}
+
+		public static bool operator !=(Color4 c1, Color4 c2)
+		{
+			return !c1.Equals(c2);
+		}
+
+		#endregion
 	}
 }

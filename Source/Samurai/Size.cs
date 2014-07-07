@@ -35,6 +35,11 @@ namespace Samurai
                    this.Height == other.Height;
         }
 
+		public override int GetHashCode()
+		{
+			return this.Width.GetHashCode() ^ this.Height.GetHashCode();
+		}
+
         public static bool operator ==(Size s1, Size s2)
         {
             return s1.Equals(s2);

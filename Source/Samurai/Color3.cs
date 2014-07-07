@@ -222,5 +222,24 @@ namespace Samurai
 				   this.G == other.G &&
 				   this.B == other.B;
 		}
+
+		public override int GetHashCode()
+		{
+			return this.R.GetHashCode() ^ this.G.GetHashCode() ^ this.B.GetHashCode();
+		}
+
+		#region Operator Overloads
+
+		public static bool operator ==(Color3 c1, Color3 c2)
+		{
+			return c1.Equals(c2);
+		}
+
+		public static bool operator !=(Color3 c1, Color3 c2)
+		{
+			return !c1.Equals(c2);
+		}
+
+		#endregion
 	}
 }

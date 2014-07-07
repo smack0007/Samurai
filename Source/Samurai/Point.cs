@@ -35,6 +35,11 @@ namespace Samurai
                    this.Y == other.Y;
         }
 
+		public override int GetHashCode()
+		{
+			return this.X.GetHashCode() ^ this.Y.GetHashCode();
+		}
+
         public static bool operator ==(Point p1, Point p2)
         {
             return p1.Equals(p2);

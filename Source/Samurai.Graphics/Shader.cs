@@ -6,8 +6,6 @@ namespace Samurai.Graphics
 {
 	public class Shader : GraphicsObject
 	{
-		string source;
-
 		internal uint Handle
 		{
 			get;

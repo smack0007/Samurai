@@ -79,6 +79,11 @@ namespace Samurai
 				   this.Height == other.Height;
 		}
 
+		public override int GetHashCode()
+		{
+			return this.X.GetHashCode() ^ this.Y.GetHashCode() ^ this.Width.GetHashCode() ^ this.Height.GetHashCode();
+		}
+
 		public static bool operator ==(Rectangle r1, Rectangle r2)
 		{
 			return r1.Equals(r2);

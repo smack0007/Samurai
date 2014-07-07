@@ -58,6 +58,11 @@ namespace Samurai
 			return this.X == other.X && this.Y == other.Y;
 		}
 
+		public override int GetHashCode()
+		{
+			return this.X.GetHashCode() ^ this.Y.GetHashCode();
+		}
+
 		/// <summary>
 		/// Calculates the length of the Vector2.
 		/// </summary>
