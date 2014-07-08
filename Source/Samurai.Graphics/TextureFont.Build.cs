@@ -127,7 +127,7 @@ namespace Samurai.Graphics
 
 				byte[] bytes = BitmapHelper.GetBytes(bitmap);
 				
-				Texture texture = Texture.FromBytes(graphics, bytes, bitmap.Width, bitmap.Height, new TextureParams()
+				Texture texture = Texture.Load(graphics, bytes, bitmap.Width, bitmap.Height, new TextureParams()
 					{
 						ColorKey = parameters.ColorKey
 					});

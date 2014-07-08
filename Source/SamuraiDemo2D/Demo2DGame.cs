@@ -22,7 +22,7 @@ namespace SamuraiDemo2D
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
 
-			this.planesTexture = Texture.FromFile(this.Graphics, "Planes.png", new TextureParams()
+			this.planesTexture = Texture.Load(this.Graphics, "Planes.png", new TextureParams()
 				{
 					ColorKey = Color4.Magenta,
 					WrapS = TextureWrap.Repeat,

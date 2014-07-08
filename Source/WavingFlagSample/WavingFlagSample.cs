@@ -40,7 +40,7 @@ namespace WavingFlagSample
 
 			this.Graphics.SetShaderProgram(this.shader);
 			
-			this.texture = Texture.FromFile(this.Graphics, "Flag.png", new TextureParams());
+			this.texture = Texture.Load(this.Graphics, "Flag.png", TextureParams.Default);
 
 			int totalChunks = 100;
 			int chunkSize = this.texture.Width / totalChunks;
