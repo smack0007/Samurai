@@ -239,7 +239,79 @@ namespace Samurai.Graphics
 				tint);
 		}
 
-		public void Flush()
+		public void DrawString(TextureFont font, string text, Vector2 position, Color4 color)
+		{
+			this.DrawString(font, text, position, Vector2.One, color);
+		}
+
+		public void DrawString(TextureFont font, string text, Vector2 position, Vector2 scale, Color4 color)
+		{
+			if (font == null)
+				throw new ArgumentNullException("font");
+
+			if (text == null)
+				throw new ArgumentNullException("text");
+
+			Size textSize = font.MeasureString(text);
+
+			this.DrawString(font, text, new Rectangle((int)position.X, (int)position.Y, textSize.Width, textSize.Height), scale, color);
+		}
+
+		public void DrawString(TextureFont font, string text, Rectangle destination, Color4 color)
+		{
+			this.DrawString(font, text, destination, Vector2.One, color);
+		}
+
+		public void DrawString(TextureFont font, string text, Rectangle destination, Vector2 scale, Color4 color)
+		{
+			if (font == null)
+				throw new ArgumentNullException("font");
+
+			if (text == null)
+				throw new ArgumentNullException("text");
+
+			if (text.Length == 0)
+				return;
+
+			float heightOfSingleLine = font.LineHeight * scale.Y;
+
+			if (heightOfSingleLine > destination.Height) // We can't draw anything
+				return;
+
+			Vector2 cursor = new Vector2(destination.X, destination.Y);
+
+			for (int i = 0; i < text.Length; i++)
+			{
+				// Skip characters we can't render.
+				if (text[i] == '\r')
+					continue;
+
+				float widthOfChar = 0;
+
+				if (text[i] == '\n' || cursor.X + (widthOfChar = font[text[i]].Width * scale.X) > destination.Right)
+				{
+					cursor.X = destination.X;
+					cursor.Y += heightOfSingleLine + font.LineSpacing;
+
+					// If the next line extends past the destination, quit.
+					if (cursor.Y + heightOfSingleLine > destination.Bottom)
+						return;
+
+					// We can't render a new line.
+					if (text[i] == '\n')
+						continue;
+				}
+
+				Rectangle letterSource = font[text[i]];
+				Rectangle letterDestination = new Rectangle((int)cursor.X, (int)cursor.Y, (int)widthOfChar, (int)heightOfSingleLine);
+
+				this.Draw(font.Texture, color, letterDestination, letterSource);
+
+				cursor.X += widthOfChar + font.CharacterSpacing;
+			}
+		}
+
+		private void Flush()
 		{
 			if (this.vertexCount > 0)
 			{

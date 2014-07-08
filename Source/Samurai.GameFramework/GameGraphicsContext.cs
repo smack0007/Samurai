@@ -3,7 +3,7 @@ using System;
 
 namespace Samurai.GameFramework
 {
-	public class GameGraphicsContext : GraphicsContext
+	public sealed class GameGraphicsContext : GraphicsContext
 	{
 		GameWindow window;
 

@@ -3,7 +3,7 @@ using System;
 
 namespace Samurai.GameFramework
 {
-    public class GameWindow
+    public sealed class GameWindow
     {
         IntPtr window;
         string title;
@@ -76,7 +76,7 @@ namespace Samurai.GameFramework
 
         public event EventHandler<MouseWheelEventArgs> MouseWheel;
                         
-        public GameWindow()
+        internal GameWindow()
 		{        
             this.window = GLFW.CreateWindow(800, 600, string.Empty, IntPtr.Zero, IntPtr.Zero);
                        

@@ -7,7 +7,9 @@ namespace Samurai
     public struct Size : IEquatable<Size>
     {
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Size));
-                
+
+		public static readonly Size Zero = new Size();
+
         public int Width;
 
         public int Height;

@@ -8,6 +8,8 @@ namespace Samurai.Graphics
 {
 	public class TextureParams
 	{
+		public static readonly TextureParams Default = new TextureParams();
+
 		/// <summary>
 		/// A color in the source image which should be replaced with transparent pixels.
 		/// </summary>

@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicSpriteBatchShaderProgram.cs" />
+    <Compile Include="BitmapHelper.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DynamicIndexBuffer.cs" />
     <Compile Include="DynamicVertexBuffer.cs" />
@@ -98,6 +99,10 @@
     <Compile Include="StaticVertexBuffer.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="TextureFilter.cs" />
+    <Compile Include="TextureFont.cs" />
+    <Compile Include="TextureFont.Build.cs" />
+    <Compile Include="TextureFontParams.cs" />
+    <Compile Include="TextureFontStyle.cs" />
     <Compile Include="TextureParams.cs" />
     <Compile Include="TextureWrap.cs" />
     <Compile Include="VertexBuffer.cs" />

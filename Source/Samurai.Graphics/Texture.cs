@@ -94,33 +94,27 @@ namespace Samurai.Graphics
 
 			if (stream == null)
 				throw new ArgumentNullException("stream");
+						
+			using (Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream))
+			{
+				byte[] bytes = BitmapHelper.GetBytes(bitmap);
+				return FromBytes(graphics, bytes, bitmap.Width, bitmap.Height, parameters);
+			}
+		}
 
+		public static Texture FromBytes(GraphicsContext graphics, byte[] bytes, int width, int height, TextureParams parameters)
+		{
 			Texture texture = new Texture(graphics);
 			graphics.GL.ActiveTexture(GLContext.Texture0 + texture.Index);
 			graphics.GL.BindTexture(GLContext.Texture2D, texture.Handle);
 
-			Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream);
+			texture.Width = width;
+			texture.Height = height;
 
-			texture.Width = bitmap.Width;
-			texture.Height = bitmap.Height;
-
-			byte[] bytes = new byte[bitmap.Width * bitmap.Height * 4];
-			
-			BitmapData bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			Marshal.Copy(bitmapData.Scan0, bytes, 0, bytes.Length);
-			bitmap.UnlockBits(bitmapData);
-
-			// Pixel format for little-endian machines is [B][G][R][A]. We need to convert to [R][G][B][A].
-			// http://stackoverflow.com/questions/8104461/pixelformat-format32bppargb-seems-to-have-wrong-byte-order
-
-			for (int i = 0; i < bytes.Length; i += 4)
+			if (parameters.ColorKey != null)
 			{
-				byte b = bytes[i];
-				bytes[i] = bytes[i + 2];
-				bytes[i + 2] = b;
-
-				if (parameters.ColorKey != null)
-				{
+				for (int i = 0; i < bytes.Length; i += 4)
+				{	
 					uint pixel = GLHelper.MakePixelRGBA(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
 
 					if (pixel == parameters.ColorKey.Value.ToRgba())
@@ -136,8 +130,8 @@ namespace Samurai.Graphics
 					GLContext.Texture2D,
 					0,
 					(int)GLContext.Rgba,
-					bitmap.Width,
-					bitmap.Height,
+					width,
+					height,
 					0,
 					GLContext.Rgba,
 					(int)GLContext.UnsignedByte,
