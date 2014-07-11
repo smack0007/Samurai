@@ -15,16 +15,18 @@ namespace Samurai.Graphics
 			return new SpriteSheet(texture, frames);
 		}
 
-		private static bool DoesFrameAlreadyExist(List<Rectangle> frames, int x, int y)
+		private static bool DoesFrameAlreadyExist(List<Rectangle> frames, int x, int y, out Rectangle frame)
 		{
 			for (int i = 0; i < frames.Count; i++)
 			{
 				if (frames[i].Contains(x, y))
 				{
+					frame = frames[i];
 					return true;
 				}
 			}
 
+			frame = Rectangle.Empty;
 			return false;
 		}
 
@@ -35,6 +37,8 @@ namespace Samurai.Graphics
 			Color4 pixel;
 			Color4 pixel2;
 
+			Rectangle frame;
+
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
@@ -43,7 +47,7 @@ namespace Samurai.Graphics
 
 					if (pixel != gridColor)
 					{
-						if (!DoesFrameAlreadyExist(frames, x, y))
+						if (!DoesFrameAlreadyExist(frames, x, y, out frame))
 						{
 							x2 = x;
 							y2 = y;
@@ -69,6 +73,13 @@ namespace Samurai.Graphics
 							y2--;
 
 							frames.Add(new Rectangle(x, y, x2 - x + 1, y2 - y + 1));
+
+							x = x2;
+						}
+						else
+						{
+							// If we found a frame already, we can for sure go to the far right of it.
+							x = frame.Right;
 						}
 					}
 				}

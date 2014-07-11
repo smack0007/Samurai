@@ -8,6 +8,8 @@ namespace Samurai
 	{
 		public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Rectangle));
 
+		public static readonly Rectangle Empty = new Rectangle();
+
 		public int X;
 
 		public int Y;

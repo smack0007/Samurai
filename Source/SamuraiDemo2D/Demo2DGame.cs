@@ -42,8 +42,8 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
-			this.spriteBatch.Draw(this.planes, 0, new Color4(255, 255, 255, 255), Vector2.Zero);
-			this.spriteBatch.DrawString(this.font, "Hello World!", Color4.White, Vector2.Zero);
+			this.spriteBatch.Draw(this.planes, 5, new Color4(255, 255, 255, 255), Vector2.Zero);
+			//this.spriteBatch.DrawString(this.font, "Hello World!", Color4.White, Vector2.Zero);
 
 			this.spriteBatch.End();
 

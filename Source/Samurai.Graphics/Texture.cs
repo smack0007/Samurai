@@ -153,11 +153,17 @@ namespace Samurai.Graphics
 			byte[] bytes = this.GetBytes();
 			Color4[] pixels = new Color4[this.Width * this.Height];
 
-			for (int i = 0, j = 0; i < bytes.Length; i += 4, j++)
-			{
-				pixels[j] = new Color4(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
-			}
+			GCHandle pixelsPtr = GCHandle.Alloc(pixels, GCHandleType.Pinned);
 
+			try
+			{
+				Marshal.Copy(bytes, 0, pixelsPtr.AddrOfPinnedObject(), bytes.Length);
+			}
+			finally
+			{
+				pixelsPtr.Free();
+			}
+						
 			return pixels;
 		}
 	}
