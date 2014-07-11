@@ -84,6 +84,96 @@ namespace Samurai
 			return this.X.GetHashCode() ^ this.Y.GetHashCode() ^ this.Width.GetHashCode() ^ this.Height.GetHashCode();
 		}
 
+		/// <summary>
+		/// Returns true if r1 instersects r2.
+		/// </summary>
+		/// <param name="r1"></param>
+		/// <param name="r2"></param>
+		/// <returns></returns>
+		public static bool Intersects(Rectangle r1, Rectangle r2)
+		{
+			return Intersects(ref r1, ref r2);
+		}
+
+		/// <summary>
+		/// Returns true if r1 intersects r2.
+		/// </summary>
+		/// <param name="r1"></param>
+		/// <param name="r2"></param>
+		/// <returns></returns>
+		public static bool Intersects(ref Rectangle r1, ref Rectangle r2)
+		{
+			if (r2.Left > r1.Right || r2.Right < r1.Left ||
+			   r2.Top > r1.Bottom || r2.Bottom < r1.Top)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Returns true if the Rectangle intersects with the other.
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		public bool Intersects(Rectangle other)
+		{
+			return Intersects(ref this, ref other);
+		}
+
+		/// <summary>
+		/// Returns true if the Rectangle intersects with the other.
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
+		public bool Intersects(ref Rectangle other)
+		{
+			return Intersects(ref this, ref other);
+		}
+
+		/// <summary>
+		/// Returns true if the Rectangle contains the given Point.
+		/// </summary>
+		/// <param name="point"></param>
+		/// <returns></returns>
+		public bool Contains(Point point)
+		{
+			return point.X >= this.X &&
+				   point.X <= this.X + this.Width &&
+				   point.Y >= this.Y &&
+				   point.Y <= this.Y + this.Height;
+		}
+
+		/// <summary>
+		/// Returns true if the Rectangle contains the given Vector2.
+		/// </summary>
+		/// <param name="vec"></param>
+		/// <returns></returns>
+		public bool Contains(Vector2 vec)
+		{
+			return vec.X >= this.X &&
+				   vec.X <= this.X + this.Width &&
+				   vec.Y >= this.Y &&
+				   vec.Y <= this.Y + this.Height;
+		}
+
+		/// <summary>
+		/// Returns true if the Rectangle contains the given X and Y coordinate.
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
+		public bool Contains(int x, int y)
+		{
+			return x >= this.X &&
+				   x <= this.X + this.Width &&
+				   y >= this.Y &&
+				   y <= this.Y + this.Height;
+		}
+
+		#region Operator Overloads
+
 		public static bool operator ==(Rectangle r1, Rectangle r2)
 		{
 			return r1.Equals(r2);
@@ -93,5 +183,7 @@ namespace Samurai
 		{
 			return !r1.Equals(r2);
 		}
+
+		#endregion
 	}
 }

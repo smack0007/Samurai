@@ -239,12 +239,21 @@ namespace Samurai.Graphics
 				tint);
 		}
 
-		public void DrawString(TextureFont font, string text, Vector2 position, Color4 color)
+		public void Draw(SpriteSheet spriteSheet, int frame, Color4 tint, Vector2 position)
 		{
-			this.DrawString(font, text, position, Vector2.One, color);
+			if (spriteSheet == null)
+				throw new ArgumentNullException("spriteSheet");
+
+			Rectangle frameRect = spriteSheet[frame];
+			this.DrawInternal(spriteSheet.Texture, tint, position, frameRect.Width, frameRect.Height, frameRect);
 		}
 
-		public void DrawString(TextureFont font, string text, Vector2 position, Vector2 scale, Color4 color)
+		public void DrawString(TextureFont font, string text, Color4 tint, Vector2 position)
+		{
+			this.DrawString(font, text, tint, position, Vector2.One);
+		}
+
+		public void DrawString(TextureFont font, string text, Color4 tint, Vector2 position, Vector2 scale)
 		{
 			if (font == null)
 				throw new ArgumentNullException("font");
@@ -254,7 +263,7 @@ namespace Samurai.Graphics
 
 			Size textSize = font.MeasureString(text);
 
-			this.DrawString(font, text, new Rectangle((int)position.X, (int)position.Y, textSize.Width, textSize.Height), scale, color);
+			this.DrawString(font, text, new Rectangle((int)position.X, (int)position.Y, textSize.Width, textSize.Height), scale, tint);
 		}
 
 		public void DrawString(TextureFont font, string text, Rectangle destination, Color4 color)

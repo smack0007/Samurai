@@ -10,6 +10,7 @@ namespace SamuraiDemo2D
 		SpriteBatch spriteBatch;
 		BasicSpriteBatchShaderProgram shaderProgram;
 		Texture planesTexture;
+		SpriteSheet planes;
 		TextureFont font;
 
 		public Demo2DGame()
@@ -24,10 +25,9 @@ namespace SamuraiDemo2D
 
 			this.planesTexture = Texture.Load(this.Graphics, "Planes.png", new TextureParams()
 				{
-					ColorKey = Color4.Magenta,
-					WrapS = TextureWrap.Repeat,
-					WrapT = TextureWrap.Repeat
 				});
+
+			this.planes = SpriteSheet.BuildFromGrid(this.planesTexture, Color4.Magenta);
 
 			this.font = TextureFont.Build(this.Graphics, "Arial", 72, new TextureFontParams()
 				{
@@ -42,8 +42,8 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
-			this.spriteBatch.Draw(this.planesTexture, new Color4(255, 255, 255, 255), Vector2.Zero, new Rectangle(0, 0, 32, 32));
-			this.spriteBatch.DrawString(this.font, "Hello World!", Vector2.Zero, Color4.White);
+			this.spriteBatch.Draw(this.planes, 0, new Color4(255, 255, 255, 255), Vector2.Zero);
+			this.spriteBatch.DrawString(this.font, "Hello World!", Color4.White, Vector2.Zero);
 
 			this.spriteBatch.End();
 

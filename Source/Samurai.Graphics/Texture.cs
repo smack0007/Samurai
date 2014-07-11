@@ -121,26 +121,17 @@ namespace Samurai.Graphics
 						GLHelper.DecomposePixelRGBA(parameters.TransparentPixel.ToRgba(), out bytes[i], out bytes[i + 1], out bytes[i + 2], out bytes[i + 3]);
 				}
 			}
-
-			GCHandle bytesPtr = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-
-			try
-			{
-				graphics.GL.TexImage2D(
-					GLContext.Texture2D,
-					0,
-					(int)GLContext.Rgba,
-					width,
-					height,
-					0,
-					GLContext.Rgba,
-					(int)GLContext.UnsignedByte,
-					bytesPtr.AddrOfPinnedObject());
-			}
-			finally
-			{
-				bytesPtr.Free();
-			}
+						
+			graphics.GL.TexImage2D(
+				GLContext.Texture2D,
+				0,
+				(int)GLContext.Rgba,
+				width,
+				height,
+				0,
+				GLContext.Rgba,
+				(int)GLContext.UnsignedByte,
+				bytes);
 
 			graphics.GL.TexParameteri(GLContext.Texture2D, GLContext.TextureMagFilter, (int)parameters.MagFilter);
 			graphics.GL.TexParameteri(GLContext.Texture2D, GLContext.TextureMinFilter, (int)parameters.MinFilter);
@@ -148,6 +139,26 @@ namespace Samurai.Graphics
 			graphics.GL.TexParameteri(GLContext.Texture2D, GLContext.TextureWrapT, (int)parameters.WrapT);
 
 			return texture;
+		}
+
+		public byte[] GetBytes()
+		{
+			byte[] bytes = new byte[this.Width * this.Height * 4];
+			this.Graphics.GL.GetTexImage(GLContext.Texture2D, 0, GLContext.Rgba, (int)GLContext.UnsignedByte, bytes);
+			return bytes;
+		}
+
+		public Color4[] GetPixels()
+		{
+			byte[] bytes = this.GetBytes();
+			Color4[] pixels = new Color4[this.Width * this.Height];
+
+			for (int i = 0, j = 0; i < bytes.Length; i += 4, j++)
+			{
+				pixels[j] = new Color4(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
+			}
+
+			return pixels;
 		}
 	}
 }

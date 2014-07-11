@@ -176,6 +176,9 @@ namespace Samurai.Graphics
 		private delegate void __GetShaderiv(uint shader, uint pname, out int @params);
 		private __GetShaderiv _GetShaderiv;
 
+		[DllImport(Library, EntryPoint = "glGetTexImage")]
+		private static extern void _GetTexImage(uint target, int level, uint format, uint type, [Out] byte[] img);
+
 		private delegate int __GetUniformLocation(uint program, string name);
 		private __GetUniformLocation _GetUniformLocation;
 
@@ -186,7 +189,7 @@ namespace Samurai.Graphics
 		private __ShaderSource _ShaderSource;
 
 		[DllImport(Library, EntryPoint = "glTexImage2D")]
-		private static extern void _TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels);
+		private static extern void _TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, byte[] pixels);
 
 		[DllImport(Library, EntryPoint = "glTexParameterf")]
 		private static extern void _TexParameterf(uint target, uint pname, float param);
@@ -519,6 +522,12 @@ namespace Samurai.Graphics
 			return @params;
 		}
 
+		public void GetTexImage(uint target, int level, uint format, uint type, byte[] img)
+		{
+			_GetTexImage(target, level, format, type, img);
+			CheckErrors("GetTexImage");
+		}
+
 		public int GetUniformLocation(uint program, string name)
 		{
 			int location = _GetUniformLocation(program, name);
@@ -542,7 +551,7 @@ namespace Samurai.Graphics
 			CheckErrors("ShaderSource");
 		}
 
-		public void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels)
+		public void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, byte[] pixels)
 		{
 			_TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 			CheckErrors("TexImage2D");

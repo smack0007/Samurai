@@ -95,6 +95,8 @@
     <Compile Include="ShaderType.cs" />
     <Compile Include="SourceBlendFactor.cs" />
     <Compile Include="SpriteBatch.cs" />
+    <Compile Include="SpriteSheet.BuildFromGrid.cs" />
+    <Compile Include="SpriteSheet.cs" />
     <Compile Include="StaticIndexBuffer.cs" />
     <Compile Include="StaticVertexBuffer.cs" />
     <Compile Include="Texture.cs" />
