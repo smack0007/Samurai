@@ -62,7 +62,7 @@ namespace Samurai.GameFramework
 			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MAJOR, 3);
 			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MINOR, 3);
 			GLFW.WindowHint(GLFW.OPENGL_PROFILE, GLFW.OPENGL_CORE_PROFILE);
-
+			
 			this.Window = new GameWindow();
 			this.Window.Resize += this.Window_Resize;
 
@@ -114,6 +114,8 @@ namespace Samurai.GameFramework
 
 			stopwatch.Start();
 			nextTick = stopwatch.ElapsedMilliseconds;
+
+			this.Window.Show();
 
 			this.Initialize();
 

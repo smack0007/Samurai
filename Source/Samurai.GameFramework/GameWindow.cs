@@ -77,7 +77,9 @@ namespace Samurai.GameFramework
         public event EventHandler<MouseWheelEventArgs> MouseWheel;
                         
         internal GameWindow()
-		{        
+		{
+			GLFW.WindowHint(GLFW.VISIBLE, 0);
+
             this.window = GLFW.CreateWindow(800, 600, string.Empty, IntPtr.Zero, IntPtr.Zero);
                        
             this.title = string.Empty;
@@ -220,6 +222,16 @@ namespace Samurai.GameFramework
         {
             GLFW.SetWindowShouldClose(this.window, shouldClose ? 1 : 0);
         }
+
+		public void Show()
+		{
+			GLFW.ShowWindow(this.window);
+		}
+
+		public void Hide()
+		{
+			GLFW.HideWindow(this.window);
+		}
 
 		public void SwapBuffers()
 		{
