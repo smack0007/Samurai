@@ -5,7 +5,7 @@ namespace Samurai.Graphics
 {
 	public sealed partial class SpriteSheet
 	{
-		public static SpriteSheet BuildFromGrid(Texture texture, Color4 gridColor)
+		public static SpriteSheet Build(Texture texture, Color4 gridColor)
 		{
 			List<Rectangle> frames = new List<Rectangle>();
 

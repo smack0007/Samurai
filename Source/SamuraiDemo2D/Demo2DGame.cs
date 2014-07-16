@@ -27,7 +27,7 @@ namespace SamuraiDemo2D
 				{
 				});
 
-			this.planes = SpriteSheet.BuildFromGrid(this.planesTexture, Color4.Magenta);
+			this.planes = SpriteSheet.Build(this.planesTexture, Color4.Magenta);
 
 			this.font = TextureFont.Build(this.Graphics, "Arial", 72, new TextureFontParams()
 				{
