@@ -55,10 +55,11 @@ namespace Samurai.GameFramework
             set { GLFW.SetWindowSize(this.window, this.size.Width, value); }
         }
 
-        public bool IsFullscreen
-        {
-            get { return false; }
-        }
+		public bool IsFullscreen
+		{
+			get;
+			private set;
+		}
 		        
         public event EventHandler Resize;
 
@@ -76,14 +77,23 @@ namespace Samurai.GameFramework
 
         public event EventHandler<MouseWheelEventArgs> MouseWheel;
                         
-        internal GameWindow()
+        internal GameWindow(GameOptions options)
 		{
 			GLFW.WindowHint(GLFW.VISIBLE, 0);
+			GLFW.WindowHint(GLFW.RESIZABLE, options.WindowResizable ? 1 : 0);
 
-            this.window = GLFW.CreateWindow(800, 600, string.Empty, IntPtr.Zero, IntPtr.Zero);
+			IntPtr monitor = IntPtr.Zero;
+
+			if (options.WindowIsFullscreen)
+			{
+				monitor = GLFW.GetPrimaryMonitor();
+				this.IsFullscreen = true;
+			}
+
+            this.window = GLFW.CreateWindow(options.WindowWidth, options.WindowHeight, string.Empty, monitor, IntPtr.Zero);
                        
             this.title = string.Empty;
-            this.size = new Size(800, 600);
+            this.size = new Size(options.WindowWidth, options.WindowHeight);
             this.position = new Point(0, 0);
 
             // It is important to hold references to the callbacks so that the GC does not garbage collect the delegates.

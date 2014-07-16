@@ -17,6 +17,9 @@ namespace Samurai.GameFramework
 		[DllImport(Library, EntryPoint = "glfwCreateWindow", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         public static extern IntPtr CreateWindow(int width, int height, string title, IntPtr monitor, IntPtr share);
 
+		[DllImport(Library, EntryPoint = "glfwGetPrimaryMonitor", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+		public static extern IntPtr GetPrimaryMonitor();
+			
         [DllImport(Library, EntryPoint = "glfwGetProcAddress", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
 		public static extern IntPtr GetProcAddress(string procName);
 

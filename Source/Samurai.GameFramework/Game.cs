@@ -8,7 +8,9 @@ namespace Samurai.GameFramework
 	/// Base clsas for Samurai games.
 	/// </summary>
 	public abstract class Game : IDisposable
-	{		
+	{
+		GameOptions options;
+
 		/// <summary>
 		/// Gets the GameWindow.
 		/// </summary>
@@ -28,30 +30,22 @@ namespace Samurai.GameFramework
 		}
 
 		/// <summary>
-		/// Gets or sets the desired frames per second.
+		/// Constructor.
 		/// </summary>
-		protected int FramesPerSecond
+		public Game()
+			: this(new GameOptions())
 		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets whether the Viewport of the GraphicsContext should be automatically resized.
-		/// </summary>
-		protected bool AutoResizeViewport
-		{
-			get;
-			set;
 		}
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public Game()
+		public Game(GameOptions options)
 		{
-			this.FramesPerSecond = 60;
-			this.AutoResizeViewport = true;
+			if (options == null)
+				throw new ArgumentNullException("options");
+
+			this.options = options;
 
 			if (GLFW.Init() == 0)
 				throw new SamuraiException("GLFW initialization failed.");
@@ -63,7 +57,7 @@ namespace Samurai.GameFramework
 			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MINOR, 3);
 			GLFW.WindowHint(GLFW.OPENGL_PROFILE, GLFW.OPENGL_CORE_PROFILE);
 			
-			this.Window = new GameWindow();
+			this.Window = new GameWindow(this.options);
 			this.Window.Resize += this.Window_Resize;
 
 			this.Graphics = new GameGraphicsContext(this.Window);
@@ -97,7 +91,7 @@ namespace Samurai.GameFramework
 				
 		private void Window_Resize(object sender, EventArgs e)
 		{
-			if (this.AutoResizeViewport)
+			if (this.options.AutoResizeViewport)
 				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
@@ -109,7 +103,7 @@ namespace Samurai.GameFramework
 			Stopwatch stopwatch = new Stopwatch();
 
 			long nextTick;
-			int timeBetweenTicks = 1000 / this.FramesPerSecond;
+			int timeBetweenTicks = 1000 / this.options.FramesPerSecond;
 			TimeSpan elapsed = TimeSpan.FromMilliseconds(timeBetweenTicks);
 
 			stopwatch.Start();
