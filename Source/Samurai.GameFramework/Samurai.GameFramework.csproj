@@ -68,6 +68,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -76,26 +78,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
-    <Compile Include="GameGraphicsContext.cs" />
     <Compile Include="GameOptions.cs" />
     <Compile Include="GameWindow.cs" />
-    <Compile Include="GLFW.cs" />
     <Compile Include="KeyEventArgs.cs" />
     <Compile Include="KeyPressEventArgs.cs" />
     <Compile Include="MouseButtonEventArgs.cs" />
     <Compile Include="MouseEventArgs.cs" />
     <Compile Include="MouseWheelEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Library\glfw3_x64.dll">
-      <Link>glfw3_x64.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Library\glfw3_x86.dll">
-      <Link>glfw3_x86.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Compile Include="Win32.cs" />
+    <Compile Include="Win32GameWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Samurai.Graphics\Samurai.Graphics.csproj">

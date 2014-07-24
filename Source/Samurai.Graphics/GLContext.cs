@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Samurai.Graphics
 {
-	internal class GLContext
-	{		
-		private const string Library = "opengl32.dll";
+	internal class GLContext : IDisposable
+	{
+		private const string Library = "libglesv2.dll";
 				
 		public const uint ArrayBuffer = 0x8892;
 		public const uint Blend = 0x0BE2;
@@ -88,6 +88,9 @@ namespace Samurai.Graphics
 		public const uint Fixed = 0x140C;
 		
 		private static readonly uint[] UintArraySizeOne = new uint[1];
+
+		IntPtr display;
+		IntPtr surface;
 
 		private delegate void __ActiveTexture(uint texture);
 		private __ActiveTexture _ActiveTexture;
@@ -227,37 +230,122 @@ namespace Samurai.Graphics
 			return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
 		}
 
-		public GLContext(Func<string, IntPtr> getProcFunc)
+		public GLContext(IntPtr window)
 		{
-			if (getProcFunc == null)
-				throw new ArgumentNullException("getProcFunc");
+			int error;
 
-			_ActiveTexture = (__ActiveTexture)GetProcAddress<__ActiveTexture>(getProcFunc, "glActiveTexture");
-			_AttachShader = (__AttachShader)GetProcAddress<__AttachShader>(getProcFunc, "glAttachShader");
-			_BindAttribLocation = (__BindAttribLocation)GetProcAddress<__BindAttribLocation>(getProcFunc, "glBindAttribLocation");
-			_BindBuffer = (__BindBuffer)GetProcAddress<__BindBuffer>(getProcFunc, "glBindBuffer");
-			_BindVertexArray = (__BindVertexArray)GetProcAddress<__BindVertexArray>(getProcFunc, "glBindVertexArray");
-			_BufferData = (__BufferData)GetProcAddress<__BufferData>(getProcFunc, "glBufferData");
-			_CompileShader = (__CompileShader)GetProcAddress<__CompileShader>(getProcFunc, "glCompileShader");
-			_CreateProgram = (__CreateProgram)GetProcAddress<__CreateProgram>(getProcFunc, "glCreateProgram");
-			_CreateShader = (__CreateShader)GetProcAddress<__CreateShader>(getProcFunc, "glCreateShader");
-			_DeleteBuffers = (__DeleteBuffers)GetProcAddress<__DeleteBuffers>(getProcFunc, "glDeleteBuffers");
-			_DeleteProgram = (__DeleteProgram)GetProcAddress<__DeleteProgram>(getProcFunc, "glDeleteProgram");
-			_DeleteShader = (__DeleteShader)GetProcAddress<__DeleteShader>(getProcFunc, "glDeleteShader");
-			_DeleteVertexArrays = (__DeleteVertexArrays)GetProcAddress<__DeleteVertexArrays>(getProcFunc, "glDeleteVertexArrays");
-			_EnableVertexAttribArray = (__EnableVertexAttribArray)GetProcAddress<__EnableVertexAttribArray>(getProcFunc, "glEnableVertexAttribArray");
-			_GenBuffers = (__GenBuffers)GetProcAddress<__GenBuffers>(getProcFunc, "glGenBuffers");
-			_GenVertexArrays = (__GenVertexArrays)GetProcAddress<__GenVertexArrays>(getProcFunc, "glGenVertexArrays");
-			_GetShaderInfoLog = (__GetShaderInfoLog)GetProcAddress<__GetShaderInfoLog>(getProcFunc, "glGetShaderInfoLog");
-			_GetShaderiv = (__GetShaderiv)GetProcAddress<__GetShaderiv>(getProcFunc, "glGetShaderiv");
-			_GetUniformLocation = (__GetUniformLocation)GetProcAddress<__GetUniformLocation>(getProcFunc, "glGetUniformLocation");
-			_LinkProgram = (__LinkProgram)GetProcAddress<__LinkProgram>(getProcFunc, "glLinkProgram");
-			_ShaderSource = (__ShaderSource)GetProcAddress<__ShaderSource>(getProcFunc, "glShaderSource");
-			_Uniform1f = (__Uniform1f)GetProcAddress<__Uniform1f>(getProcFunc, "glUniform1f");
-			_Uniform1i = (__Uniform1i)GetProcAddress<__Uniform1i>(getProcFunc, "glUniform1i");
-			_UniformMatrix4fv = (__UniformMatrix4fv)GetProcAddress<__UniformMatrix4fv>(getProcFunc, "glUniformMatrix4fv");
-			_UseProgram = (__UseProgram)GetProcAddress<__UseProgram>(getProcFunc, "glUseProgram");
-			_VertexAttribPointer = (__VertexAttribPointer)GetProcAddress<__VertexAttribPointer>(getProcFunc, "glVertexAttribPointer");
+			this.display = EGL.GetDisplay(EGL.DEFAULT_DISPLAY);
+
+			if (this.display == IntPtr.Zero)
+			{
+				throw new SamuraiException("EGL.GetDisplay failed.");
+			}
+
+			int majorVersion;
+			int minorVersion;
+
+			if (!EGL.Initialize(this.display, out majorVersion, out minorVersion))
+			{
+				error = EGL.GetError();
+				throw new SamuraiException("EGL.Initialize failed: " + EGL.ErrorToString(error));
+			}
+
+			EGL.BindAPI(EGL.OPENGL_ES_API);
+			error = EGL.GetError();
+			
+			if (error != EGL.SUCCESS)
+			{
+				throw new SamuraiException("EGL.BindAPI failed: " + EGL.ErrorToString(error));
+			}
+
+			int[] configAttributes = new int[]
+			{
+				EGL.RED_SIZE, 8,
+				EGL.GREEN_SIZE, 8,
+				EGL.BLUE_SIZE, 8,
+				EGL.ALPHA_SIZE, 8,
+				EGL.DEPTH_SIZE, 24,
+				EGL.STENCIL_SIZE, 8,
+				EGL.SAMPLE_BUFFERS, EGL.DONT_CARE,
+				EGL.NONE
+			};
+
+			IntPtr config;
+			int configCount;
+			if (!EGL.ChooseConfig(display, configAttributes, out config, 1, out configCount) || (configCount != 1))
+			{
+				throw new SamuraiException("EGL.ChooseConfig failed.");
+			}
+
+			int[] surfaceAttributes = new int[]
+			{
+				EGL.NONE, EGL.NONE,
+			};
+
+			this.surface = EGL.CreateWindowSurface(display, config, window, surfaceAttributes);
+			if (this.surface == IntPtr.Zero)
+			{
+				EGL.GetError(); // Clear error and try again
+				this.surface = EGL.CreateWindowSurface(display, config, IntPtr.Zero, null);
+			}
+
+			error = EGL.GetError();
+			if (error != EGL.SUCCESS)
+			{
+				throw new Exception("EGL.CreateWindowSurface failed: " + EGL.ErrorToString(error));
+			}
+
+			int[] contextAttibutes = new int[]
+			{
+				EGL.CONTEXT_CLIENT_VERSION, 2,
+				EGL.NONE
+			};
+
+			IntPtr context = EGL.CreateContext(display, config, IntPtr.Zero, contextAttibutes);
+			error = EGL.GetError();
+			if (error != EGL.SUCCESS)
+			{
+				throw new Exception("EGL.CreateContext failed: " + EGL.ErrorToString(error));
+			}
+
+			EGL.MakeCurrent(display, surface, surface, context);
+			error = EGL.GetError();
+			if (error != EGL.SUCCESS)
+			{
+				throw new Exception("EGL.MakeCurrent failed: " + EGL.ErrorToString(error));
+			}
+
+			//_ActiveTexture = (__ActiveTexture)GetProcAddress<__ActiveTexture>(getProcFunc, "glActiveTexture");
+			//_AttachShader = (__AttachShader)GetProcAddress<__AttachShader>(getProcFunc, "glAttachShader");
+			//_BindAttribLocation = (__BindAttribLocation)GetProcAddress<__BindAttribLocation>(getProcFunc, "glBindAttribLocation");
+			//_BindBuffer = (__BindBuffer)GetProcAddress<__BindBuffer>(getProcFunc, "glBindBuffer");
+			//_BindVertexArray = (__BindVertexArray)GetProcAddress<__BindVertexArray>(getProcFunc, "glBindVertexArray");
+			//_BufferData = (__BufferData)GetProcAddress<__BufferData>(getProcFunc, "glBufferData");
+			//_CompileShader = (__CompileShader)GetProcAddress<__CompileShader>(getProcFunc, "glCompileShader");
+			//_CreateProgram = (__CreateProgram)GetProcAddress<__CreateProgram>(getProcFunc, "glCreateProgram");
+			//_CreateShader = (__CreateShader)GetProcAddress<__CreateShader>(getProcFunc, "glCreateShader");
+			//_DeleteBuffers = (__DeleteBuffers)GetProcAddress<__DeleteBuffers>(getProcFunc, "glDeleteBuffers");
+			//_DeleteProgram = (__DeleteProgram)GetProcAddress<__DeleteProgram>(getProcFunc, "glDeleteProgram");
+			//_DeleteShader = (__DeleteShader)GetProcAddress<__DeleteShader>(getProcFunc, "glDeleteShader");
+			//_DeleteVertexArrays = (__DeleteVertexArrays)GetProcAddress<__DeleteVertexArrays>(getProcFunc, "glDeleteVertexArrays");
+			//_EnableVertexAttribArray = (__EnableVertexAttribArray)GetProcAddress<__EnableVertexAttribArray>(getProcFunc, "glEnableVertexAttribArray");
+			//_GenBuffers = (__GenBuffers)GetProcAddress<__GenBuffers>(getProcFunc, "glGenBuffers");
+			//_GenVertexArrays = (__GenVertexArrays)GetProcAddress<__GenVertexArrays>(getProcFunc, "glGenVertexArrays");
+			//_GetShaderInfoLog = (__GetShaderInfoLog)GetProcAddress<__GetShaderInfoLog>(getProcFunc, "glGetShaderInfoLog");
+			//_GetShaderiv = (__GetShaderiv)GetProcAddress<__GetShaderiv>(getProcFunc, "glGetShaderiv");
+			//_GetUniformLocation = (__GetUniformLocation)GetProcAddress<__GetUniformLocation>(getProcFunc, "glGetUniformLocation");
+			//_LinkProgram = (__LinkProgram)GetProcAddress<__LinkProgram>(getProcFunc, "glLinkProgram");
+			//_ShaderSource = (__ShaderSource)GetProcAddress<__ShaderSource>(getProcFunc, "glShaderSource");
+			//_Uniform1f = (__Uniform1f)GetProcAddress<__Uniform1f>(getProcFunc, "glUniform1f");
+			//_Uniform1i = (__Uniform1i)GetProcAddress<__Uniform1i>(getProcFunc, "glUniform1i");
+			//_UniformMatrix4fv = (__UniformMatrix4fv)GetProcAddress<__UniformMatrix4fv>(getProcFunc, "glUniformMatrix4fv");
+			//_UseProgram = (__UseProgram)GetProcAddress<__UseProgram>(getProcFunc, "glUseProgram");
+			//_VertexAttribPointer = (__VertexAttribPointer)GetProcAddress<__VertexAttribPointer>(getProcFunc, "glVertexAttribPointer");
+		}
+
+		public void Dispose()
+		{
+			EGL.Terminate(this.display);
 		}
 
 		private static void ThrowExceptionForErrorCode(string functionName, uint errorCode)
@@ -603,6 +691,11 @@ namespace Samurai.Graphics
 		{
 			_Viewport(x, y, width, height);
 			CheckErrors("Viewport");
+		}
+
+		public void SwapBuffers()
+		{
+			EGL.SwapBuffers(this.display, this.surface);
 		}
 	}
 }

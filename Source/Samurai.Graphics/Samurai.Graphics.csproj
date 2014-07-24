@@ -81,6 +81,7 @@
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DynamicIndexBuffer.cs" />
     <Compile Include="DynamicVertexBuffer.cs" />
+    <Compile Include="EGL.cs" />
     <Compile Include="FragmentShader.cs" />
     <Compile Include="GLContext.cs" />
     <Compile Include="GLHelper.cs" />
@@ -121,6 +122,20 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BasicSpriteBatchShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Library\x86\d3dcompiler_46.dll">
+      <Link>d3dcompiler_46.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Library\x86\libegl.dll">
+      <Link>libegl.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Library\x86\libglesv2.dll">
+      <Link>libglesv2.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

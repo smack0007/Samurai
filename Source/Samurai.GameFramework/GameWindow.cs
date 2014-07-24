@@ -5,20 +5,14 @@ namespace Samurai.GameFramework
 {
     public sealed class GameWindow
     {
-        IntPtr window;
-        string title;
+        Win32GameWindow window;
+
+		Game game;
+
         Point position;
         Size size;
         double mouseX, mouseY;
-
-        GLFW.CharFun charCallback;
-        GLFW.CursorPosFun cursorPosCallback;
-        GLFW.KeyFun keyCallback;
-        GLFW.MouseButtonFun mouseButtonCallback;
-        GLFW.ScrollFun scrollCallback;
-        GLFW.WindowPosFun windowPosCallback;
-        GLFW.WindowSizeFun windowSizeCallback;
-
+		        
         KeyEventArgs keyEventArgs;
         KeyPressEventArgs keyPressEventArgs;
 
@@ -26,33 +20,33 @@ namespace Samurai.GameFramework
         MouseButtonEventArgs mouseButtonEventArgs;
         MouseWheelEventArgs mouseWheelEventArgs;
 
+		public IntPtr Handle
+		{
+			get { return this.window.Handle; }
+		}
+
         public string Title
         {
-            get { return this.title; }
-            
-            set
-            {
-                GLFW.SetWindowTitle(this.window, value);
-                this.title = value;
-            }
+			get { return this.window.Title; }
+            set { this.window.Title = value; }
         }
 
         public Size Size
         {
             get { return this.size; }
-            set { GLFW.SetWindowSize(this.window, value.Width, value.Height); }
+            set { }
         }
 
         public int Width
         {
             get { return this.size.Width; }
-            set { GLFW.SetWindowSize(this.window, value, this.size.Height); }
+            set {  }
         }
 
         public int Height
         {
             get { return this.size.Height; }
-            set { GLFW.SetWindowSize(this.window, this.size.Width, value); }
+            set {  }
         }
 
 		public bool IsFullscreen
@@ -77,49 +71,40 @@ namespace Samurai.GameFramework
 
         public event EventHandler<MouseWheelEventArgs> MouseWheel;
                         
-        internal GameWindow(GameOptions options)
-		{
-			GLFW.WindowHint(GLFW.VISIBLE, 0);
-			GLFW.WindowHint(GLFW.RESIZABLE, options.WindowResizable ? 1 : 0);
+        internal GameWindow(Game game, GameOptions options)
+		{	
+			this.game = game;
 
-			IntPtr monitor = IntPtr.Zero;
-
-			if (options.WindowIsFullscreen)
-			{
-				monitor = GLFW.GetPrimaryMonitor();
-				this.IsFullscreen = true;
-			}
-
-            this.window = GLFW.CreateWindow(options.WindowWidth, options.WindowHeight, string.Empty, monitor, IntPtr.Zero);
+			this.window = new Win32GameWindow();
+			this.window.Tick += this.Window_Tick;
                        
-            this.title = string.Empty;
             this.size = new Size(options.WindowWidth, options.WindowHeight);
             this.position = new Point(0, 0);
 
             // It is important to hold references to the callbacks so that the GC does not garbage collect the delegates.
 
-            this.windowPosCallback = this.OnWindowMove;
-            GLFW.SetWindowPosCallback(this.window, this.windowPosCallback);
+			//this.windowPosCallback = this.OnWindowMove;
+			//GLFW.SetWindowPosCallback(this.window, this.windowPosCallback);
 
-            this.windowSizeCallback = this.OnWindowResize;
-            GLFW.SetWindowSizeCallback(this.window, this.windowSizeCallback);
+			//this.windowSizeCallback = this.OnWindowResize;
+			//GLFW.SetWindowSizeCallback(this.window, this.windowSizeCallback);
 
-            this.charCallback = this.OnChar;
-            GLFW.SetCharCallback(this.window, this.charCallback);
+			//this.charCallback = this.OnChar;
+			//GLFW.SetCharCallback(this.window, this.charCallback);
 
-            this.keyCallback = this.OnKey;
-            GLFW.SetKeyCallback(this.window, this.keyCallback);
+			//this.keyCallback = this.OnKey;
+			//GLFW.SetKeyCallback(this.window, this.keyCallback);
 
-            this.cursorPosCallback = this.OnCursorPos;
-            GLFW.SetCursorPosCallback(this.window, this.cursorPosCallback);
+			//this.cursorPosCallback = this.OnCursorPos;
+			//GLFW.SetCursorPosCallback(this.window, this.cursorPosCallback);
 
-            this.mouseButtonCallback = this.OnMouseButton;
-            GLFW.SetMouseButtonCallback(this.window, this.mouseButtonCallback);
+			//this.mouseButtonCallback = this.OnMouseButton;
+			//GLFW.SetMouseButtonCallback(this.window, this.mouseButtonCallback);
 
-            this.scrollCallback = this.OnScroll;
-            GLFW.SetScrollCallback(this.window, this.scrollCallback);
+			//this.scrollCallback = this.OnScroll;
+			//GLFW.SetScrollCallback(this.window, this.scrollCallback);
             
-            GLFW.MakeContextCurrent(this.window);
+			//GLFW.MakeContextCurrent(this.window);
 
             this.keyEventArgs = new KeyEventArgs();
             this.keyPressEventArgs = new KeyPressEventArgs();
@@ -130,8 +115,19 @@ namespace Samurai.GameFramework
 
         public void Dispose()
         {
-            GLFW.Terminate();
+            //GLFW.Terminate();
+			this.window.Dispose();
         }
+
+		public void Run()
+		{
+			this.window.Run();
+		}
+
+		private void Window_Tick(object sender, EventArgs e)
+		{
+			this.game.Tick();
+		}
 
         private void OnWindowMove(IntPtr window, int xpos, int ypos)
         {
@@ -157,22 +153,22 @@ namespace Samurai.GameFramework
 
         private void OnKey(IntPtr window, int key, int scancode, int action, int mods)
         {
-            if (action == GLFW.PRESS)
-            {
-                if (this.KeyDown != null)
-                {
-                    this.keyEventArgs.Key = GLFW.ConvertKeyCode(key);
-                    this.KeyDown(this, this.keyEventArgs);
-                }
-            }
-            else if (action == GLFW.RELEASE)
-            {
-                if (this.KeyUp != null)
-                {
-                    this.keyEventArgs.Key = GLFW.ConvertKeyCode(key);
-                    this.KeyUp(this, this.keyEventArgs);
-                }
-            }
+			//if (action == GLFW.PRESS)
+			//{
+			//	if (this.KeyDown != null)
+			//	{
+			//		this.keyEventArgs.Key = GLFW.ConvertKeyCode(key);
+			//		this.KeyDown(this, this.keyEventArgs);
+			//	}
+			//}
+			//else if (action == GLFW.RELEASE)
+			//{
+			//	if (this.KeyUp != null)
+			//	{
+			//		this.keyEventArgs.Key = GLFW.ConvertKeyCode(key);
+			//		this.KeyUp(this, this.keyEventArgs);
+			//	}
+			//}
         }
 
         private void OnCursorPos(IntPtr window, double xpos, double ypos)
@@ -190,26 +186,26 @@ namespace Samurai.GameFramework
      
         private void OnMouseButton(IntPtr window, int button, int action, int mods)
         {
-            if (action == GLFW.PRESS)
-            {
-                if (this.MouseButtonDown != null)
-                {
-                    this.mouseButtonEventArgs.Button = GLFW.ConvertMouseButton(button);
-                    this.mouseButtonEventArgs.X = this.mouseX;
-                    this.mouseButtonEventArgs.Y = this.mouseY;
-                    this.MouseButtonDown(this, this.mouseButtonEventArgs);
-                }
-            }
-            else if (action == GLFW.RELEASE)
-            {
-                if (this.MouseButtonUp != null)
-                {
-                    this.mouseButtonEventArgs.Button = GLFW.ConvertMouseButton(button);
-                    this.mouseButtonEventArgs.X = this.mouseX;
-                    this.mouseButtonEventArgs.Y = this.mouseY;
-                    this.MouseButtonUp(this, this.mouseButtonEventArgs);
-                }
-            }
+			//if (action == GLFW.PRESS)
+			//{
+			//	if (this.MouseButtonDown != null)
+			//	{
+			//		this.mouseButtonEventArgs.Button = GLFW.ConvertMouseButton(button);
+			//		this.mouseButtonEventArgs.X = this.mouseX;
+			//		this.mouseButtonEventArgs.Y = this.mouseY;
+			//		this.MouseButtonDown(this, this.mouseButtonEventArgs);
+			//	}
+			//}
+			//else if (action == GLFW.RELEASE)
+			//{
+			//	if (this.MouseButtonUp != null)
+			//	{
+			//		this.mouseButtonEventArgs.Button = GLFW.ConvertMouseButton(button);
+			//		this.mouseButtonEventArgs.X = this.mouseX;
+			//		this.mouseButtonEventArgs.Y = this.mouseY;
+			//		this.MouseButtonUp(this, this.mouseButtonEventArgs);
+			//	}
+			//}
         }
 
         private void OnScroll(IntPtr window, double xoffset, double yoffset)
@@ -225,27 +221,28 @@ namespace Samurai.GameFramework
                              
 		internal bool ShouldClose()
 		{
-			return GLFW.WindowShouldClose(this.window) != 0;
+			//return GLFW.WindowShouldClose(this.window) != 0;
+			return false;
 		}
 
         internal void SetShouldClose(bool shouldClose)
         {
-            GLFW.SetWindowShouldClose(this.window, shouldClose ? 1 : 0);
+			//GLFW.SetWindowShouldClose(this.window, shouldClose ? 1 : 0);
         }
 
 		public void Show()
 		{
-			GLFW.ShowWindow(this.window);
+			//GLFW.ShowWindow(this.window);
 		}
 
 		public void Hide()
 		{
-			GLFW.HideWindow(this.window);
+			//GLFW.HideWindow(this.window);
 		}
 
 		public void SwapBuffers()
 		{
-			GLFW.SwapBuffers(this.window);
+			//GLFW.SwapBuffers(this.window);
 		}
     }
 }

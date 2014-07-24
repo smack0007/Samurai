@@ -23,7 +23,7 @@ namespace Samurai.GameFramework
 		/// <summary>
 		/// Gets the GraphicsContext.
 		/// </summary>
-		public GameGraphicsContext Graphics
+		public GraphicsContext Graphics
 		{
 			get;
 			private set;
@@ -46,22 +46,12 @@ namespace Samurai.GameFramework
 				throw new ArgumentNullException("options");
 
 			this.options = options;
-
-			if (GLFW.Init() == 0)
-				throw new SamuraiException("GLFW initialization failed.");
-
-			GLFW.RegisterErrorCallback();
-
-			GLFW.WindowHint(GLFW.CLIENT_API, GLFW.OPENGL_API);
-			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MAJOR, 3);
-			GLFW.WindowHint(GLFW.CONTEXT_VERSION_MINOR, 3);
-			GLFW.WindowHint(GLFW.OPENGL_PROFILE, GLFW.OPENGL_CORE_PROFILE);
-			
-			this.Window = new GameWindow(this.options);
+					
+			this.Window = new GameWindow(this, this.options);
 			this.Window.Resize += this.Window_Resize;
 
-			this.Graphics = new GameGraphicsContext(this.Window);
-			this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
+			this.Graphics = new GraphicsContext(this.Window.Handle);
+			//this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
 		/// <summary>
@@ -85,7 +75,6 @@ namespace Samurai.GameFramework
 			if (disposing)
 			{
 				this.Graphics.Dispose();
-				GLFW.Terminate();
 			}
 		}
 				
@@ -95,38 +84,46 @@ namespace Samurai.GameFramework
 				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
+		Stopwatch stopwatch;
+		long nextTick;
+		int timeBetweenTicks; 
+		TimeSpan elapsed;
+
 		/// <summary>
 		/// Starts the game loop.
 		/// </summary>
 		public void Run()
 		{
-			Stopwatch stopwatch = new Stopwatch();
+			this.stopwatch = new Stopwatch();
+			this.timeBetweenTicks = 1000 / this.options.FramesPerSecond;
+			this.elapsed = TimeSpan.FromMilliseconds(timeBetweenTicks); 
 
-			long nextTick;
-			int timeBetweenTicks = 1000 / this.options.FramesPerSecond;
-			TimeSpan elapsed = TimeSpan.FromMilliseconds(timeBetweenTicks);
-
-			stopwatch.Start();
-			nextTick = stopwatch.ElapsedMilliseconds;
+			this.stopwatch.Start();
+			this.nextTick = stopwatch.ElapsedMilliseconds;
 
 			this.Window.Show();
 
 			this.Initialize();
 
-			while (!this.Window.ShouldClose())
-			{
-				GLFW.PollEvents();
+			this.Window.Run();
 
-				if (stopwatch.ElapsedMilliseconds >= nextTick)
-				{
-					this.Update(elapsed);
-					this.Draw(elapsed);
-
-					nextTick += timeBetweenTicks;
-				}
-			}
+			//while (!this.Window.ShouldClose())
+			//{
+			//	
+			//}
 
 			this.Shutdown();
+		}
+
+		internal void Tick()
+		{
+			if (this.stopwatch.ElapsedMilliseconds >= this.nextTick)
+			{
+				this.Update(elapsed);
+				this.Draw(elapsed);
+
+				this.nextTick += this.timeBetweenTicks;
+			}
 		}
 
 		/// <summary>

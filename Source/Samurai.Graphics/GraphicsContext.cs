@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Samurai.Graphics
 {
-	public abstract class GraphicsContext : DisposableObject
+	public class GraphicsContext : DisposableObject
 	{		
 		Color4 clearColor;
 		Rectangle viewport;
@@ -91,12 +91,9 @@ namespace Samurai.Graphics
 			}
 		}
 				
-		protected GraphicsContext(Func<string, IntPtr> getProcFunc)
+		public GraphicsContext(IntPtr window)
 		{
-			if (getProcFunc == null)
-				throw new ArgumentNullException("host");
-
-			this.GL = new GLContext(getProcFunc);
+			this.GL = new GLContext(window);
 
 			this.textures = new bool[32];
 
@@ -126,6 +123,8 @@ namespace Samurai.Graphics
 			}
 
 			this.graphicsObjects.Clear();
+
+			this.GL.Dispose();
 		}
 		
 		internal void RegisterGraphicsObject(GraphicsObject obj)
@@ -178,7 +177,10 @@ namespace Samurai.Graphics
 			this.GL.Clear(GLContext.ColorBufferBit | GLContext.DepthBufferBit);
 		}
 
-		public abstract void SwapBuffers();
+		public void SwapBuffers()
+		{
+			this.GL.SwapBuffers();
+		}
 
 		public void SetBlendFunction(SourceBlendFactor source, DestinationBlendFactor destination)
 		{
