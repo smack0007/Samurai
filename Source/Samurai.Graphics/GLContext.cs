@@ -232,6 +232,7 @@ namespace Samurai.Graphics
 
 		public GLContext(IntPtr window)
 		{
+#if WINDOWS
 			int error;
 
 			this.display = EGL.GetDisplay(EGL.DEFAULT_DISPLAY);
@@ -314,6 +315,7 @@ namespace Samurai.Graphics
 			{
 				throw new Exception("EGL.MakeCurrent failed: " + EGL.ErrorToString(error));
 			}
+#endif
 
 			//_ActiveTexture = (__ActiveTexture)GetProcAddress<__ActiveTexture>(getProcFunc, "glActiveTexture");
 			//_AttachShader = (__AttachShader)GetProcAddress<__AttachShader>(getProcFunc, "glAttachShader");
