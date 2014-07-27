@@ -51,7 +51,7 @@ namespace Samurai.GameFramework
 			this.Window.Resize += this.Window_Resize;
 
 			this.Graphics = new GraphicsContext(this.Window.Handle);
-			//this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
+			this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
 		/// <summary>

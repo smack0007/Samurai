@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if WINDOWS
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -228,3 +229,4 @@ namespace Samurai.GameFramework
 		}
 	}
 }
+#endif

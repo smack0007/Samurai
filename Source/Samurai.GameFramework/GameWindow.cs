@@ -5,7 +5,9 @@ namespace Samurai.GameFramework
 {
     public sealed class GameWindow
     {
-        Win32GameWindow window;
+#if WINDOWS
+		Win32GameWindow window;
+#endif
 
 		Game game;
 
@@ -75,36 +77,14 @@ namespace Samurai.GameFramework
 		{	
 			this.game = game;
 
+#if WINDOWS
 			this.window = new Win32GameWindow();
+#endif
+			
 			this.window.Tick += this.Window_Tick;
                        
             this.size = new Size(options.WindowWidth, options.WindowHeight);
             this.position = new Point(0, 0);
-
-            // It is important to hold references to the callbacks so that the GC does not garbage collect the delegates.
-
-			//this.windowPosCallback = this.OnWindowMove;
-			//GLFW.SetWindowPosCallback(this.window, this.windowPosCallback);
-
-			//this.windowSizeCallback = this.OnWindowResize;
-			//GLFW.SetWindowSizeCallback(this.window, this.windowSizeCallback);
-
-			//this.charCallback = this.OnChar;
-			//GLFW.SetCharCallback(this.window, this.charCallback);
-
-			//this.keyCallback = this.OnKey;
-			//GLFW.SetKeyCallback(this.window, this.keyCallback);
-
-			//this.cursorPosCallback = this.OnCursorPos;
-			//GLFW.SetCursorPosCallback(this.window, this.cursorPosCallback);
-
-			//this.mouseButtonCallback = this.OnMouseButton;
-			//GLFW.SetMouseButtonCallback(this.window, this.mouseButtonCallback);
-
-			//this.scrollCallback = this.OnScroll;
-			//GLFW.SetScrollCallback(this.window, this.scrollCallback);
-            
-			//GLFW.MakeContextCurrent(this.window);
 
             this.keyEventArgs = new KeyEventArgs();
             this.keyPressEventArgs = new KeyPressEventArgs();
