@@ -13,38 +13,43 @@ namespace Samurai.GameFramework
 	{
 		bool isRunning;
 
-		int keyCode;
-		event EventHandler<KeyPressEventArgs> keyPressEvent;
-		KeyPressEventArgs keyPressEventArgs;
+		TextInputEventArgs textInputEventArgs;
 
 		event EventHandler<CancelEventArgs> closeEvent;
 		CancelEventArgs closeEventArgs;
 
-		/// <summary>
-		/// Gets or sets the text of the window.
-		/// </summary>
 		public string Title
 		{
 			get { return this.Text; }
 			set { this.Text = value; }
 		}
 
-		/// <summary>
-		/// The width of the game display area.
-		/// </summary>
-		public int DisplayWidth
+		public Point Position
 		{
-			get { return this.ClientSize.Width; }
-			set { this.ClientSize = new System.Drawing.Size(value, this.ClientSize.Height); }
+			get
+			{
+				System.Drawing.Point location = this.Location;
+				return new Point(location.X, location.Y);
+			}
+
+			set
+			{
+				this.Location = new System.Drawing.Point(value.X, value.Y);
+			}
 		}
 
-		/// <summary>
-		/// Tthe height of the game display area.
-		/// </summary>
-		public int DisplayHeight
+		public new Size Size
 		{
-			get { return this.ClientSize.Height; }
-			set { this.ClientSize = new System.Drawing.Size(this.ClientSize.Width, value); }
+			get
+			{
+				System.Drawing.Size clientSize = this.ClientSize;
+				return new Size(clientSize.Width, clientSize.Height);
+			}
+
+			set
+			{
+				this.ClientSize = new System.Drawing.Size(value.Width, value.Height);
+			}
 		}
 
 		/// <summary>
@@ -74,16 +79,11 @@ namespace Samurai.GameFramework
 		/// <summary>
 		/// Triggered when a key is pressed.
 		/// </summary>
-		public new event EventHandler<KeyPressEventArgs> KeyPress
-		{
-			add { this.keyPressEvent += value; }
-			remove { this.keyPressEvent -= value; }
-		}
+		public event EventHandler<TextInputEventArgs> TextInput;
 
-		/// <summary>
-		/// Triggered when the size of the client area of the window changes.
-		/// </summary>
-		public event EventHandler DisplaySizeChanged;
+		public event EventHandler PositionChanged;
+
+		public new event EventHandler SizeChanged;
 
 		/// <summary>
 		/// Constructor.
@@ -96,10 +96,11 @@ namespace Samurai.GameFramework
 			this.MaximizeBox = false;
 			this.ClientSize = new System.Drawing.Size(800, 600);
 			this.KeyPreview = true;
+			this.Visible = false;
 
 			//this.Icon = Snowball.GameFramework.Properties.Resources.Icon;
 
-			this.keyPressEventArgs = new KeyPressEventArgs();
+			this.textInputEventArgs = new TextInputEventArgs();
 
 			this.closeEventArgs = new CancelEventArgs();
 		}
@@ -112,12 +113,20 @@ namespace Samurai.GameFramework
 			base.OnKeyDown(e);
 		}
 
+		protected override void OnLocationChanged(EventArgs e)
+		{
+			base.OnLocationChanged(e);
+
+			if (this.PositionChanged != null)
+				this.PositionChanged(this, EventArgs.Empty);
+		}
+
 		protected override void OnClientSizeChanged(EventArgs e)
 		{
 			base.OnClientSizeChanged(e);
 
-			if (this.DisplaySizeChanged != null)
-				this.DisplaySizeChanged(this, e);
+			if (this.SizeChanged != null)
+				this.SizeChanged(this, EventArgs.Empty);
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -170,17 +179,12 @@ namespace Samurai.GameFramework
 				{
 					switch (message.msg)
 					{
-						case Win32.WM_KEYDOWN:
-							this.keyCode = (int)message.wParam;
-							break;
-
 						case Win32.WM_CHAR:
 						case Win32.WM_UNICHAR:
-							//this.keyPressEventArgs.KeyCode = this.keyCode;
-							this.keyPressEventArgs.KeyChar = (char)message.wParam;
+							this.textInputEventArgs.Char = (char)message.wParam;
 
-							if (this.keyPressEvent != null)
-								this.keyPressEvent(this, this.keyPressEventArgs);
+							if (this.TextInput != null)
+								this.TextInput(this, this.textInputEventArgs);
 
 							break;
 
@@ -205,7 +209,6 @@ namespace Samurai.GameFramework
 
 						case Win32.WM_SYSKEYDOWN:
 						case Win32.WM_SYSKEYUP:
-
 							break;
 					}
 

@@ -2,9 +2,9 @@
 
 namespace Samurai.GameFramework
 {
-    public class MouseWheelEventArgs : MouseEventArgs
+    public class TextInputEventArgs : EventArgs
     {
-        public double WheelDelta
+        public char Char
         {
             get;
             set;

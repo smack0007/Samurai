@@ -107,11 +107,6 @@ namespace Samurai.GameFramework
 
 			this.Window.Run();
 
-			//while (!this.Window.ShouldClose())
-			//{
-			//	
-			//}
-
 			this.Shutdown();
 		}
 
@@ -131,7 +126,7 @@ namespace Samurai.GameFramework
 		/// </summary>
 		public void Exit()
 		{
-			this.Window.SetShouldClose(true);
+			this.Window.Exit();
 		}
 
 		/// <summary>

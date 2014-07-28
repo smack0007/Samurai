@@ -109,7 +109,6 @@
     <Compile Include="TextureWrap.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="VertexShader.cs" />
-    <Compile Include="WGL.cs" />
     <Compile Include="WGLContext.cs" />
     <Compile Include="Win32.cs" />
   </ItemGroup>

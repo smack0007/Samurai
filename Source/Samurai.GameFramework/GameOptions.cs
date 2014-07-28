@@ -37,13 +37,7 @@ namespace Samurai.GameFramework
 			set;
 		}
 
-		public int WindowWidth
-		{
-			get;
-			set;
-		}
-
-		public int WindowHeight
+		public Size WindowSize
 		{
 			get;
 			set;
@@ -58,8 +52,7 @@ namespace Samurai.GameFramework
 			this.AutoResizeViewport = true;
 			this.WindowIsFullscreen = false;
 			this.WindowResizable = false;
-			this.WindowWidth = 800;
-			this.WindowHeight = 600;
+			this.WindowSize = new Size(1280, 720);
 		}
 	}
 }

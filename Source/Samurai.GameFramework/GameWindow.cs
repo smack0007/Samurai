@@ -10,18 +10,7 @@ namespace Samurai.GameFramework
 #endif
 
 		Game game;
-
-        Point position;
-        Size size;
-        double mouseX, mouseY;
-		        
-        KeyEventArgs keyEventArgs;
-        KeyPressEventArgs keyPressEventArgs;
-
-        MouseEventArgs mouseEventArgs;
-        MouseButtonEventArgs mouseButtonEventArgs;
-        MouseWheelEventArgs mouseWheelEventArgs;
-
+		
 		public IntPtr Handle
 		{
 			get { return this.window.Handle; }
@@ -33,22 +22,40 @@ namespace Samurai.GameFramework
             set { this.window.Title = value; }
         }
 
+		public Point Position
+		{
+			get { return this.window.Position; }
+			set { this.window.Position = value; }
+		}
+
+		public int X
+		{
+			get { return this.Position.X; }
+			set { this.Position = new Point(value, this.Y); }
+		}
+
+		public int Y
+		{
+			get { return this.Position.Y; }
+			set { this.Position = new Point(this.X, value); }
+		}
+
         public Size Size
         {
-            get { return this.size; }
-            set { }
+            get { return this.window.Size; }
+			set { this.window.Size = value; }
         }
 
         public int Width
         {
-            get { return this.size.Width; }
-            set {  }
+            get { return this.Size.Width; }
+			set { this.window.Size = new Size(value, this.Height); }
         }
 
         public int Height
         {
-            get { return this.size.Height; }
-            set {  }
+            get { return this.Size.Height; }
+			set { this.window.Size = new Size(this.Width, value); }
         }
 
 		public bool IsFullscreen
@@ -59,19 +66,7 @@ namespace Samurai.GameFramework
 		        
         public event EventHandler Resize;
 
-        public event EventHandler<KeyEventArgs> KeyDown;
-
-        public event EventHandler<KeyEventArgs> KeyUp;
-
-        public event EventHandler<KeyPressEventArgs> KeyPress;
-
-        public event EventHandler<MouseEventArgs> MouseMove;
-
-        public event EventHandler<MouseButtonEventArgs> MouseButtonDown;
-
-        public event EventHandler<MouseButtonEventArgs> MouseButtonUp;
-
-        public event EventHandler<MouseWheelEventArgs> MouseWheel;
+        public event EventHandler<TextInputEventArgs> TextInput;
                         
         internal GameWindow(Game game, GameOptions options)
 		{	
@@ -82,20 +77,14 @@ namespace Samurai.GameFramework
 #endif
 			
 			this.window.Tick += this.Window_Tick;
-                       
-            this.size = new Size(options.WindowWidth, options.WindowHeight);
-            this.position = new Point(0, 0);
+			this.window.SizeChanged += this.Window_Resize;
+			this.window.TextInput += this.Window_TextInput;
 
-            this.keyEventArgs = new KeyEventArgs();
-            this.keyPressEventArgs = new KeyPressEventArgs();
-            this.mouseEventArgs = new MouseEventArgs();
-            this.mouseButtonEventArgs = new MouseButtonEventArgs();
-            this.mouseWheelEventArgs = new MouseWheelEventArgs();
+			this.window.Size = options.WindowSize;
         }
 
         public void Dispose()
         {
-            //GLFW.Terminate();
 			this.window.Dispose();
         }
 
@@ -109,120 +98,31 @@ namespace Samurai.GameFramework
 			this.game.Tick();
 		}
 
-        private void OnWindowMove(IntPtr window, int xpos, int ypos)
+        private void Window_Resize(object sender, EventArgs e)
         {
-            this.position = new Point(xpos, ypos);
-        }
-
-        private void OnWindowResize(IntPtr window, int width, int height)
-        {
-            this.size = new Size(width, height);
-
             if (this.Resize != null)
                 this.Resize(this, EventArgs.Empty);
         }
     
-        private void OnChar(IntPtr window, uint codepoint)
+        private void Window_TextInput(object sender, TextInputEventArgs e)
         {
-            if (this.KeyPress != null)
-            {
-                this.keyPressEventArgs.KeyChar = (char)codepoint;
-                this.KeyPress(this, this.keyPressEventArgs);
-            }
+            if (this.TextInput != null)
+                this.TextInput(this, e);
         }
-
-        private void OnKey(IntPtr window, int key, int scancode, int action, int mods)
-        {
-			//if (action == GLFW.PRESS)
-			//{
-			//	if (this.KeyDown != null)
-			//	{
-			//		this.keyEventArgs.Key = GLFW.ConvertKeyCode(key);
-			//		this.KeyDown(this, this.keyEventArgs);
-			//	}
-			//}
-			//else if (action == GLFW.RELEASE)
-			//{
-			//	if (this.KeyUp != null)
-			//	{
-			//		this.keyEventArgs.Key = GLFW.ConvertKeyCode(key);
-			//		this.KeyUp(this, this.keyEventArgs);
-			//	}
-			//}
-        }
-
-        private void OnCursorPos(IntPtr window, double xpos, double ypos)
-        {
-            this.mouseX = xpos;
-            this.mouseY = ypos;
-
-            if (this.MouseMove != null)
-            {
-                this.mouseEventArgs.X = xpos;
-                this.mouseEventArgs.Y = ypos;
-                this.MouseMove(this, this.mouseEventArgs);
-            }
-        }
-     
-        private void OnMouseButton(IntPtr window, int button, int action, int mods)
-        {
-			//if (action == GLFW.PRESS)
-			//{
-			//	if (this.MouseButtonDown != null)
-			//	{
-			//		this.mouseButtonEventArgs.Button = GLFW.ConvertMouseButton(button);
-			//		this.mouseButtonEventArgs.X = this.mouseX;
-			//		this.mouseButtonEventArgs.Y = this.mouseY;
-			//		this.MouseButtonDown(this, this.mouseButtonEventArgs);
-			//	}
-			//}
-			//else if (action == GLFW.RELEASE)
-			//{
-			//	if (this.MouseButtonUp != null)
-			//	{
-			//		this.mouseButtonEventArgs.Button = GLFW.ConvertMouseButton(button);
-			//		this.mouseButtonEventArgs.X = this.mouseX;
-			//		this.mouseButtonEventArgs.Y = this.mouseY;
-			//		this.MouseButtonUp(this, this.mouseButtonEventArgs);
-			//	}
-			//}
-        }
-
-        private void OnScroll(IntPtr window, double xoffset, double yoffset)
-        {
-            if (this.MouseWheel != null)
-            {
-                this.mouseWheelEventArgs.WheelDelta = yoffset;
-                this.mouseButtonEventArgs.X = this.mouseX;
-                this.mouseButtonEventArgs.Y = this.mouseY;
-                this.MouseWheel(this, this.mouseWheelEventArgs);
-            }
-        }
-                             
-		internal bool ShouldClose()
-		{
-			//return GLFW.WindowShouldClose(this.window) != 0;
-			return false;
-		}
-
-        internal void SetShouldClose(bool shouldClose)
-        {
-			//GLFW.SetWindowShouldClose(this.window, shouldClose ? 1 : 0);
-        }
-
+		    
 		public void Show()
 		{
-			//GLFW.ShowWindow(this.window);
+			this.window.Show();
 		}
 
 		public void Hide()
 		{
-			//GLFW.HideWindow(this.window);
+			this.window.Hide();
 		}
 
-		public void SwapBuffers()
+		public void Exit()
 		{
-			//GLFW.SwapBuffers(this.window);
+			this.window.Exit();
 		}
     }
 }
