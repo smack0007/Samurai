@@ -19,11 +19,5 @@ namespace Samurai
         XButton1,
 
         XButton2,
-
-        XButton3,
-
-        XButton4,
-
-        XButton5
     }
 }

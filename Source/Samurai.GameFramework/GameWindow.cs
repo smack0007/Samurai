@@ -3,7 +3,7 @@ using System;
 
 namespace Samurai.GameFramework
 {
-    public sealed class GameWindow
+    public sealed class GameWindow : IHostControl
     {
 #if WINDOWS
 		Win32GameWindow window;

@@ -1,6 +1,7 @@
 ﻿using Samurai;
 using Samurai.GameFramework;
 using Samurai.Graphics;
+using Samurai.Input;
 using System;
 
 namespace SamuraiDemo2D
@@ -12,6 +13,8 @@ namespace SamuraiDemo2D
 		Texture planesTexture;
 		SpriteSheet planes;
 		TextureFont font;
+		Keyboard keyboard;
+		Mouse mouse;
 
 		public Demo2DGame()
 		{
@@ -34,6 +37,18 @@ namespace SamuraiDemo2D
 					Color = Color4.Blue,
 					ColorKey = Color4.Black
 				});
+
+			this.keyboard = new Keyboard();
+			this.mouse = new Mouse(this.Window);
+		}
+
+		protected override void Update(TimeSpan elapsed)
+		{
+			this.keyboard.Update();
+			this.mouse.Update(elapsed);
+
+			if (this.keyboard.IsKeyPressed(Key.Escape))
+				this.Exit();
 		}
 
 		protected override void Draw(TimeSpan elapsed)
@@ -42,7 +57,7 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
-			this.spriteBatch.Draw(this.planes, 5, new Color4(255, 255, 255, 255), Vector2.Zero);
+			this.spriteBatch.Draw(this.planes, 5, new Color4(255, 255, 255, 255), new Vector2(this.mouse.X, this.mouse.Y));
 			//this.spriteBatch.DrawString(this.font, "Hello World!", Color4.White, Vector2.Zero);
 
 			this.spriteBatch.End();

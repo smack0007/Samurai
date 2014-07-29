@@ -84,10 +84,9 @@
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />
     <Compile Include="DisposableObject.cs" />
+    <Compile Include="IHostControl.cs" />
     <Compile Include="MathHelper.cs" />
-    <Compile Include="Key.cs" />
     <Compile Include="Matrix4.cs" />
-    <Compile Include="MouseButton.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rectangle.cs" />

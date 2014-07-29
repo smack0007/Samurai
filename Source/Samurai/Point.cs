@@ -8,6 +8,8 @@ namespace Samurai
     {
         public static readonly int SizeInBytes = Marshal.SizeOf(typeof(Point));
 
+		public static readonly Point Zero = new Point();
+
         public int X;
 
         public int Y;

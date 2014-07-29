@@ -99,6 +99,10 @@
       <Project>{206d7c47-54b6-4562-b49f-c15009d6b8c6}</Project>
       <Name>Samurai.Graphics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Samurai.Input\Samurai.Input.csproj">
+      <Project>{dde11599-e3f8-4e6b-9d33-1df37045f6c9}</Project>
+      <Name>Samurai.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Samurai\Samurai.csproj">
       <Project>{0d380a23-56eb-4a8f-a32b-c081592ed576}</Project>
       <Name>Samurai</Name>
