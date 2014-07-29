@@ -23,11 +23,11 @@ namespace SamuraiDemo2D
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
 
-			this.planesTexture = Texture.Load(this.Graphics, "Planes.png", new TextureParams()
+			this.planesTexture = Texture.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
 				{
 				});
 
-			this.planes = SpriteSheet.Build(this.planesTexture, Color4.Magenta);
+			this.planes = SpriteSheet.BuildFromGrid(this.planesTexture, Color4.Magenta);
 
 			this.font = TextureFont.Build(this.Graphics, "Arial", 72, new TextureFontParams()
 				{

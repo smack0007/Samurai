@@ -75,7 +75,7 @@ namespace Samurai.Graphics
 			this.Graphics.GL.DeleteTexture(this.Handle);
 		}
 
-		public static Texture Load(GraphicsContext graphics, string fileName, TextureParams parameters)
+		public static Texture LoadFromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -84,10 +84,10 @@ namespace Samurai.Graphics
 				throw new ArgumentNullException("fileName");
 
 			using (FileStream file = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-				return Load(graphics, file, parameters);
+				return LoadFromStream(graphics, file, parameters);
 		}
 
-		public static Texture Load(GraphicsContext graphics, Stream stream, TextureParams parameters)
+		public static Texture LoadFromStream(GraphicsContext graphics, Stream stream, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -98,11 +98,11 @@ namespace Samurai.Graphics
 			using (Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream))
 			{
 				byte[] bytes = BitmapHelper.GetBytes(bitmap);
-				return Load(graphics, bytes, bitmap.Width, bitmap.Height, parameters);
+				return LoadFromBytes(graphics, bytes, bitmap.Width, bitmap.Height, parameters);
 			}
 		}
 
-		public static Texture Load(GraphicsContext graphics, byte[] bytes, int width, int height, TextureParams parameters)
+		public static Texture LoadFromBytes(GraphicsContext graphics, byte[] bytes, int width, int height, TextureParams parameters)
 		{
 			Texture texture = new Texture(graphics);
 			graphics.GL.ActiveTexture(GLContext.Texture0 + texture.Index);

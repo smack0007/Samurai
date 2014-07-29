@@ -54,13 +54,13 @@ namespace SamuraiDemo
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, this.vertexData);
 			this.indexBuffer = new StaticIndexBuffer<byte>(this.Graphics, this.indexData);
 
-			this.texture0 = Texture.Load(this.Graphics, "Texture0.png", new TextureParams()
+			this.texture0 = Texture.LoadFromFile(this.Graphics, "Texture0.png", new TextureParams()
 			{
 				WrapS = TextureWrap.Repeat,
 				WrapT = TextureWrap.Repeat
 			});
 
-			this.texture1 = Texture.Load(this.Graphics, "Texture1.png", new TextureParams()
+			this.texture1 = Texture.LoadFromFile(this.Graphics, "Texture1.png", new TextureParams()
 			{
 				WrapS = TextureWrap.Clamp,
 				WrapT = TextureWrap.Clamp
