@@ -80,7 +80,7 @@ namespace Samurai.GameFramework
 				
 		private void Window_Resize(object sender, EventArgs e)
 		{
-			if (this.options.AutoResizeViewport)
+			if (this.options.AutoResizeViewport && this.Graphics != null)
 				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 

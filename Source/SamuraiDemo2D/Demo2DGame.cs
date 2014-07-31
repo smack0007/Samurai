@@ -17,6 +17,10 @@ namespace SamuraiDemo2D
 		Mouse mouse;
 
 		public Demo2DGame()
+			: base(new GameOptions()
+			{
+				WindowResizable = true
+			})
 		{
 			this.Window.Title = "Samurai 2D Demo";
 

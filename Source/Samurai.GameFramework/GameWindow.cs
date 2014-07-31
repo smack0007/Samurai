@@ -73,7 +73,7 @@ namespace Samurai.GameFramework
 			this.game = game;
 
 #if WINDOWS
-			this.window = new Win32GameWindow();
+			this.window = new Win32GameWindow(options);
 #endif
 			
 			this.window.Tick += this.Window_Tick;

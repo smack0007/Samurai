@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,6 +12,8 @@ namespace Samurai.GameFramework
 {
 	internal sealed class Win32GameWindow : Form
 	{
+		GameOptions options;
+
 		bool isRunning;
 
 		TextInputEventArgs textInputEventArgs;
@@ -88,13 +91,15 @@ namespace Samurai.GameFramework
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public Win32GameWindow()
+		public Win32GameWindow(GameOptions options)
 			: base()
 		{
+			this.options = options;
+
 			this.Cursor = Cursors.Arrow;
-			this.FormBorderStyle = FormBorderStyle.Fixed3D;
+			this.FormBorderStyle = options.WindowResizable ?  FormBorderStyle.Sizable : FormBorderStyle.Fixed3D;
 			this.MaximizeBox = false;
-			this.ClientSize = new System.Drawing.Size(800, 600);
+			this.ClientSize = new System.Drawing.Size(options.WindowSize.Width, options.WindowSize.Height);
 			this.KeyPreview = true;
 			this.Visible = false;
 
@@ -170,6 +175,27 @@ namespace Samurai.GameFramework
 			this.isRunning = true;
 
 			this.Show();
+
+			if (options.WindowIsFullscreen)
+			{
+				this.TopMost = true;
+				this.WindowState = FormWindowState.Maximized;
+				this.FormBorderStyle = FormBorderStyle.None;
+
+				Win32.ShowCursor(false);
+
+				Win32.DevMode devMode = new Win32.DevMode();
+				devMode.dmSize = (short)Marshal.SizeOf(typeof(Win32.DevMode));
+				devMode.dmPelsWidth = options.WindowSize.Width;
+				devMode.dmPelsHeight = options.WindowSize.Height;
+				devMode.dmBitsPerPel = 32;
+				devMode.dmFields = Win32.DM_PELSWIDTH | Win32.DM_PELSHEIGHT | Win32.DM_BITSPERPEL;
+
+				if (Win32.ChangeDisplaySettings(devMode, Win32.CDS_FULLSCREEN) != Win32.DISP_CHANGE_SUCCESSFUL)
+				{
+					throw new SamuraiException("Unable to make GameWindow fullscreen.");
+				}
+			}
 
 			Win32.Message message;
 

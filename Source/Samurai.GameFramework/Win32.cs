@@ -10,6 +10,14 @@ namespace Samurai.GameFramework
 {
 	internal static class Win32
 	{
+		public const int CDS_FULLSCREEN = 0x00000004;
+
+		public const int DISP_CHANGE_SUCCESSFUL = 0;
+
+		public const int DM_BITSPERPEL = 0x40000;
+		public const int DM_PELSWIDTH = 0x80000;
+		public const int DM_PELSHEIGHT = 0x100000;
+
 		public const int PM_REMOVE = 0x0001;
 
 		public const int WM_KEYDOWN = 0x0100;
@@ -47,6 +55,15 @@ namespace Samurai.GameFramework
 			return (ushort)(value >> 16);
 		}
 
+		[DllImport("user32.dll", CharSet = CharSet.Auto)]
+		public static extern int ChangeDisplaySettings([MarshalAs(UnmanagedType.LPStruct)] DevMode lpDevMode, uint dwflags);
+
+		[DllImport("user32.dll")]
+		public static extern int ShowCursor(bool bShow);
+		
+		[DllImport("gdi32.dll")]
+		public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
 		[DllImport("user32.dll")]
 		public static extern IntPtr DispatchMessage([In] ref Message msg);
 
@@ -73,6 +90,75 @@ namespace Samurai.GameFramework
 		{
 			public int X;
 			public int Y;
+		}
+
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+		public class DevMode
+		{
+			const int CCHDEVICENAME = 32;
+			const int CCHFORMNAME = 32;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = CCHDEVICENAME)]
+			public char[] dmDeviceName;
+			public short dmSpecVersion;
+			public short dmDriverVersion;
+			public short dmSize;
+			public short dmDriverExtra;
+			public int dmFields;
+			public DevModeUnion u;
+			public short dmColor;
+			public short dmDuplex;
+			public short dmYResolution;
+			public short dmTTOption;
+			public short dmCollate;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = CCHFORMNAME)]
+			public char[] dmFormName;
+			public short dmLogPixels;
+			public int dmBitsPerPel;
+			public int dmPelsWidth;
+			public int dmPelsHeight;
+			public int dmDisplayFlagsOrdmNup;
+			public int dmDisplayFrequency;
+			public int dmICMMethod;
+			public int dmICMIntent;
+			public int dmMediaType;
+			public int dmDitherType;
+			public int dmReserved1;
+			public int dmReserved2;
+			public int dmPanningWidth;
+			public int dmPanningHeight;
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		public struct DevModeUnion
+		{
+			[FieldOffset(0)]
+			public short dmOrientation;
+			[FieldOffset(2)]
+			public short dmPaperSize;
+			[FieldOffset(4)]
+			public short dmPaperLength;
+			[FieldOffset(6)]
+			public short dmPaperWidth;
+			[FieldOffset(8)]
+			public short dmScale;
+			[FieldOffset(10)]
+			public short dmCopies;
+			[FieldOffset(12)]
+			public short dmDefaultSource;
+			[FieldOffset(14)]
+			public short dmPrintQuality;
+
+			[FieldOffset(0)]
+			public int dmPosition_x;
+			[FieldOffset(4)]
+			public int dmPosition_y;
+
+			[FieldOffset(0)]
+			public int dmDisplayOrientation;
+
+			[FieldOffset(0)]
+			public int dmDisplayFixedOutput;
 		}
 	}
 }
