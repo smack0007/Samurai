@@ -134,6 +134,9 @@ namespace Samurai.Graphics
 			Rectangle source,
 			Color4 color)
 		{
+			if (this.vertexCount == this.vertices.Length)
+				this.Flush();
+
 			this.vertices[this.vertexCount].Position = new Vector3(topLeft, 0);
 			this.vertices[this.vertexCount + 1].Position = new Vector3(topRight, 0);
 			this.vertices[this.vertexCount + 2].Position = new Vector3(bottomLeft, 0);
@@ -212,7 +215,7 @@ namespace Samurai.Graphics
 			this.texture = texture;
 
 			Matrix4 rotationMatrix;
-			Matrix4.CreateRotationZ(-rotation, out rotationMatrix);
+			Matrix4.CreateRotationZ(rotation, out rotationMatrix);
 
 			Matrix4 scaleMatrix;
 			Matrix4.CreateScale(ref scale, out scaleMatrix);
@@ -220,15 +223,21 @@ namespace Samurai.Graphics
 			Matrix4 translationMatrix;
 			Matrix4.CreateTranslation(destination.X, destination.Y, out translationMatrix);
 
-			Matrix4 transform = Matrix4.Identity;
-			Matrix4.Multiply(ref transform, ref scaleMatrix, out transform);
-			Matrix4.Multiply(ref transform, ref rotationMatrix, out transform);
-			Matrix4.Multiply(ref transform, ref translationMatrix, out transform);
+			Matrix4 identity = Matrix4.Identity;
+			
+			Matrix4 transform1;
+			Matrix4.Multiply(ref identity, ref scaleMatrix, out transform1);
 
-			Vector2 topLeft = new Vector2(-origin.X, -origin.Y).Transform(ref transform);
-			Vector2 topRight = new Vector2(width - origin.X, -origin.Y).Transform(ref transform);
-			Vector2 bottomRight = new Vector2(width - origin.X, height - origin.Y).Transform(ref transform);
-			Vector2 bottomLeft = new Vector2(-origin.X, height - origin.Y).Transform(ref transform);
+			Matrix4 transform2;
+			Matrix4.Multiply(ref transform1, ref rotationMatrix, out transform2);
+
+			Matrix4 transform3;
+			Matrix4.Multiply(ref transform2, ref translationMatrix, out transform3);
+
+			Vector2 topLeft = new Vector2(-origin.X, -origin.Y).Transform(ref transform3);
+			Vector2 topRight = new Vector2(width - origin.X, -origin.Y).Transform(ref transform3);
+			Vector2 bottomRight = new Vector2(width - origin.X, height - origin.Y).Transform(ref transform3);
+			Vector2 bottomLeft = new Vector2(-origin.X, height - origin.Y).Transform(ref transform3);
 
 			this.AddQuad(
 				topLeft,
@@ -246,6 +255,15 @@ namespace Samurai.Graphics
 
 			Rectangle frameRect = spriteSheet[frame];
 			this.DrawInternal(spriteSheet.Texture, tint, position, frameRect.Width, frameRect.Height, frameRect);
+		}
+
+		public void Draw(SpriteSheet spriteSheet, int frame, Color4 tint, Vector2 position, Vector2 origin, Vector2 scale, float rotation)
+		{
+			if (spriteSheet == null)
+				throw new ArgumentNullException("spriteSheet");
+
+			Rectangle frameRect = spriteSheet[frame];
+			this.DrawInternal(spriteSheet.Texture, tint, position, frameRect.Width, frameRect.Height, frameRect, origin, scale, rotation);
 		}
 
 		public void DrawString(TextureFont font, string text, Color4 tint, Vector2 position)

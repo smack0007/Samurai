@@ -3,6 +3,7 @@ using Samurai.GameFramework;
 using Samurai.Graphics;
 using Samurai.Input;
 using System;
+using System.Collections.Generic;
 
 namespace SamuraiDemo2D
 {
@@ -11,10 +12,18 @@ namespace SamuraiDemo2D
 		SpriteBatch spriteBatch;
 		BasicSpriteBatchShaderProgram shaderProgram;
 		Texture planesTexture;
-		SpriteSheet planes;
+		SpriteSheet planeSpriteSheet;
 		TextureFont font;
 		Keyboard keyboard;
 		Mouse mouse;
+		
+		List<Plane> planes;
+
+		const int PlaneCount = 100;
+
+		int fps = 0;
+		int fpsCount;
+		float fpsTimer;
 
 		public Demo2DGame()
 			: base(new GameOptions()
@@ -34,16 +43,31 @@ namespace SamuraiDemo2D
 				{
 				});
 
-			this.planes = SpriteSheet.BuildFromGrid(this.planesTexture, Color4.Magenta);
+			this.planeSpriteSheet = SpriteSheet.Build(this.planesTexture, 64, 64);
 
 			this.font = TextureFont.Build(this.Graphics, "Arial", 72, new TextureFontParams()
 				{
-					Color = Color4.Blue,
-					ColorKey = Color4.Black
+					Color = Color4.Black,
+					BackgroundColor = Color4.White,
+					//ColorKey = Color4.Black
 				});
 
 			this.keyboard = new Keyboard();
 			this.mouse = new Mouse(this.Window);
+
+			Random random = new Random();
+
+			this.planes = new List<Plane>();
+
+			for (int i = 0; i < PlaneCount; i++)
+			{
+				this.planes.Add(new Plane(
+					random.Next(4) * 3,
+					new Vector2(random.Next(this.Window.Width), random.Next(this.Window.Height)),
+					(float)random.Next(360),
+					this.Window.Size
+				));
+			}
 		}
 
 		protected override void Update(TimeSpan elapsed)
@@ -53,6 +77,11 @@ namespace SamuraiDemo2D
 
 			if (this.keyboard.IsKeyPressed(Key.Escape))
 				this.Exit();
+
+			foreach (Plane plane in this.planes)
+			{
+				plane.Update(elapsed);
+			}
 		}
 
 		protected override void Draw(TimeSpan elapsed)
@@ -61,12 +90,33 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
-			this.spriteBatch.Draw(this.planes, 5, new Color4(255, 255, 255, 255), new Vector2(this.mouse.X, this.mouse.Y));
-			//this.spriteBatch.DrawString(this.font, "Hello World!", Color4.White, Vector2.Zero);
+			foreach (Plane plane in this.planes)
+			{
+				this.spriteBatch.Draw(
+					this.planeSpriteSheet,
+					plane.StartFrame + plane.FrameOffset,
+					Color4.White,
+					plane.Position,
+					new Vector2(32, 32),
+					Vector2.One,
+					MathHelper.ToRadians(plane.Rotation)
+				);
+			}
+
+			this.spriteBatch.DrawString(this.font, string.Join("FPS: ", this.fps.ToString()), Color4.White, new Vector2(50, 50));
 
 			this.spriteBatch.End();
 
 			this.Graphics.SwapBuffers();
+
+			this.fpsCount++;
+			this.fpsTimer += (float)elapsed.TotalSeconds;
+			if (this.fpsTimer >= 1.0f)
+			{
+				this.fps = this.fpsCount;
+				this.fpsTimer -= 1.0f;
+				this.fpsCount = 0;
+			}
 		}
 
 		private static void Main(string[] args)

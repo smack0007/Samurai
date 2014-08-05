@@ -101,6 +101,23 @@ namespace Samurai
 			result = new Vector2((position.X * matrix.M11) + (position.Y * matrix.M21) + matrix.M41,
 								 (position.X * matrix.M12) + (position.Y * matrix.M22) + matrix.M42);
 		}
+				
+		public static void RotateAboutOrigin(ref Vector2 point, ref Vector2 origin, float rotation)
+		{
+			Vector2 u = point - origin; // point relative to origin  
+
+			if (u == Vector2.Zero)
+				return;
+
+			float a = (float)Math.Atan2(u.Y, u.X); // angle relative to origin  
+			a += rotation; // rotate  
+
+			// u is now the new point relative to origin
+			float length = u.Length();
+			u = new Vector2((float)Math.Cos(a) * length, (float)Math.Sin(a) * length);
+
+			point = u + origin;
+		}
 
 		#region Operator Overloads
 

@@ -90,6 +90,7 @@ namespace SamuraiDemo
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
+			
 			//this.GraphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, 0, 3);
 
 			this.Graphics.SwapBuffers();
