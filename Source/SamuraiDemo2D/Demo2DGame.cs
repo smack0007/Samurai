@@ -11,7 +11,7 @@ namespace SamuraiDemo2D
 	{
 		SpriteBatch spriteBatch;
 		BasicSpriteBatchShaderProgram shaderProgram;
-		Texture planesTexture;
+		Texture2D planesTexture;
 		SpriteSheet planeSpriteSheet;
 		TextureFont font;
 		Keyboard keyboard;
@@ -39,7 +39,7 @@ namespace SamuraiDemo2D
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
 
-			this.planesTexture = Texture.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
+			this.planesTexture = Texture2D.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
 				{
 				});
 

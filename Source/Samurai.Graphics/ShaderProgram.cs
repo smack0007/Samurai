@@ -65,7 +65,7 @@ namespace Samurai.Graphics
 			this.Graphics.GL.UniformMatrix4(location, ref value);
 		}
 
-		public void SetSampler(string name, Texture texture)
+		public void SetSampler(string name, Texture2D texture)
 		{
 			int location = this.Graphics.GL.GetUniformLocation(this.Handle, name);
 			this.Graphics.GL.Uniform1i(location, (int)texture.Index);

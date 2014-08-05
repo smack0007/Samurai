@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Samurai.Graphics
 {
-	public class Texture : GraphicsObject
+	public class Texture2D : GraphicsObject
 	{
 		internal uint Index
 		{
@@ -56,7 +56,7 @@ namespace Samurai.Graphics
 			private set;
 		}
 
-		private Texture(GraphicsContext graphics)
+		private Texture2D(GraphicsContext graphics)
 			: base(graphics)
 		{
 			this.Index = this.Graphics.AllocateTextureIndex();
@@ -75,7 +75,7 @@ namespace Samurai.Graphics
 			this.Graphics.GL.DeleteTexture(this.Handle);
 		}
 
-		public static Texture LoadFromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
+		public static Texture2D LoadFromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -87,7 +87,7 @@ namespace Samurai.Graphics
 				return LoadFromStream(graphics, file, parameters);
 		}
 
-		public static Texture LoadFromStream(GraphicsContext graphics, Stream stream, TextureParams parameters)
+		public static Texture2D LoadFromStream(GraphicsContext graphics, Stream stream, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -102,9 +102,9 @@ namespace Samurai.Graphics
 			}
 		}
 
-		public static Texture LoadFromBytes(GraphicsContext graphics, byte[] bytes, int width, int height, TextureParams parameters)
+		public static Texture2D LoadFromBytes(GraphicsContext graphics, byte[] bytes, int width, int height, TextureParams parameters)
 		{
-			Texture texture = new Texture(graphics);
+			Texture2D texture = new Texture2D(graphics);
 			graphics.GL.ActiveTexture(GLContext.Texture0 + texture.Index);
 			graphics.GL.BindTexture(GLContext.Texture2D, texture.Handle);
 

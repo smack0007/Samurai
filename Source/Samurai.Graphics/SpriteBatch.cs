@@ -23,7 +23,7 @@ namespace Samurai.Graphics
 
 		Vertex[] vertices;
 		int vertexCount;
-		Texture texture;
+		Texture2D texture;
 
 		DynamicVertexBuffer<Vertex> vertexBuffer;
 		StaticIndexBuffer<ushort> indexBuffer;
@@ -155,27 +155,27 @@ namespace Samurai.Graphics
 			this.vertexCount += 4;
 		}
 
-		public void Draw(Texture texture, Color4 tint, Vector2 destination)
+		public void Draw(Texture2D texture, Color4 tint, Vector2 destination)
 		{
 			this.Draw(texture, tint, destination, new Rectangle(0, 0, texture.Width, texture.Height));
 		}
 
-		public void Draw(Texture texture, Color4 tint, Rectangle destination)
+		public void Draw(Texture2D texture, Color4 tint, Rectangle destination)
 		{
 			this.Draw(texture, tint, destination, new Rectangle(0, 0, texture.Width, texture.Height));
 		}
 
-		public void Draw(Texture texture, Color4 tint, Vector2 destination, Rectangle source)
+		public void Draw(Texture2D texture, Color4 tint, Vector2 destination, Rectangle source)
 		{
 			this.DrawInternal(texture, tint, destination, source.Width, source.Height, source);
 		}
 
-		public void Draw(Texture texture, Color4 tint, Rectangle destination, Rectangle source)
+		public void Draw(Texture2D texture, Color4 tint, Rectangle destination, Rectangle source)
 		{
 			this.DrawInternal(texture, tint, new Vector2(destination.X, destination.Y), destination.Width, destination.Height, source);
 		}
 
-		private void DrawInternal(Texture texture, Color4 tint, Vector2 destination, int width, int height, Rectangle source)
+		private void DrawInternal(Texture2D texture, Color4 tint, Vector2 destination, int width, int height, Rectangle source)
 		{
 			if (texture == null)
 				throw new ArgumentNullException("texture");
@@ -194,17 +194,17 @@ namespace Samurai.Graphics
 				tint);
 		}
 
-		public void Draw(Texture texture, Color4 tint, Vector2 destination, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
+		public void Draw(Texture2D texture, Color4 tint, Vector2 destination, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
 		{
 			this.DrawInternal(texture, tint, destination, source.Width, source.Height, source, origin, scale, rotation);
 		}
 
-		public void Draw(Texture texture, Color4 tint, Rectangle destination, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
+		public void Draw(Texture2D texture, Color4 tint, Rectangle destination, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
 		{
 			this.DrawInternal(texture, tint, new Vector2(destination.X, destination.Y), destination.Width, destination.Height, source, origin, scale, rotation);
 		}
 
-		private void DrawInternal(Texture texture, Color4 tint, Vector2 destination, int width, int height, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
+		private void DrawInternal(Texture2D texture, Color4 tint, Vector2 destination, int width, int height, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
 		{
 			if (texture == null)
 				throw new ArgumentNullException("texture");

@@ -8,6 +8,6 @@ namespace Samurai.Graphics
 
 		void SetProjectionMatrix(ref Matrix4 matrix);
 
-		void SetSampler(Texture texture);
+		void SetSampler(Texture2D texture);
 	}
 }

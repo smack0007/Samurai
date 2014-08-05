@@ -52,7 +52,7 @@ namespace Samurai.Graphics
 		/// Sets the sampler texture to be used.
 		/// </summary>
 		/// <param name="texture"></param>
-		public void SetSampler(Texture texture)
+		public void SetSampler(Texture2D texture)
 		{
 			this.ShaderProgram.SetSampler("fragSampler", texture);
 		}
