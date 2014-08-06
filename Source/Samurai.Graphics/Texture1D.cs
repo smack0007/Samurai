@@ -4,15 +4,9 @@ using System.IO;
 
 namespace Samurai.Graphics
 {
-	public class Texture2D : Texture
+	public class Texture1D : Texture
 	{
-		public int Width
-		{
-			get;
-			private set;
-		}
-
-		public int Height
+		public int Length
 		{
 			get;
 			private set;
@@ -20,15 +14,15 @@ namespace Samurai.Graphics
 
 		protected override int PixelCount
 		{
-			get { return this.Width * this.Height; }
+			get { return this.Length; }
 		}
 
-		private Texture2D(GraphicsContext graphics)
+		private Texture1D(GraphicsContext graphics)
 			: base(graphics)
 		{
 		}
 
-		public static Texture2D LoadFromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
+		public static Texture1D LoadFromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -40,7 +34,7 @@ namespace Samurai.Graphics
 				return LoadFromStream(graphics, file, parameters);
 		}
 
-		public static Texture2D LoadFromStream(GraphicsContext graphics, Stream stream, TextureParams parameters)
+		public static Texture1D LoadFromStream(GraphicsContext graphics, Stream stream, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -51,11 +45,11 @@ namespace Samurai.Graphics
 			using (Bitmap bitmap = (Bitmap)Bitmap.FromStream(stream))
 			{
 				byte[] bytes = BitmapHelper.GetBytes(bitmap);
-				return LoadFromBytes(graphics, bytes, bitmap.Width, bitmap.Height, parameters);
+				return LoadFromBytes(graphics, bytes, bitmap.Width * bitmap.Height, parameters);
 			}
 		}
 
-		public static Texture2D LoadFromBytes(GraphicsContext graphics, byte[] bytes, int width, int height, TextureParams parameters)
+		public static Texture1D LoadFromBytes(GraphicsContext graphics, byte[] bytes, int length, TextureParams parameters)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -63,23 +57,21 @@ namespace Samurai.Graphics
 			if (bytes == null)
 				throw new ArgumentNullException("bytes");
 
-			Texture2D texture = new Texture2D(graphics);
+			Texture1D texture = new Texture1D(graphics);
 
-			Texture.Initialize(texture, graphics, GLContext.Texture2D, bytes, parameters);
+			Texture.Initialize(texture, graphics, GLContext.Texture1D, bytes, parameters);
 
-			graphics.GL.TexImage2D(
-				GLContext.Texture2D,
+			graphics.GL.TexImage1D(
+				GLContext.Texture1D,
 				0,
 				(int)GLContext.Rgba,
-				width,
-				height,
+				length,
 				0,
 				GLContext.Rgba,
 				(int)GLContext.UnsignedByte,
 				bytes);
 
-			texture.Width = width;
-			texture.Height = height;
+			texture.Length = length;
 
 			return texture;
 		}

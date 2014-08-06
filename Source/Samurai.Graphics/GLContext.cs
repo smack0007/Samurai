@@ -72,6 +72,7 @@ namespace Samurai.Graphics
 		public const uint Nearest = 0x2600;
 		public const uint Repeat = 0x2901;
 		public const uint Texture0 = 0x84C0;
+		public const uint Texture1D = 0x0DE0;
 		public const uint Texture2D = 0x0DE1;
 		public const uint TextureMagFilter = 0x2800;
 		public const uint TextureMinFilter = 0x2801;
@@ -190,6 +191,9 @@ namespace Samurai.Graphics
 
 		private delegate void __ShaderSource(uint shader, int count, string[] @string, ref int length);
 		private __ShaderSource _ShaderSource;
+
+		[DllImport(Library, EntryPoint = "glTexImage1D")]
+		private static extern void _TexImage1D(uint target, int level, int internalformat, int width, int border, uint format, uint type, byte[] pixels);
 
 		[DllImport(Library, EntryPoint = "glTexImage2D")]
 		private static extern void _TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, byte[] pixels);
@@ -546,6 +550,12 @@ namespace Samurai.Graphics
 			_ShaderSource(shader, 1, sources, ref length);
 
 			CheckErrors("ShaderSource");
+		}
+
+		public void TexImage1D(uint target, int level, int internalformat, int width, int border, uint format, uint type, byte[] pixels)
+		{
+			_TexImage1D(target, level, internalformat, width, border, format, type, pixels);
+			CheckErrors("TexImage1D");
 		}
 
 		public void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, byte[] pixels)
