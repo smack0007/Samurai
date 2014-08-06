@@ -19,17 +19,14 @@ namespace SamuraiDemo2D
 		
 		List<Plane> planes;
 
-		const int PlaneCount = 100;
+		const int PlaneCount = 1000;
 
 		int fps = 0;
 		int fpsCount;
 		float fpsTimer;
 
 		public Demo2DGame()
-			: base(new GameOptions()
-			{
-				WindowResizable = true
-			})
+			: base()
 		{
 			this.Window.Title = "Samurai 2D Demo";
 

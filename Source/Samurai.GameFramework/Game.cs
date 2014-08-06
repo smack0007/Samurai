@@ -85,25 +85,26 @@ namespace Samurai.GameFramework
 		}
 
 		Stopwatch stopwatch;
+		long timeBetweenTicks; 
+		long lastTick;
 		long nextTick;
-		int timeBetweenTicks; 
-		TimeSpan elapsed;
-
+		
 		/// <summary>
 		/// Starts the game loop.
 		/// </summary>
 		public void Run()
-		{
-			this.stopwatch = new Stopwatch();
-			this.timeBetweenTicks = 1000 / this.options.FramesPerSecond;
-			this.elapsed = TimeSpan.FromMilliseconds(timeBetweenTicks); 
-
-			this.stopwatch.Start();
-			this.nextTick = stopwatch.ElapsedMilliseconds;
-
+		{			
 			this.Window.Show();
 
 			this.Initialize();
+
+			this.stopwatch = new Stopwatch();
+			this.timeBetweenTicks = 1000 / this.options.FramesPerSecond;
+			
+			this.stopwatch.Start();
+			long elapsed = stopwatch.ElapsedMilliseconds;
+			this.lastTick = elapsed;
+			this.nextTick = elapsed;
 
 			this.Window.Run();
 
@@ -112,12 +113,17 @@ namespace Samurai.GameFramework
 
 		internal void Tick()
 		{
-			if (this.stopwatch.ElapsedMilliseconds >= this.nextTick)
+			long totalElapsedMilliseconds = this.stopwatch.ElapsedMilliseconds;
+
+			if (totalElapsedMilliseconds >= this.nextTick)
 			{
+				TimeSpan elapsed = TimeSpan.FromMilliseconds(totalElapsedMilliseconds - this.lastTick);
+
 				this.Update(elapsed);
 				this.Draw(elapsed);
 
-				this.nextTick += this.timeBetweenTicks;
+				this.lastTick = totalElapsedMilliseconds;
+				this.nextTick = totalElapsedMilliseconds + this.timeBetweenTicks;
 			}
 		}
 
