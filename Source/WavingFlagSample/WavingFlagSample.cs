@@ -44,7 +44,12 @@ namespace WavingFlagSample
 
 			int totalChunks = 100;
 			int chunkSize = this.texture.Width / totalChunks;
-			Rectangle destination = new Rectangle(100, 142, chunkSize, this.texture.Height);
+			Rectangle destination = new Rectangle(
+				(this.Window.Width - this.texture.Width) / 2,
+				(this.Window.Height - this.texture.Height) / 2,
+				chunkSize,
+				this.texture.Height);
+
 			Rectangle source = new Rectangle(0, 0, chunkSize, this.texture.Height);
 
 			Vertex[] vertexData = new Vertex[totalChunks * 4];
@@ -94,7 +99,7 @@ namespace WavingFlagSample
 			totalElapsedSeconds += (float)elapsed.TotalSeconds;
 
 			this.shader.SetValue("projection", ref projection);
-			this.shader.SetValue("startX", 100.0f);
+			this.shader.SetValue("startX", (float)((this.Window.Width - this.texture.Width) / 2));
 			this.shader.SetValue("time", totalElapsedSeconds);
 			this.shader.SetSampler("texture0", this.texture);
 
