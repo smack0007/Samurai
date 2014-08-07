@@ -353,7 +353,7 @@ namespace Samurai.Graphics
 				this.shader.SetProjectionMatrix(ref this.projection);
 				this.shader.SetSampler(this.texture);
 
-				this.graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
+				this.graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer, 0, (this.vertexCount / 4) * 6);
 
 				this.vertexCount = 0;
 			}
