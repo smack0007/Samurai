@@ -53,6 +53,13 @@ namespace Samurai.Graphics
 			this.Graphics.GL.DeleteProgram(this.Handle);
 		}
 		
+		public void SetProjection(string name, ref Matrix4 value)
+		{
+			int location = this.Graphics.GL.GetUniformLocation(this.Handle, name);
+			Matrix4 projection = value * Matrix4.InvertedYAxis;
+			this.Graphics.GL.UniformMatrix4(location, ref projection);
+		}
+
 		public void SetValue(string name, float value)
 		{
 			int location = this.Graphics.GL.GetUniformLocation(this.Handle, name);

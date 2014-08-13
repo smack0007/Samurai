@@ -70,7 +70,7 @@ namespace Samurai.Graphics
 			graphics.GL.TexImage2D(
 				GLContext.Texture2D,
 				0,
-				(int)GLContext.Rgba,
+				(int)GLContext.Rgba8,
 				width,
 				height,
 				0,

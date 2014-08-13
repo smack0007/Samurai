@@ -47,6 +47,11 @@ namespace Samurai.Graphics
 		public const uint SrcColor = 0x0300;
 		public const uint Zero = 0;
 
+		// Faces
+		public const uint CullFace = 0x0B44;
+		public const uint Cw = 0x0900;
+		public const uint Ccw = 0x0901;
+
 		// Error Codes
 		public const uint InvalidEnum = 0x0500;
 		public const uint InvalidFramebufferOperation = 0x0506;
@@ -60,6 +65,7 @@ namespace Samurai.Graphics
 
 		// Pixels
 		public const uint Rgba = 0x1908;
+		public const uint Rgba8 = 0x8058;
 
 		// Primitive Types
 		public const uint Lines = 0x0001;
@@ -161,6 +167,9 @@ namespace Samurai.Graphics
 
 		private delegate void __EnableVertexAttribArray(uint index);
 		private __EnableVertexAttribArray _EnableVertexAttribArray;
+
+		[DllImport(Library, EntryPoint = "glFrontFace")]
+		private static extern void _FrontFace(uint mode);
 
 		private delegate void __GenBuffers(int n, [Out] uint[] buffers);
 		private __GenBuffers _GenBuffers;
@@ -459,6 +468,12 @@ namespace Samurai.Graphics
 		{
 			_EnableVertexAttribArray(index);
 			CheckErrors("EnableVertexAttribArray");
+		}
+
+		public void FrontFace(uint mode)
+		{
+			_FrontFace(mode);
+			CheckErrors("FrontFace");
 		}
 
 		public uint GenBuffer()

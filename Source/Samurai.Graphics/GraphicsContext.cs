@@ -13,6 +13,8 @@ namespace Samurai.Graphics
 		SourceBlendFactor sourceBlendFactor = SourceBlendFactor.One;
 		DestinationBlendFactor destinationBlendFactor = DestinationBlendFactor.Zero;
 
+		CullMode cullMode;
+
 		bool[] textures;
 		uint nextTexture;
 
@@ -90,6 +92,37 @@ namespace Samurai.Graphics
 				}
 			}
 		}
+
+		public CullMode CullMode
+		{
+			get { return this.cullMode; }
+
+			set
+			{
+				if (value != this.cullMode)
+				{
+					this.cullMode = value;
+
+					if (this.cullMode == CullMode.None)
+					{
+						this.GL.Disable(GLContext.CullFace);
+					}
+					else
+					{
+						this.GL.Enable(GLContext.CullFace);
+
+						if (this.cullMode == CullMode.Front)
+						{
+							this.GL.FrontFace((uint)GLContext.Ccw);
+						}
+						else
+						{
+							this.GL.FrontFace((uint)GLContext.Cw);
+						}
+					}
+				}
+			}
+		}
 				
 		public GraphicsContext(IntPtr window)
 		{
@@ -99,6 +132,9 @@ namespace Samurai.Graphics
 
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
+
+			this.cullMode = CullMode.None;
+			this.GL.Disable(GLContext.CullFace);
 
 			this.graphicsObjects = new List<GraphicsObject>();
 		}

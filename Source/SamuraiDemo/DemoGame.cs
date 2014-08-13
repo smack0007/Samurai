@@ -30,7 +30,7 @@ namespace SamuraiDemo
 
 		byte[] indexData = new byte[]
 		{
-			0, 1, 3, 1, 3, 2
+			0, 1, 3, 1, 2, 3
 		};
 
 		ShaderProgram shaderProgram;
@@ -43,6 +43,8 @@ namespace SamuraiDemo
 		public DemoGame()
 		{
 			this.Window.Title = "Samurai Demo";
+
+			this.Graphics.CullMode = CullMode.Back;
 
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,
@@ -69,29 +71,29 @@ namespace SamuraiDemo
 			this.gamePad1 = new GamePad(GamePadIndex.One);
 		}
 
-		float rotation;
+		float rotationZ;
+		float rotationX;
 
 		protected override void Update(TimeSpan elapsed)
 		{
 			this.gamePad1.Update();
 
-			this.rotation += (float)(360.0 * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.X);
+			this.rotationZ += (float)(360.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.X);
+			this.rotationX += (float)(360.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.Y);
 		}
 		
 		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
-						
-			Matrix4 projection = 
-				Matrix4.CreateRotationZ(MathHelper.ToRadians(rotation)) *
-				Matrix4.InvertedYAxis;
+
+			Matrix4 projection =
+				Matrix4.CreateRotationZ(MathHelper.ToRadians(this.rotationZ)) *
+				Matrix4.CreateRotationX(MathHelper.ToRadians(this.rotationX));
 					
-			this.shaderProgram.SetValue("projection", ref projection);
+			this.shaderProgram.SetProjection("projection", ref projection);
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
-			
-			//this.GraphicsDevice.Draw(PrimitiveType.Triangles, this.vertexBuffer, 0, 3);
 
 			this.Graphics.SwapBuffers();
 		}

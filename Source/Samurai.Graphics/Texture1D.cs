@@ -64,7 +64,7 @@ namespace Samurai.Graphics
 			graphics.GL.TexImage1D(
 				GLContext.Texture1D,
 				0,
-				(int)GLContext.Rgba,
+				(int)GLContext.Rgba8,
 				length,
 				0,
 				GLContext.Rgba,
