@@ -14,6 +14,7 @@ namespace Samurai.Graphics
 		DestinationBlendFactor destinationBlendFactor = DestinationBlendFactor.Zero;
 
 		CullMode cullMode;
+		bool depthTestEnabled;
 
 		bool[] textures;
 		uint nextTexture;
@@ -113,12 +114,34 @@ namespace Samurai.Graphics
 
 						if (this.cullMode == CullMode.Front)
 						{
-							this.GL.FrontFace((uint)GLContext.Ccw);
+							this.GL.FrontFace((uint)GLContext.Cw);
 						}
 						else
 						{
-							this.GL.FrontFace((uint)GLContext.Cw);
+							this.GL.FrontFace((uint)GLContext.Ccw);
 						}
+					}
+				}
+			}
+		}
+
+		public bool DepthTestEnabled
+		{
+			get { return this.depthTestEnabled; }
+
+			set
+			{
+				if (value != this.depthTestEnabled)
+				{
+					this.depthTestEnabled = value;
+
+					if (this.depthTestEnabled)
+					{
+						this.GL.Enable(GLContext.DepthTest);
+					}
+					else
+					{
+						this.GL.Disable(GLContext.DepthTest);
 					}
 				}
 			}
@@ -135,6 +158,9 @@ namespace Samurai.Graphics
 
 			this.cullMode = CullMode.None;
 			this.GL.Disable(GLContext.CullFace);
+
+			this.depthTestEnabled = false;
+			this.GL.Disable(GLContext.DepthTest);
 
 			this.graphicsObjects = new List<GraphicsObject>();
 		}

@@ -318,6 +318,34 @@ namespace Samurai
 			return result;
 		}
 
+		public static Matrix4 Perspective(float left, float right, float top, float bottom, float near, float far)
+		{
+			float range = far / (far - near);
+
+			return new Matrix4()
+			{
+				M11 = 2.0f * near / (right - left),
+				M22 = 2.0f * near / (top - bottom),
+				M31 = (left + right) / (left - right),
+				M32 = (top + bottom) / (bottom - top),
+				M33 = range,
+				M34 = 1.0f,
+				M43 = -near * range
+			};
+		}
+
+		public static Matrix4 PerspectiveFOV(float fov, float aspect, float near, float far)
+		{
+			float yScale = (float)(1.0 / Math.Tan(fov * 0.5f));
+			float xScale = yScale / aspect;
+
+			float halfWidth = near / xScale;
+			float halfHeight = near / yScale;
+
+			return Perspective(-halfWidth, halfWidth, -halfHeight, halfHeight, near, far);
+		}
+
+
 		public static Matrix4 operator *(Matrix4 matrix1, Matrix4 matrix2)
 		{
 			Matrix4 returnMatrix = new Matrix4();

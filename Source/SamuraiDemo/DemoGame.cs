@@ -22,16 +22,62 @@ namespace SamuraiDemo
 
 		Vertex[] vertexData = new Vertex[]
         {
-            new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.0f), Color = new Color3(255, 0, 0), UV = new Vector2(0.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.0f), Color = new Color3(0, 255, 0), UV = new Vector2(1.0f, 0.0f) },
-            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.0f), Color = new Color3(0, 0, 255), UV = new Vector2(1.0f, 1.0f) },
-            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.0f), Color = new Color3(255, 255, 0), UV = new Vector2(0.0f, 1.0f) }
+			// Front
+            new Vertex() { Position = new Vector3(-0.5f, -0.5f, -0.5f), Color = new Color3(255, 0, 0), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, -0.5f), Color = new Color3(255, 0, 0), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, -0.5f), Color = new Color3(255, 0, 0), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, -0.5f), Color = new Color3(255, 0, 0), UV = new Vector2(0.0f, 1.0f) },
+
+			// Back
+			new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.5f), Color = new Color3(0, 0, 255), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.5f), Color = new Color3(0, 0, 255), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.5f), Color = new Color3(0, 0, 255), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.5f), Color = new Color3(0, 0, 255), UV = new Vector2(0.0f, 1.0f) },
+
+			// Left
+			new Vertex() { Position = new Vector3(-0.5f, -0.5f, -0.5f), Color = new Color3(0, 255, 0), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.5f), Color = new Color3(0, 255, 0), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.5f), Color = new Color3(0, 255, 0), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, -0.5f), Color = new Color3(0, 255, 0), UV = new Vector2(0.0f, 1.0f) },
+
+			// Right
+			new Vertex() { Position = new Vector3(0.5f, -0.5f, -0.5f), Color = new Color3(0, 192, 192), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.5f), Color = new Color3(0, 192, 192), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.5f), Color = new Color3(0, 192, 192), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, -0.5f), Color = new Color3(0, 192, 192), UV = new Vector2(0.0f, 1.0f) },
+
+			// Top
+            new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.5f), Color = new Color3(255, 0, 255), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.5f), Color = new Color3(255, 0, 255), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, -0.5f, -0.5f), Color = new Color3(255, 0, 255), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, -0.5f, -0.5f), Color = new Color3(255, 0, 255), UV = new Vector2(0.0f, 1.0f) },
+
+			// Bottom
+			new Vertex() { Position = new Vector3(-0.5f, 0.5f, 0.5f), Color = new Color3(255, 255, 255), UV = new Vector2(0.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, 0.5f), Color = new Color3(255, 255, 255), UV = new Vector2(1.0f, 0.0f) },
+            new Vertex() { Position = new Vector3(0.5f, 0.5f, -0.5f), Color = new Color3(255, 255, 255), UV = new Vector2(1.0f, 1.0f) },
+            new Vertex() { Position = new Vector3(-0.5f, 0.5f, -0.5f), Color = new Color3(255, 255, 255), UV = new Vector2(0.0f, 1.0f) },
         };
 
 		byte[] indexData = new byte[]
 		{
-			0, 1, 3, 1, 2, 3
+			0, 1, 3, 1, 2, 3,
+			
+			7, 5, 4, 7, 6, 5,
+
+			11, 9, 8, 11, 10, 9,
+			
+			12, 13, 15, 13, 14, 15,
+
+			16, 17, 19, 17, 18, 19,
+			
+			23, 21, 20, 23, 22, 21,
 		};
+
+		float rotationZ;
+
+		float translationZ = 5.0f;
+		float translationX;
 
 		ShaderProgram shaderProgram;
 		StaticVertexBuffer<Vertex> vertexBuffer;
@@ -45,6 +91,7 @@ namespace SamuraiDemo
 			this.Window.Title = "Samurai Demo";
 
 			this.Graphics.CullMode = CullMode.Back;
+			this.Graphics.DepthTestEnabled = true;
 
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,
@@ -71,15 +118,14 @@ namespace SamuraiDemo
 			this.gamePad1 = new GamePad(GamePadIndex.One);
 		}
 
-		float rotationZ;
-		float rotationX;
-
 		protected override void Update(TimeSpan elapsed)
 		{
 			this.gamePad1.Update();
 
-			this.rotationZ += (float)(360.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.X);
-			this.rotationX += (float)(360.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.Y);
+			this.translationX += (float)(5.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.X);
+			this.translationZ += (float)(5.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.Y);
+
+			this.rotationZ += (float)(180.0f * elapsed.TotalSeconds * this.gamePad1.RightThumbStick.X);
 		}
 		
 		protected override void Draw(TimeSpan elapsed)
@@ -87,8 +133,9 @@ namespace SamuraiDemo
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
 			Matrix4 projection =
-				Matrix4.CreateRotationZ(MathHelper.ToRadians(this.rotationZ)) *
-				Matrix4.CreateRotationX(MathHelper.ToRadians(this.rotationX));
+				Matrix4.CreateTranslation(-this.translationX, 0, this.translationZ) *
+				Matrix4.CreateRotationY(MathHelper.ToRadians(this.rotationZ)) *
+				Matrix4.PerspectiveFOV(120.0f, (float)this.Window.Width / (float)this.Window.Height, 0.1f, 100.0f);
 					
 			this.shaderProgram.SetProjection("projection", ref projection);
 			this.shaderProgram.SetSampler("texture0", this.texture1);

@@ -47,6 +47,9 @@ namespace Samurai.Graphics
 		public const uint SrcColor = 0x0300;
 		public const uint Zero = 0;
 
+		// Depth
+		public const uint DepthTest = 0x0B71;
+
 		// Faces
 		public const uint CullFace = 0x0B44;
 		public const uint Cw = 0x0900;
