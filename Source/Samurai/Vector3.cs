@@ -84,6 +84,27 @@ namespace Samurai
 			return this.X.GetHashCode() ^ this.Y.GetHashCode() ^ this.Z.GetHashCode();
 		}
 
+		public static Vector3 Cross(ref Vector3 v1, ref Vector3 v2)
+		{
+			Vector3 result;
+			Cross(ref v1, ref v2, out result);
+			return result;
+		}
+
+		public static void Cross(ref Vector3 v1, ref Vector3 v2, out Vector3 result)
+		{
+			result = new Vector3(
+				(v1.Y * v2.Z) - (v1.Z * v2.Y),
+				(v1.Z * v2.X) - (v1.X * v2.Z),
+				(v1.X * v2.Y) - (v1.Y * v2.X)
+			);
+		}
+
+		public static float Dot(ref Vector3 v1, ref Vector3 v2)
+		{
+			return (v1.X * v2.X) + (v1.Y * v2.Y) + (v1.Z * v2.Z);
+		}
+
 		/// <summary>
 		/// Calculates the length of the Vector2.
 		/// </summary>
@@ -101,6 +122,18 @@ namespace Samurai
 		{
 			float length = this.Length();
 			return new Vector3(this.X / length, this.Y / length, this.Z / length);
+		}
+
+		public static Vector3 Subtract(ref Vector3 v1, ref Vector3 v2)
+		{
+			Vector3 result;
+			Subtract(ref v1, ref v2, out result);
+			return result;
+		}
+
+		public static void Subtract(ref Vector3 v1, ref Vector3 v2, out Vector3 result)
+		{
+			result = new Vector3(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
 		}
 
 		public Vector3 Transform(ref Matrix4 matrix)

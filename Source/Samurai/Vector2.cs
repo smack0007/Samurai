@@ -36,7 +36,7 @@ namespace Samurai
 			this.X = x;
 			this.Y = y;
 		}
-
+				
 		public override string ToString()
 		{
 			return string.Format("{{ {0}, {1} }}", this.X, this.Y);
@@ -61,6 +61,11 @@ namespace Samurai
 		public override int GetHashCode()
 		{
 			return this.X.GetHashCode() ^ this.Y.GetHashCode();
+		}
+
+		public float Angle()
+		{
+			return (float)Math.Atan2(this.X, -this.Y);
 		}
 
 		/// <summary>

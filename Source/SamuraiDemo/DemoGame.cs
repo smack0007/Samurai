@@ -122,19 +122,22 @@ namespace SamuraiDemo
 		{
 			this.gamePad1.Update();
 
-			this.translationX += (float)(5.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.X);
-			this.translationZ += (float)(5.0f * elapsed.TotalSeconds * this.gamePad1.LeftThumbStick.Y);
-
-			this.rotationZ += (float)(180.0f * elapsed.TotalSeconds * this.gamePad1.RightThumbStick.X);
+			Vector2 leftThumbStick = this.gamePad1.LeftThumbStick;
+			this.rotationZ += (float)(2.0f * elapsed.TotalSeconds * -leftThumbStick.X);
+			this.translationX += (float)(5.0f * elapsed.TotalSeconds * Math.Sin(this.rotationZ) * leftThumbStick.Y);
+			this.translationZ += (float)(5.0f * elapsed.TotalSeconds * Math.Cos(this.rotationZ) * leftThumbStick.Y);
 		}
 		
 		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
+			Vector3 eye = new Vector3(-this.translationX, 0, this.translationZ);
+			Vector3 target = new Vector3(-this.translationX + (float)Math.Sin(this.rotationZ), 0, this.translationZ + (float)-Math.Cos(this.rotationZ));
+			Vector3 up = Vector3.UnitY;
+
 			Matrix4 projection =
-				Matrix4.CreateTranslation(-this.translationX, 0, this.translationZ) *
-				Matrix4.CreateRotationY(MathHelper.ToRadians(this.rotationZ)) *
+				Matrix4.LookAt(ref eye, ref target, ref up) * 
 				Matrix4.PerspectiveFOV(120.0f, (float)this.Window.Width / (float)this.Window.Height, 0.1f, 100.0f);
 					
 			this.shaderProgram.SetProjection("projection", ref projection);

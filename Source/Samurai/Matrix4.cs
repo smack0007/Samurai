@@ -345,6 +345,38 @@ namespace Samurai
 			return Perspective(-halfWidth, halfWidth, -halfHeight, halfHeight, near, far);
 		}
 
+		public static Matrix4 LookAt(ref Vector3 eye, ref Vector3 target, ref Vector3 up)
+		{
+			Vector3 xAxis, yAxis, zAxis;
+			
+			Vector3.Subtract(ref target, ref eye, out zAxis);
+			zAxis.Normalize();
+			
+			Vector3.Cross(ref up, ref zAxis, out xAxis);
+			xAxis.Normalize();
+			
+			Vector3.Cross(ref zAxis, ref xAxis, out yAxis);
+
+			Matrix4 result = Matrix4.Identity;
+			
+			result.M11 = xAxis.X;
+			result.M21 = xAxis.Y;
+			result.M31 = xAxis.Z;
+			
+			result.M12 = yAxis.X;
+			result.M22 = yAxis.Y;
+			result.M32 = yAxis.Z;
+			
+			result.M13 = zAxis.X;
+			result.M23 = zAxis.Y;
+			result.M33 = zAxis.Z;
+			
+			result.M41 = -Vector3.Dot(ref xAxis, ref eye);
+			result.M42 = -Vector3.Dot(ref yAxis, ref eye);
+			result.M43 = -Vector3.Dot(ref zAxis, ref eye);
+
+			return result;
+		}
 
 		public static Matrix4 operator *(Matrix4 matrix1, Matrix4 matrix2)
 		{
