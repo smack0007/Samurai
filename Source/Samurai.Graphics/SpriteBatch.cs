@@ -245,6 +245,8 @@ namespace Samurai.Graphics
 			float rotation,
 			float layerDepth)
 		{
+			this.EnsureDrawInProgress();
+
 			if (texture == null)
 				throw new ArgumentNullException("texture");
 
