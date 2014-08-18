@@ -90,8 +90,9 @@ namespace SamuraiDemo
 		{
 			this.Window.Title = "Samurai Demo";
 
-			this.Graphics.CullMode = CullMode.Back;
 			this.Graphics.DepthTestEnabled = true;
+			this.Graphics.FrontFace = FrontFace.Clockwise;
+			this.Graphics.CullMode = CullMode.Back;
 
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,

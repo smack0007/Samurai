@@ -190,7 +190,10 @@ namespace Samurai.Graphics
 				bitmapGraphics.Flush();
 			}
 
-			return CropCharWidth(charBitmap, backgroundColor);
+			if (ch != ' ')
+				charBitmap = CropCharWidth(charBitmap, backgroundColor);
+
+			return charBitmap;
 		}
 
 		private static bool AreColorsEqual(Color c1, Color c2)

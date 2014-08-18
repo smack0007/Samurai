@@ -13,9 +13,11 @@ namespace Samurai.Graphics
 		SourceBlendFactor sourceBlendFactor = SourceBlendFactor.One;
 		DestinationBlendFactor destinationBlendFactor = DestinationBlendFactor.Zero;
 
-		CullMode cullMode;
 		bool depthTestEnabled;
-
+		DepthFunc depthFunc;
+		FrontFace frontFace;
+		CullMode cullMode;
+		
 		bool[] textures;
 		uint nextTexture;
 
@@ -56,11 +58,11 @@ namespace Samurai.Graphics
 
 					if (value)
 					{
-						this.GL.Enable(GLContext.Blend);
+						this.GL.Enable(GLContext.BlendCap);
 					}
 					else
 					{
-						this.GL.Disable(GLContext.Blend);
+						this.GL.Disable(GLContext.BlendCap);
 					}
 				}
 			}
@@ -94,37 +96,6 @@ namespace Samurai.Graphics
 			}
 		}
 
-		public CullMode CullMode
-		{
-			get { return this.cullMode; }
-
-			set
-			{
-				if (value != this.cullMode)
-				{
-					this.cullMode = value;
-
-					if (this.cullMode == CullMode.None)
-					{
-						this.GL.Disable(GLContext.CullFace);
-					}
-					else
-					{
-						this.GL.Enable(GLContext.CullFace);
-
-						if (this.cullMode == CullMode.Front)
-						{
-							this.GL.FrontFace((uint)GLContext.Cw);
-						}
-						else
-						{
-							this.GL.FrontFace((uint)GLContext.Ccw);
-						}
-					}
-				}
-			}
-		}
-
 		public bool DepthTestEnabled
 		{
 			get { return this.depthTestEnabled; }
@@ -137,11 +108,70 @@ namespace Samurai.Graphics
 
 					if (this.depthTestEnabled)
 					{
-						this.GL.Enable(GLContext.DepthTest);
+						this.GL.Enable(GLContext.DepthTestCap);
 					}
 					else
 					{
-						this.GL.Disable(GLContext.DepthTest);
+						this.GL.Disable(GLContext.DepthTestCap);
+					}
+				}
+			}
+		}
+
+		public DepthFunc DepthFunc
+		{
+			get { return this.depthFunc; }
+
+			set
+			{
+				if (value != this.depthFunc)
+				{
+					this.depthFunc = value;
+					this.GL.DepthFunc((uint)this.depthFunc);
+				}
+			}
+		}
+
+		public FrontFace FrontFace
+		{
+			get { return this.frontFace; }
+
+			set
+			{
+				if (value != this.frontFace)
+				{
+					this.frontFace = value;
+					GL.FrontFace((uint)this.frontFace);
+				}
+			}
+		}
+
+		public CullMode CullMode
+		{
+			get { return this.cullMode; }
+
+			set
+			{
+				if (value != this.cullMode)
+				{
+					this.cullMode = value;
+
+					if (this.cullMode == CullMode.None)
+					{
+						this.GL.Disable(GLContext.CullFaceCap);
+					}
+					else
+					{
+						this.GL.Enable(GLContext.CullFaceCap);
+
+						if (this.cullMode == CullMode.Front)
+						{
+							this.GL.FrontFace((uint)GLContext.Cw);
+						}
+						else
+						{
+							this.GL.FrontFace((uint)GLContext.Ccw);
+						}
 					}
 				}
 			}
@@ -156,12 +186,18 @@ namespace Samurai.Graphics
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
 
-			this.cullMode = CullMode.None;
-			this.GL.Disable(GLContext.CullFace);
-
 			this.depthTestEnabled = false;
-			this.GL.Disable(GLContext.DepthTest);
+			this.GL.Disable(GLContext.DepthTestCap);
 
+			this.depthFunc = DepthFunc.LessThanOrEqual;
+			this.GL.DepthFunc(GLContext.Lequal);
+
+			this.frontFace = FrontFace.Clockwise;
+			this.GL.FrontFace(GLContext.Cw);
+
+			this.cullMode = CullMode.None;
+			this.GL.Disable(GLContext.CullFaceCap);
+						
 			this.graphicsObjects = new List<GraphicsObject>();
 		}
 

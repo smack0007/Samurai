@@ -2,12 +2,14 @@
 
 namespace Samurai.Graphics
 {
-	public enum CullMode
+	public enum CullMode : uint
 	{
 		None,
 
-		Front,
+		Front = GLContext.Front,
 
-		Back
+		Back = GLContext.Back,
+
+		FrontAndBack = GLContext.FrontAndBack
 	}
 }

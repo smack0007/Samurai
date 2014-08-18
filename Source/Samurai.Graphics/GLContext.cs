@@ -13,27 +13,6 @@ namespace Samurai.Graphics
 		private const string Library = "opengl32.dll";
 		WGLContext platformContext;
 #endif
-	
-		public const uint ArrayBuffer = 0x8892;
-		public const uint Blend = 0x0BE2;
-		public const uint ColorBufferBit = 0x00004000;
-		public const uint CompileStatus = 0x8B81;
-		public const uint DepthBufferBit = 0x00000100;
-		public const uint DynamicCopy = 0x88EA;
-		public const uint DynamicDraw = 0x88E8;
-		public const uint DynamicRead = 0x88E9;
-		public const uint ElementArrayBuffer = 0x8893;
-		public const uint FragmentShader = 0x8B30;
-		public const uint InfoLogLength = 0x8B84;
-		public const uint StaticCopy = 0x88E6;
-		public const uint StaticDraw = 0x88E4;
-		public const uint StaticRead = 0x88E5;
-		public const uint StencilBufferBit = 0x00000400;
-		public const uint StreamCopy = 0x88E2;
-		public const uint StreamDraw = 0x88E0;
-		public const uint StreamRead = 0x88E1;
-		public const uint VertexShader = 0x8B31;
-		
 		// Blend
 		public const uint DstAlpha = 0x0304;
 		public const uint DstColor = 0x0306;
@@ -47,13 +26,45 @@ namespace Samurai.Graphics
 		public const uint SrcColor = 0x0300;
 		public const uint Zero = 0;
 
-		// Depth
-		public const uint DepthTest = 0x0B71;
+		// Buffer
+		public const uint ArrayBuffer = 0x8892;
+		public const uint DynamicCopy = 0x88EA;
+		public const uint DynamicDraw = 0x88E8;
+		public const uint DynamicRead = 0x88E9;
+		public const uint ElementArrayBuffer = 0x8893;
+		public const uint StaticCopy = 0x88E6;
+		public const uint StaticDraw = 0x88E4;
+		public const uint StaticRead = 0x88E5;
+		public const uint StreamCopy = 0x88E2;
+		public const uint StreamDraw = 0x88E0;
+		public const uint StreamRead = 0x88E1;
+
+		// Clear
+		public const uint ColorBufferBit = 0x00004000;
+		public const uint DepthBufferBit = 0x00000100;
+		//public const uint StencilBufferBit = 0x00000400;
+
+		// DepthFunc
+		public const uint Always = 0x0207;
+		public const uint Equal = 0x0202;
+		public const uint Gequal = 0x0206;
+		public const uint Greater = 0x0204;
+		public const uint Lequal = 0x0203;
+		public const uint Less = 0x0201;
+		public const uint Never = 0x0200;
+		public const uint Notequal = 0x0205;
+
+		// Enable
+		public const uint BlendCap = 0x0BE2;
+		public const uint DepthTestCap = 0x0B71;
+		public const uint CullFaceCap = 0x0B44;
 
 		// Faces
-		public const uint CullFace = 0x0B44;
+		public const uint Back = 0x0405;
 		public const uint Cw = 0x0900;
 		public const uint Ccw = 0x0901;
+		public const uint Front = 0x0404;
+		public const uint FrontAndBack = 0x0408;
 
 		// Error Codes
 		public const uint InvalidEnum = 0x0500;
@@ -74,6 +85,12 @@ namespace Samurai.Graphics
 		public const uint Lines = 0x0001;
 		public const uint Points = 0x0000;
 		public const uint Triangles = 0x0004;
+
+		// Shaders
+		public const uint CompileStatus = 0x8B81;
+		public const uint FragmentShader = 0x8B30;
+		public const uint InfoLogLength = 0x8B84;
+		public const uint VertexShader = 0x8B31;
 
 		// Textures
 		public const uint ClampToEdge = 0x812F;
@@ -141,6 +158,9 @@ namespace Samurai.Graphics
 		private delegate uint __CreateShader(uint shaderType);
 		private __CreateShader _CreateShader;
 
+		[DllImport(Library, EntryPoint = "glCullFace")]
+		private static extern void _CullFace(uint mode);
+
 		private delegate void __DeleteBuffers(int n, uint[] buffers);
 		private __DeleteBuffers _DeleteBuffers;
 				
@@ -155,6 +175,9 @@ namespace Samurai.Graphics
 
 		private delegate void __DeleteVertexArrays(int n, uint[] arrays);
 		private __DeleteVertexArrays _DeleteVertexArrays;
+
+		[DllImport(Library, EntryPoint = "glDepthFunc")]
+		private static extern void _DepthFunc(uint func);
 
 		[DllImport(Library, EntryPoint = "glDisable")]
 		private static extern void _Disable(uint cap);
@@ -392,6 +415,12 @@ namespace Samurai.Graphics
 			return shader;
 		}
 
+		public void CullFace(uint mode)
+		{
+			_CullFace(mode);
+			CheckErrors("CullFace");
+		}
+
 		public void DeleteBuffer(uint buffer)
 		{
 			UintArraySizeOne[0] = buffer;
@@ -441,6 +470,12 @@ namespace Samurai.Graphics
 		{
 			_DeleteVertexArrays(arrays.Length, arrays);
 			CheckErrors("DeleteVertexArrays");
+		}
+
+		public void DepthFunc(uint func)
+		{
+			_DepthFunc(func);
+			CheckErrors("DepthFunc");
 		}
 
 		public void Disable(uint cap)

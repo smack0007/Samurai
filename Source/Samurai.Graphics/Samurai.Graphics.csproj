@@ -79,10 +79,12 @@
     <Compile Include="BasicSpriteBatchShaderProgram.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="CullMode.cs" />
+    <Compile Include="DepthFunc.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DynamicIndexBuffer.cs" />
     <Compile Include="DynamicVertexBuffer.cs" />
     <Compile Include="FragmentShader.cs" />
+    <Compile Include="FrontFace.cs" />
     <Compile Include="GLContext.cs" />
     <Compile Include="GLHelper.cs" />
     <Compile Include="GraphicsContext.cs" />

@@ -30,9 +30,14 @@ namespace SamuraiDemo2D
 		{
 			this.Window.Title = "Samurai 2D Demo";
 
+			this.Graphics.DepthTestEnabled = true;
+			this.Graphics.FrontFace = FrontFace.Clockwise;
+			this.Graphics.CullMode = CullMode.None;
+			this.Graphics.DepthFunc = DepthFunc.LessThanOrEqual;
+
 			this.Graphics.BlendEnabled = true;
 			this.Graphics.SetBlendFunction(SourceBlendFactor.SourceAlpha, DestinationBlendFactor.OneMinusSourceAlpha);
-
+						
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
 
@@ -42,10 +47,10 @@ namespace SamuraiDemo2D
 
 			this.planeSpriteSheet = SpriteSheet.Build(this.planesTexture, 64, 64);
 
-			this.font = TextureFont.Build(this.Graphics, "Arial", 72, new TextureFontParams()
+			this.font = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
 				{
-					Color = Color4.Black,
-					BackgroundColor = Color4.White,
+					Color = Color4.White,
+					BackgroundColor = Color4.Transparent,
 					//ColorKey = Color4.Black
 				});
 
@@ -87,20 +92,33 @@ namespace SamuraiDemo2D
 
 			this.spriteBatch.Begin(this.shaderProgram);
 
+			string text = string.Format("FPS: {0}", fps);
+
+			Size textSize = this.font.MeasureString(text);
+			int halfWindowWidth = this.Window.Width / 2;
+			int halfWindowHeight = this.Window.Height / 2;
+			int halfTextWidth = textSize.Width / 2;
+			int halfTextHeight = textSize.Height / 2;
+
+			this.spriteBatch.DrawString(
+				this.font,
+				text,
+				new Rectangle(halfWindowWidth - halfTextWidth, halfWindowHeight - halfTextHeight, textSize.Width, textSize.Height),
+				tint: Color4.CornflowerBlue,
+				origin: new Vector2(halfTextWidth, halfTextHeight),
+				rotation: MathHelper.ToRadians(45.0f),
+				layerDepth: 0.5f);
+
 			foreach (Plane plane in this.planes)
 			{
 				this.spriteBatch.Draw(
 					this.planeSpriteSheet,
 					plane.StartFrame + plane.FrameOffset,
-					Color4.White,
 					plane.Position,
-					new Vector2(32, 32),
-					Vector2.One,
-					MathHelper.ToRadians(plane.Rotation)
+					origin: new Vector2(32, 32),
+					rotation: MathHelper.ToRadians(plane.Rotation)
 				);
 			}
-
-			this.spriteBatch.DrawString(this.font, string.Join("FPS: ", this.fps.ToString()), Color4.White, new Vector2(50, 50));
 
 			this.spriteBatch.End();
 

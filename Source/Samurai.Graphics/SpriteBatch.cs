@@ -49,10 +49,10 @@ namespace Samurai.Graphics
 			{
 				indices[i] = vertex;
 				indices[i + 1] = (ushort)(vertex + 1);
-				indices[i + 2] = (ushort)(vertex + 2);
-				indices[i + 3] = (ushort)(vertex + 2);
-				indices[i + 4] = (ushort)(vertex + 3);
-				indices[i + 5] = (ushort)(vertex + 1);
+				indices[i + 2] = (ushort)(vertex + 3);
+				indices[i + 3] = (ushort)(vertex + 1);
+				indices[i + 4] = (ushort)(vertex + 2);
+				indices[i + 5] = (ushort)(vertex + 3);
 			}
 
 			this.indexBuffer = new StaticIndexBuffer<ushort>(this.graphics, indices);
@@ -132,20 +132,21 @@ namespace Samurai.Graphics
 			Vector2 bottomRight,
 			Vector2 bottomLeft,
 			Rectangle source,
-			Color4 color)
+			Color4 color,
+			float layerDepth)
 		{
 			if (this.vertexCount == this.vertices.Length)
 				this.Flush();
 
-			this.vertices[this.vertexCount].Position = new Vector3(topLeft, 0);
-			this.vertices[this.vertexCount + 1].Position = new Vector3(topRight, 0);
-			this.vertices[this.vertexCount + 2].Position = new Vector3(bottomLeft, 0);
-			this.vertices[this.vertexCount + 3].Position = new Vector3(bottomRight, 0);
+			this.vertices[this.vertexCount].Position = new Vector3(topLeft, layerDepth);
+			this.vertices[this.vertexCount + 1].Position = new Vector3(topRight, layerDepth);
+			this.vertices[this.vertexCount + 2].Position = new Vector3(bottomRight, layerDepth);
+			this.vertices[this.vertexCount + 3].Position = new Vector3(bottomLeft, layerDepth);
 
 			this.vertices[this.vertexCount].UV = this.CalculateUV(source.Left, source.Top);
 			this.vertices[this.vertexCount + 1].UV = this.CalculateUV(source.Right, source.Top);
-			this.vertices[this.vertexCount + 2].UV = this.CalculateUV(source.Left, source.Bottom);
-			this.vertices[this.vertexCount + 3].UV = this.CalculateUV(source.Right, source.Bottom);
+			this.vertices[this.vertexCount + 2].UV = this.CalculateUV(source.Right, source.Bottom);
+			this.vertices[this.vertexCount + 3].UV = this.CalculateUV(source.Left, source.Bottom);
 
 			this.vertices[this.vertexCount].Color = color;
 			this.vertices[this.vertexCount + 1].Color = color;
@@ -155,56 +156,94 @@ namespace Samurai.Graphics
 			this.vertexCount += 4;
 		}
 
-		public void Draw(Texture2D texture, Color4 tint, Vector2 destination)
-		{
-			this.Draw(texture, tint, destination, new Rectangle(0, 0, texture.Width, texture.Height));
-		}
-
-		public void Draw(Texture2D texture, Color4 tint, Rectangle destination)
-		{
-			this.Draw(texture, tint, destination, new Rectangle(0, 0, texture.Width, texture.Height));
-		}
-
-		public void Draw(Texture2D texture, Color4 tint, Vector2 destination, Rectangle source)
-		{
-			this.DrawInternal(texture, tint, destination, source.Width, source.Height, source);
-		}
-
-		public void Draw(Texture2D texture, Color4 tint, Rectangle destination, Rectangle source)
-		{
-			this.DrawInternal(texture, tint, new Vector2(destination.X, destination.Y), destination.Width, destination.Height, source);
-		}
-
-		private void DrawInternal(Texture2D texture, Color4 tint, Vector2 destination, int width, int height, Rectangle source)
+		public void Draw(
+			Texture2D texture,
+			Vector2 destination,
+			Rectangle? source = null,
+			Color4? tint = null,
+			Vector2? origin = null,
+			Vector2? scale = null,
+			float rotation = 0.0f,
+			float layerDepth = 0.0f)
 		{
 			if (texture == null)
 				throw new ArgumentNullException("texture");
-
-			if (texture != this.texture)
-				this.Flush();
-
-			this.texture = texture;
-
-			this.AddQuad(
-				new Vector2(destination.X, destination.Y),
-				new Vector2(destination.X + width, destination.Y),
-				new Vector2(destination.X + width, destination.Y + height),
-				new Vector2(destination.X, destination.Y + height),
+		
+			this.DrawInternal(
+				texture,
+				destination,
+				source != null ? source.Value.Width : texture.Width,
+				source != null ? source.Value.Height : texture.Height,
 				source,
-				tint);
+				tint,
+				origin,
+				scale,
+				rotation,
+				layerDepth);
 		}
-
-		public void Draw(Texture2D texture, Color4 tint, Vector2 destination, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
+			
+		public void Draw(
+			Texture2D texture,
+			Rectangle destination,
+			Rectangle? source = null,
+			Color4? tint = null,
+			Vector2? origin = null,
+			Vector2? scale = null,
+			float rotation = 0.0f,
+			float layerDepth = 0.0f)
 		{
-			this.DrawInternal(texture, tint, destination, source.Width, source.Height, source, origin, scale, rotation);
+			this.DrawInternal(
+				texture,
+				new Vector2(destination.X, destination.Y),
+				destination.Width,
+				destination.Height,
+				source,
+				tint,
+				origin,
+				scale,
+				rotation,
+				layerDepth);
 		}
 
-		public void Draw(Texture2D texture, Color4 tint, Rectangle destination, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
+		public void Draw(
+			SpriteSheet spriteSheet,
+			int frame,
+			Vector2 position,
+			Color4? tint = null,
+			Vector2? origin = null,
+			Vector2? scale = null,
+			float rotation = 0.0f,
+			float layerDepth = 0.0f)
 		{
-			this.DrawInternal(texture, tint, new Vector2(destination.X, destination.Y), destination.Width, destination.Height, source, origin, scale, rotation);
+			if (spriteSheet == null)
+				throw new ArgumentNullException("spriteSheet");
+
+			Rectangle frameRect = spriteSheet[frame];
+			
+			this.DrawInternal(
+				spriteSheet.Texture,
+				position,
+				frameRect.Width,
+				frameRect.Height,
+				frameRect,
+				tint,
+				origin,
+				scale,
+				rotation,
+				layerDepth);
 		}
 
-		private void DrawInternal(Texture2D texture, Color4 tint, Vector2 destination, int width, int height, Rectangle source, Vector2 origin, Vector2 scale, float rotation)
+		private void DrawInternal(
+			Texture2D texture,
+			Vector2 destination,
+			int width,
+			int height,
+			Rectangle? source,
+			Color4? tint,
+			Vector2? origin,
+			Vector2? scale,
+			float rotation,
+			float layerDepth)
 		{
 			if (texture == null)
 				throw new ArgumentNullException("texture");
@@ -213,18 +252,35 @@ namespace Samurai.Graphics
 				this.Flush();
 
 			this.texture = texture;
+
+			if (source == null)
+				source = new Rectangle(0, 0, texture.Width, texture.Height);
+
+			if (tint == null)
+				tint = Color4.White;
+						
+			if (origin == null)
+				origin = Vector2.Zero;
+
+			if (scale == null)
+				scale = Vector2.One;
+
+			Vector2 topLeft = new Vector2(-origin.Value.X, -origin.Value.Y);
+			Vector2 topRight = new Vector2(width - origin.Value.X, -origin.Value.Y);
+			Vector2 bottomRight = new Vector2(width - origin.Value.X, height - origin.Value.Y);
+			Vector2 bottomLeft = new Vector2(-origin.Value.X, height - origin.Value.Y);
 
 			Matrix4 rotationMatrix;
 			Matrix4.CreateRotationZ(rotation, out rotationMatrix);
 
 			Matrix4 scaleMatrix;
-			Matrix4.CreateScale(ref scale, out scaleMatrix);
+			Matrix4.CreateScale(scale.Value.X, scale.Value.Y, 1.0f, out scaleMatrix);
 
 			Matrix4 translationMatrix;
 			Matrix4.CreateTranslation(destination.X, destination.Y, out translationMatrix);
 
 			Matrix4 identity = Matrix4.Identity;
-			
+
 			Matrix4 transform1;
 			Matrix4.Multiply(ref identity, ref scaleMatrix, out transform1);
 
@@ -234,62 +290,30 @@ namespace Samurai.Graphics
 			Matrix4 transform3;
 			Matrix4.Multiply(ref transform2, ref translationMatrix, out transform3);
 
-			Vector2 topLeft = new Vector2(-origin.X, -origin.Y).Transform(ref transform3);
-			Vector2 topRight = new Vector2(width - origin.X, -origin.Y).Transform(ref transform3);
-			Vector2 bottomRight = new Vector2(width - origin.X, height - origin.Y).Transform(ref transform3);
-			Vector2 bottomLeft = new Vector2(-origin.X, height - origin.Y).Transform(ref transform3);
+			topLeft = topLeft.Transform(ref transform3);
+			topRight = topRight.Transform(ref transform3);
+			bottomRight = bottomRight.Transform(ref transform3);
+			bottomLeft = bottomLeft.Transform(ref transform3);
 
 			this.AddQuad(
 				topLeft,
 				topRight,
 				bottomRight,
 				bottomLeft,
-				source,
-				tint);
+				source.Value,
+				tint.Value,
+				layerDepth);
 		}
-
-		public void Draw(SpriteSheet spriteSheet, int frame, Color4 tint, Vector2 position)
-		{
-			if (spriteSheet == null)
-				throw new ArgumentNullException("spriteSheet");
-
-			Rectangle frameRect = spriteSheet[frame];
-			this.DrawInternal(spriteSheet.Texture, tint, position, frameRect.Width, frameRect.Height, frameRect);
-		}
-
-		public void Draw(SpriteSheet spriteSheet, int frame, Color4 tint, Vector2 position, Vector2 origin, Vector2 scale, float rotation)
-		{
-			if (spriteSheet == null)
-				throw new ArgumentNullException("spriteSheet");
-
-			Rectangle frameRect = spriteSheet[frame];
-			this.DrawInternal(spriteSheet.Texture, tint, position, frameRect.Width, frameRect.Height, frameRect, origin, scale, rotation);
-		}
-
-		public void DrawString(TextureFont font, string text, Color4 tint, Vector2 position)
-		{
-			this.DrawString(font, text, tint, position, Vector2.One);
-		}
-
-		public void DrawString(TextureFont font, string text, Color4 tint, Vector2 position, Vector2 scale)
-		{
-			if (font == null)
-				throw new ArgumentNullException("font");
-
-			if (text == null)
-				throw new ArgumentNullException("text");
-
-			Size textSize = font.MeasureString(text);
-
-			this.DrawString(font, text, new Rectangle((int)position.X, (int)position.Y, textSize.Width, textSize.Height), scale, tint);
-		}
-
-		public void DrawString(TextureFont font, string text, Rectangle destination, Color4 color)
-		{
-			this.DrawString(font, text, destination, Vector2.One, color);
-		}
-
-		public void DrawString(TextureFont font, string text, Rectangle destination, Vector2 scale, Color4 color)
+		
+		public Vector2 DrawString(
+			TextureFont font,
+			string text,
+			Vector2 position,
+			Color4? tint = null,
+			Vector2? origin = null,
+			Vector2? scale = null,
+			float rotation = 0.0f,
+			float layerDepth = 0.0f)
 		{
 			if (font == null)
 				throw new ArgumentNullException("font");
@@ -298,12 +322,45 @@ namespace Samurai.Graphics
 				throw new ArgumentNullException("text");
 
 			if (text.Length == 0)
-				return;
+				return position;
 
-			float heightOfSingleLine = font.LineHeight * scale.Y;
+			Size textSize = font.MeasureString(text);
+
+			return this.DrawString(font, text, new Rectangle((int)position.X, (int)position.Y, textSize.Width, textSize.Height), tint, origin, scale, rotation, layerDepth);
+		}
+				
+		public Vector2 DrawString(
+			TextureFont font,
+			string text,
+			Rectangle destination,
+			Color4? tint = null,
+			Vector2? origin = null,
+			Vector2? scale = null,
+			float rotation = 0.0f,
+			float layerDepth = 0.0f)
+		{
+			if (font == null)
+				throw new ArgumentNullException("font");
+
+			if (text == null)
+				throw new ArgumentNullException("text");
+
+			if (text.Length == 0)
+				return new Vector2(destination.X, destination.Y);
+
+			if (tint == null)
+				tint = Color4.White;
+
+			if (origin == null)
+				origin = Vector2.Zero;
+
+			if (scale == null)
+				scale = Vector2.One;
+
+			float heightOfSingleLine = font.LineHeight * scale.Value.Y;
 
 			if (heightOfSingleLine > destination.Height) // We can't draw anything
-				return;
+				return new Vector2(destination.X, destination.Y);
 
 			Vector2 cursor = new Vector2(destination.X, destination.Y);
 
@@ -315,27 +372,41 @@ namespace Samurai.Graphics
 
 				float widthOfChar = 0;
 
-				if (text[i] == '\n' || cursor.X + (widthOfChar = font[text[i]].Width * scale.X) > destination.Right)
+				if (text[i] == '\n' || cursor.X + (widthOfChar = font[text[i]].Width * scale.Value.X) > destination.Right)
 				{
 					cursor.X = destination.X;
 					cursor.Y += heightOfSingleLine + font.LineSpacing;
 
 					// If the next line extends past the destination, quit.
 					if (cursor.Y + heightOfSingleLine > destination.Bottom)
-						return;
+						return cursor;
 
 					// We can't render a new line.
 					if (text[i] == '\n')
 						continue;
 				}
 
-				Rectangle letterSource = font[text[i]];
-				Rectangle letterDestination = new Rectangle((int)cursor.X, (int)cursor.Y, (int)widthOfChar, (int)heightOfSingleLine);
+				Vector2 characterOrigin = origin.Value;
+				characterOrigin.X -= cursor.X - destination.X;
+				characterOrigin.Y -= cursor.Y - destination.Y;
 
-				this.Draw(font.Texture, color, letterDestination, letterSource);
+				Rectangle letterSource = font[text[i]];
+				Rectangle letterDestination = new Rectangle((int)cursor.X + (int)characterOrigin.X, (int)cursor.Y + (int)characterOrigin.Y, (int)widthOfChar, (int)heightOfSingleLine);
+								
+				this.Draw(
+					font.Texture,
+					letterDestination,
+					letterSource,
+					tint,
+					characterOrigin,
+					scale,
+					rotation,
+					layerDepth);
 
 				cursor.X += widthOfChar + font.CharacterSpacing;
 			}
+
+			return cursor;
 		}
 
 		private void Flush()
