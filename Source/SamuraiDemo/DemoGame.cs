@@ -5,6 +5,7 @@ using Samurai.Input;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Samurai.UserInterface;
 
 namespace SamuraiDemo
 {
@@ -86,20 +87,22 @@ namespace SamuraiDemo
 		Texture2D texture1;
 		GamePad gamePad1;
 
+		ControlRenderer controlRenderer;
+		Label label;
+		
 		public DemoGame()
 		{
 			this.Window.Title = "Samurai Demo";
 
-			this.Graphics.DepthTestEnabled = true;
 			this.Graphics.FrontFace = FrontFace.Clockwise;
-			this.Graphics.CullMode = CullMode.Back;
 
+			this.Graphics.BlendEnabled = true;
+			this.Graphics.SetBlendFunction(SourceBlendFactor.SourceAlpha, DestinationBlendFactor.OneMinusSourceAlpha);
+						
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,
 				VertexShader.Compile(this.Graphics, File.ReadAllText("Shader.vert")),
 				FragmentShader.Compile(this.Graphics, File.ReadAllText("Shader.frag")));
-
-			this.Graphics.SetShaderProgram(this.shaderProgram);
 
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, this.vertexData);
 			this.indexBuffer = new StaticIndexBuffer<byte>(this.Graphics, this.indexData);
@@ -117,6 +120,19 @@ namespace SamuraiDemo
 			});
 
 			this.gamePad1 = new GamePad(GamePadIndex.One);
+
+			this.controlRenderer = new ControlRenderer(this.Graphics);
+			this.controlRenderer.DefaultFont = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
+				{
+					BackgroundColor = Color4.Transparent
+				});
+
+			this.label = new Label()
+			{
+				Text = "Hello World!",
+				Position = new Vector2(100, 100),
+				Font = TextureFont.Build(this.Graphics, "Segoe UI", 24, new TextureFontParams() { BackgroundColor = Color4.Transparent })
+			};
 		}
 
 		protected override void Update(TimeSpan elapsed)
@@ -133,6 +149,9 @@ namespace SamuraiDemo
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
+			this.Graphics.DepthTestEnabled = true;
+			this.Graphics.CullMode = CullMode.Back;
+
 			Vector3 eye = new Vector3(-this.translationX, 0, this.translationZ);
 			Vector3 target = new Vector3(-this.translationX + (float)Math.Sin(this.rotationZ), 0, this.translationZ + (float)-Math.Cos(this.rotationZ));
 			Vector3 up = Vector3.UnitY;
@@ -140,11 +159,19 @@ namespace SamuraiDemo
 			Matrix4 projection =
 				Matrix4.LookAt(ref eye, ref target, ref up) * 
 				Matrix4.PerspectiveFOV(120.0f, (float)this.Window.Width / (float)this.Window.Height, 0.1f, 100.0f);
-					
+
+			this.Graphics.SetShaderProgram(this.shaderProgram);
 			this.shaderProgram.SetProjection("projection", ref projection);
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
+
+			this.Graphics.DepthTestEnabled = false;
+			this.Graphics.CullMode = CullMode.None;
+
+			this.controlRenderer.Begin();
+			this.label.Draw(this.controlRenderer);
+			this.controlRenderer.End();
 
 			this.Graphics.SwapBuffers();
 		}

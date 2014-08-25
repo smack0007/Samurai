@@ -110,6 +110,10 @@
       <Project>{dde11599-e3f8-4e6b-9d33-1df37045f6c9}</Project>
       <Name>Samurai.Input</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Samurai.UserInterface\Samurai.UserInterface.csproj">
+      <Project>{9375894b-765b-44ff-8801-ddffeca11aa2}</Project>
+      <Name>Samurai.UserInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Samurai\Samurai.csproj">
       <Project>{0d380a23-56eb-4a8f-a32b-c081592ed576}</Project>
       <Name>Samurai</Name>
