@@ -10,12 +10,11 @@ namespace Samurai.Graphics
 		Rectangle viewport;
 
 		BlendState blendState;
+		RasterizerState rasterizerState;
 		
 		bool depthTestEnabled;
 		DepthFunc depthFunc;
-		FrontFace frontFace;
-		CullMode cullMode;
-		
+				
 		bool[] textures;
 		uint nextTexture;
 
@@ -60,6 +59,23 @@ namespace Samurai.Graphics
 				}
 			}
 		}
+
+		public RasterizerState RasterizerState
+		{
+			get { return this.rasterizerState; }
+
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("RasterizerState");
+
+				if (value != this.rasterizerState)
+				{
+					this.rasterizerState = value;
+					this.ApplyRasterizerState();
+				}
+			}
+		}
 		
 		public bool DepthTestEnabled
 		{
@@ -96,52 +112,7 @@ namespace Samurai.Graphics
 				}
 			}
 		}
-
-		public FrontFace FrontFace
-		{
-			get { return this.frontFace; }
-
-			set
-			{
-				if (value != this.frontFace)
-				{
-					this.frontFace = value;
-					GL.FrontFace((uint)this.frontFace);
-				}
-			}
-		}
-
-		public CullMode CullMode
-		{
-			get { return this.cullMode; }
-
-			set
-			{
-				if (value != this.cullMode)
-				{
-					this.cullMode = value;
-
-					if (this.cullMode == CullMode.None)
-					{
-						this.GL.Disable(GLContext.CullFaceCap);
-					}
-					else
-					{
-						this.GL.Enable(GLContext.CullFaceCap);
-
-						if (this.cullMode == CullMode.Front)
-						{
-							this.GL.FrontFace((uint)GLContext.Cw);
-						}
-						else
-						{
-							this.GL.FrontFace((uint)GLContext.Ccw);
-						}
-					}
-				}
-			}
-		}
-				
+								
 		public GraphicsContext(IntPtr window)
 		{
 			this.GL = new GLContext(window);
@@ -151,6 +122,9 @@ namespace Samurai.Graphics
 			this.blendState = BlendState.Disabled;
 			this.ApplyBlendState();
 
+			this.rasterizerState = RasterizerState.Default;
+			this.ApplyRasterizerState();
+
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
 
@@ -159,12 +133,6 @@ namespace Samurai.Graphics
 
 			this.depthFunc = DepthFunc.LessThanOrEqual;
 			this.GL.DepthFunc(GLContext.Lequal);
-
-			this.frontFace = FrontFace.Clockwise;
-			this.GL.FrontFace(GLContext.Cw);
-
-			this.cullMode = CullMode.None;
-			this.GL.Disable(GLContext.CullFaceCap);
 						
 			this.graphicsObjects = new List<GraphicsObject>();
 		}
@@ -232,18 +200,39 @@ namespace Samurai.Graphics
 			this.textures[index] = false;
 		}
 		
-		private void ApplyBlendState()
+		private void ToggleCap(uint cap, bool isEnabled)
 		{
-			if (this.blendState.Enabled)
+			if (isEnabled)
 			{
-				this.GL.Enable(GLContext.BlendCap);
+				this.GL.Enable(cap);
 			}
 			else
 			{
-				this.GL.Disable(GLContext.BlendCap);
+				this.GL.Disable(cap);
 			}
+		}
 
-			this.GL.BlendFunc((uint)this.blendState.SourceBlendFactor, (uint)this.blendState.DestinationBlendFactor);
+		private void ApplyBlendState()
+		{
+			this.ToggleCap(GLContext.BlendCap, this.blendState.Enabled);
+
+			if (this.blendState.Enabled)
+				this.GL.BlendFunc((uint)this.blendState.SourceBlendFactor, (uint)this.blendState.DestinationBlendFactor);
+		}
+
+		private void ApplyRasterizerState()
+		{
+			this.GL.FrontFace((uint)this.rasterizerState.FrontFace);
+
+			if (this.rasterizerState.CullMode == CullMode.None)
+			{
+				this.ToggleCap(GLContext.CullFaceCap, false);
+			}
+			else
+			{
+				this.ToggleCap(GLContext.CullFaceCap, true);
+				this.GL.CullFace((uint)this.rasterizerState.CullMode);
+			}
 		}
 
 		public void Clear(Color4 color)

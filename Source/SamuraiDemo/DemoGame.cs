@@ -89,15 +89,17 @@ namespace SamuraiDemo
 
 		ControlRenderer controlRenderer;
 		Label label;
-		
+
+		RasterizerState rasterizerState = new RasterizerState(
+			frontFace: FrontFace.Clockwise,
+			cullMode: CullMode.Back);
+
 		public DemoGame()
 		{
 			this.Window.Title = "Samurai Demo";
-
-			this.Graphics.FrontFace = FrontFace.Clockwise;
-
-			this.Graphics.BlendState = BlendState.AlphaBlend;
 						
+			this.Graphics.BlendState = BlendState.AlphaBlend;
+			
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,
 				VertexShader.Compile(this.Graphics, File.ReadAllText("Shader.vert")),
@@ -149,7 +151,7 @@ namespace SamuraiDemo
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
 			this.Graphics.DepthTestEnabled = true;
-			this.Graphics.CullMode = CullMode.Back;
+			this.Graphics.RasterizerState = this.rasterizerState;
 
 			Vector3 eye = new Vector3(-this.translationX, 0, this.translationZ);
 			Vector3 target = new Vector3(-this.translationX + (float)Math.Sin(this.rotationZ), 0, this.translationZ + (float)-Math.Cos(this.rotationZ));
@@ -160,13 +162,13 @@ namespace SamuraiDemo
 				Matrix4.PerspectiveFOV(120.0f, (float)this.Window.Width / (float)this.Window.Height, 0.1f, 100.0f);
 
 			this.Graphics.SetShaderProgram(this.shaderProgram);
-			this.shaderProgram.SetProjection("projection", ref projection);
+			this.shaderProgram.SetValue("projection", ref projection);
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 
 			this.Graphics.DepthTestEnabled = false;
-			this.Graphics.CullMode = CullMode.None;
+			this.Graphics.RasterizerState = RasterizerState.Default;
 
 			this.controlRenderer.Begin();
 			this.label.Draw(this.controlRenderer);

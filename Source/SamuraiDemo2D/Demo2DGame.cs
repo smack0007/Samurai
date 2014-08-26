@@ -31,11 +31,10 @@ namespace SamuraiDemo2D
 			this.Window.Title = "Samurai 2D Demo";
 
 			this.Graphics.DepthTestEnabled = true;
-			this.Graphics.FrontFace = FrontFace.Clockwise;
-			this.Graphics.CullMode = CullMode.None;
 			this.Graphics.DepthFunc = DepthFunc.LessThanOrEqual;
 
 			this.Graphics.BlendState = BlendState.AlphaBlend;
+			this.Graphics.RasterizerState = RasterizerState.Default;
 						
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
