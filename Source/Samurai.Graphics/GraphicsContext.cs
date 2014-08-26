@@ -10,11 +10,9 @@ namespace Samurai.Graphics
 		Rectangle viewport;
 
 		BlendState blendState;
+		DepthBufferState depthState;
 		RasterizerState rasterizerState;
-		
-		bool depthTestEnabled;
-		DepthFunc depthFunc;
-				
+								
 		bool[] textures;
 		uint nextTexture;
 
@@ -60,6 +58,23 @@ namespace Samurai.Graphics
 			}
 		}
 
+		public DepthBufferState DepthBufferState
+		{
+			get { return this.depthState; }
+
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("DepthState");
+
+				if (value != this.depthState)
+				{
+					this.depthState = value;
+					this.ApplyDepthBufferState();
+				}
+			}
+		}
+
 		public RasterizerState RasterizerState
 		{
 			get { return this.rasterizerState; }
@@ -76,42 +91,6 @@ namespace Samurai.Graphics
 				}
 			}
 		}
-		
-		public bool DepthTestEnabled
-		{
-			get { return this.depthTestEnabled; }
-
-			set
-			{
-				if (value != this.depthTestEnabled)
-				{
-					this.depthTestEnabled = value;
-
-					if (this.depthTestEnabled)
-					{
-						this.GL.Enable(GLContext.DepthTestCap);
-					}
-					else
-					{
-						this.GL.Disable(GLContext.DepthTestCap);
-					}
-				}
-			}
-		}
-
-		public DepthFunc DepthFunc
-		{
-			get { return this.depthFunc; }
-
-			set
-			{
-				if (value != this.depthFunc)
-				{
-					this.depthFunc = value;
-					this.GL.DepthFunc((uint)this.depthFunc);
-				}
-			}
-		}
 								
 		public GraphicsContext(IntPtr window)
 		{
@@ -122,18 +101,15 @@ namespace Samurai.Graphics
 			this.blendState = BlendState.Disabled;
 			this.ApplyBlendState();
 
+			this.depthState = DepthBufferState.Disabled;
+			this.ApplyDepthBufferState();
+
 			this.rasterizerState = RasterizerState.Default;
 			this.ApplyRasterizerState();
-
+						
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
-
-			this.depthTestEnabled = false;
-			this.GL.Disable(GLContext.DepthTestCap);
-
-			this.depthFunc = DepthFunc.LessThanOrEqual;
-			this.GL.DepthFunc(GLContext.Lequal);
-						
+												
 			this.graphicsObjects = new List<GraphicsObject>();
 		}
 
@@ -217,7 +193,15 @@ namespace Samurai.Graphics
 			this.ToggleCap(GLContext.BlendCap, this.blendState.Enabled);
 
 			if (this.blendState.Enabled)
-				this.GL.BlendFunc((uint)this.blendState.SourceBlendFactor, (uint)this.blendState.DestinationBlendFactor);
+				this.GL.BlendFunc((uint)this.blendState.SourceFactor, (uint)this.blendState.DestinationFactor);
+		}
+				
+		private void ApplyDepthBufferState()
+		{
+			this.ToggleCap(GLContext.DepthTestCap, this.depthState.Enabled);
+
+			if (this.depthState.Enabled)
+				this.GL.DepthFunc((uint)this.depthState.DepthFunc);
 		}
 
 		private void ApplyRasterizerState()

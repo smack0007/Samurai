@@ -30,8 +30,7 @@ namespace SamuraiDemo2D
 		{
 			this.Window.Title = "Samurai 2D Demo";
 
-			this.Graphics.DepthTestEnabled = true;
-			this.Graphics.DepthFunc = DepthFunc.LessThanOrEqual;
+			this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
 
 			this.Graphics.BlendState = BlendState.AlphaBlend;
 			this.Graphics.RasterizerState = RasterizerState.Default;

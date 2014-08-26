@@ -81,6 +81,7 @@
     <Compile Include="BlendState.cs" />
     <Compile Include="CullMode.cs" />
     <Compile Include="DepthFunc.cs" />
+    <Compile Include="DepthBufferState.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DynamicIndexBuffer.cs" />
     <Compile Include="DynamicVertexBuffer.cs" />

@@ -6,14 +6,14 @@ namespace Samurai.Graphics
 	{
 		public static readonly BlendState Disabled = new BlendState(
 			enabled: false,
-			sourceBlendFactor: SourceBlendFactor.One,
-			destinationBlendFactor: DestinationBlendFactor.Zero
+			sourceFactor: SourceBlendFactor.One,
+			destinationFactor: DestinationBlendFactor.Zero
 		);
 
 		public static readonly BlendState AlphaBlend = new BlendState(
 			enabled: true,
-			sourceBlendFactor: SourceBlendFactor.SourceAlpha,
-			destinationBlendFactor: DestinationBlendFactor.OneMinusSourceAlpha
+			sourceFactor: SourceBlendFactor.SourceAlpha,
+			destinationFactor: DestinationBlendFactor.OneMinusSourceAlpha
 		);
 
 		public bool Enabled
@@ -22,13 +22,13 @@ namespace Samurai.Graphics
 			private set;
 		}
 
-		public SourceBlendFactor SourceBlendFactor
+		public SourceBlendFactor SourceFactor
 		{
 			get;
 			private set;
 		}
 
-		public DestinationBlendFactor DestinationBlendFactor
+		public DestinationBlendFactor DestinationFactor
 		{
 			get;
 			private set;
@@ -36,12 +36,12 @@ namespace Samurai.Graphics
 
 		public BlendState(
 			bool enabled = false,
-			SourceBlendFactor sourceBlendFactor = SourceBlendFactor.One,
-			DestinationBlendFactor destinationBlendFactor = DestinationBlendFactor.Zero)
+			SourceBlendFactor sourceFactor = SourceBlendFactor.One,
+			DestinationBlendFactor destinationFactor = DestinationBlendFactor.Zero)
 		{
 			this.Enabled = enabled;
-			this.SourceBlendFactor = sourceBlendFactor;
-			this.DestinationBlendFactor = destinationBlendFactor;
+			this.SourceFactor = sourceFactor;
+			this.DestinationFactor = destinationFactor;
 		}
 	}
 }

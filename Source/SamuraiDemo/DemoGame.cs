@@ -124,9 +124,9 @@ namespace SamuraiDemo
 
 			this.controlRenderer = new ControlRenderer(this.Graphics);
 			this.controlRenderer.DefaultFont = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
-				{
-					BackgroundColor = Color4.Transparent
-				});
+			{
+				BackgroundColor = Color4.Transparent
+			});
 
 			this.label = new Label()
 			{
@@ -150,7 +150,7 @@ namespace SamuraiDemo
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
-			this.Graphics.DepthTestEnabled = true;
+			this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
 			this.Graphics.RasterizerState = this.rasterizerState;
 
 			Vector3 eye = new Vector3(-this.translationX, 0, this.translationZ);
@@ -167,7 +167,7 @@ namespace SamuraiDemo
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 
-			this.Graphics.DepthTestEnabled = false;
+			this.Graphics.DepthBufferState = DepthBufferState.Disabled;
 			this.Graphics.RasterizerState = RasterizerState.Default;
 
 			this.controlRenderer.Begin();
