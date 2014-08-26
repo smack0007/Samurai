@@ -96,8 +96,7 @@ namespace SamuraiDemo
 
 			this.Graphics.FrontFace = FrontFace.Clockwise;
 
-			this.Graphics.BlendEnabled = true;
-			this.Graphics.SetBlendFunction(SourceBlendFactor.SourceAlpha, DestinationBlendFactor.OneMinusSourceAlpha);
+			this.Graphics.BlendState = BlendState.AlphaBlend;
 						
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,

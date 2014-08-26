@@ -35,8 +35,7 @@ namespace SamuraiDemo2D
 			this.Graphics.CullMode = CullMode.None;
 			this.Graphics.DepthFunc = DepthFunc.LessThanOrEqual;
 
-			this.Graphics.BlendEnabled = true;
-			this.Graphics.SetBlendFunction(SourceBlendFactor.SourceAlpha, DestinationBlendFactor.OneMinusSourceAlpha);
+			this.Graphics.BlendState = BlendState.AlphaBlend;
 						
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);

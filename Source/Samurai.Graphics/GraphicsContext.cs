@@ -9,10 +9,8 @@ namespace Samurai.Graphics
 		Color4 clearColor;
 		Rectangle viewport;
 
-		bool blendEnabled;
-		SourceBlendFactor sourceBlendFactor = SourceBlendFactor.One;
-		DestinationBlendFactor destinationBlendFactor = DestinationBlendFactor.Zero;
-
+		BlendState blendState;
+		
 		bool depthTestEnabled;
 		DepthFunc depthFunc;
 		FrontFace frontFace;
@@ -46,56 +44,23 @@ namespace Samurai.Graphics
 			}
 		}
 
-		public bool BlendEnabled
+		public BlendState BlendState
 		{
-			get { return this.blendEnabled; }
+			get { return this.blendState; }
 
 			set
 			{
-				if (value != this.blendEnabled)
-				{
-					this.blendEnabled = value;
+				if (value == null)
+					throw new ArgumentNullException("BlendState");
 
-					if (value)
-					{
-						this.GL.Enable(GLContext.BlendCap);
-					}
-					else
-					{
-						this.GL.Disable(GLContext.BlendCap);
-					}
+				if (value != this.blendState)
+				{
+					this.blendState = value;
+					this.ApplyBlendState();					
 				}
 			}
 		}
-
-		public SourceBlendFactor SourceBlendFactor
-		{
-			get { return this.sourceBlendFactor; }
-
-			set
-			{
-				if (value != this.sourceBlendFactor)
-				{
-					this.sourceBlendFactor = value;
-					this.GL.BlendFunc((uint)this.sourceBlendFactor, (uint)this.destinationBlendFactor);
-				}
-			}
-		}
-
-		public DestinationBlendFactor DestinationBlendFactor
-		{
-			get { return this.destinationBlendFactor; }
-
-			set
-			{
-				if (value != this.destinationBlendFactor)
-				{
-					this.destinationBlendFactor = value;
-					this.GL.BlendFunc((uint)this.sourceBlendFactor, (uint)this.destinationBlendFactor);
-				}
-			}
-		}
-
+		
 		public bool DepthTestEnabled
 		{
 			get { return this.depthTestEnabled; }
@@ -183,6 +148,9 @@ namespace Samurai.Graphics
 
 			this.textures = new bool[32];
 
+			this.blendState = BlendState.Disabled;
+			this.ApplyBlendState();
+
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
 
@@ -264,6 +232,20 @@ namespace Samurai.Graphics
 			this.textures[index] = false;
 		}
 		
+		private void ApplyBlendState()
+		{
+			if (this.blendState.Enabled)
+			{
+				this.GL.Enable(GLContext.BlendCap);
+			}
+			else
+			{
+				this.GL.Disable(GLContext.BlendCap);
+			}
+
+			this.GL.BlendFunc((uint)this.blendState.SourceBlendFactor, (uint)this.blendState.DestinationBlendFactor);
+		}
+
 		public void Clear(Color4 color)
 		{
 			if (!color.Equals(this.clearColor))
@@ -279,17 +261,7 @@ namespace Samurai.Graphics
 		{
 			this.GL.SwapBuffers();
 		}
-
-		public void SetBlendFunction(SourceBlendFactor source, DestinationBlendFactor destination)
-		{
-			if (source != this.sourceBlendFactor || destination != this.destinationBlendFactor)
-			{
-				this.sourceBlendFactor = source;
-				this.destinationBlendFactor = destination;
-				this.GL.BlendFunc((uint)this.sourceBlendFactor, (uint)this.destinationBlendFactor);
-			}
-		}
-
+				
 		public void SetShaderProgram(ShaderProgram shader)
 		{
 			if (shader == null)

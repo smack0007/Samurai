@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="BasicSpriteBatchShaderProgram.cs" />
     <Compile Include="BitmapHelper.cs" />
+    <Compile Include="BlendState.cs" />
     <Compile Include="CullMode.cs" />
     <Compile Include="DepthFunc.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
