@@ -17,7 +17,7 @@ namespace Samurai.UserInterface
 			ControlProperty<TextureFont>.Create();
 
 		public static readonly ControlProperty<Vector2> PositionProperty =
-			ControlProperty<Vector2>.Create(computeFunc: ControlProperty<Vector2>.IgnoreParentComputeFunc);
+			ControlProperty<Vector2>.Create();
 
 		public static readonly ControlProperty<Size> SizeProperty =
 			ControlProperty<Size>.Create();

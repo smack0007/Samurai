@@ -32,6 +32,10 @@ namespace Samurai.Graphics
 		bool drawInProgress;
 
 		Matrix4 projection;
+
+		BlendState oldBlendState;
+		DepthBufferState oldDepthBufferState;
+		RasterizerState oldRasterizerState;
 										
 		public SpriteBatch(GraphicsContext graphics)
 		{
@@ -101,6 +105,16 @@ namespace Samurai.Graphics
 				throw new InvalidOperationException("Draw already in progress.");
 
 			this.shader = shader;
+
+			this.oldBlendState = this.graphics.BlendState;
+			this.graphics.BlendState = BlendState.AlphaBlend;
+
+			this.oldDepthBufferState = this.graphics.DepthBufferState;
+			this.graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
+
+			this.oldRasterizerState = this.graphics.RasterizerState;
+			this.graphics.RasterizerState = RasterizerState.Default;
+
 			this.drawInProgress = true;
 		}
 
@@ -109,6 +123,15 @@ namespace Samurai.Graphics
 			this.EnsureDrawInProgress();
 
 			this.Flush();
+
+			this.graphics.BlendState = this.oldBlendState;
+			this.oldBlendState = null;
+
+			this.graphics.DepthBufferState = this.oldDepthBufferState;
+			this.oldDepthBufferState = null;
+
+			this.graphics.RasterizerState = this.oldRasterizerState;
+			this.oldRasterizerState = null;
 
 			this.shader = null;
 			this.drawInProgress = false;

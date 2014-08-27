@@ -39,6 +39,12 @@ namespace Samurai.Graphics
 		public const uint StreamDraw = 0x88E0;
 		public const uint StreamRead = 0x88E1;
 
+		// Caps
+		public const uint BlendCap = 0x0BE2;
+		public const uint CullFaceCap = 0x0B44;
+		public const uint DepthTestCap = 0x0B71;
+		public const uint ScissorTestCap = 0x0C11;
+
 		// Clear
 		public const uint ColorBufferBit = 0x00004000;
 		public const uint DepthBufferBit = 0x00000100;
@@ -53,11 +59,6 @@ namespace Samurai.Graphics
 		public const uint Less = 0x0201;
 		public const uint Never = 0x0200;
 		public const uint Notequal = 0x0205;
-
-		// Enable
-		public const uint BlendCap = 0x0BE2;
-		public const uint DepthTestCap = 0x0B71;
-		public const uint CullFaceCap = 0x0B44;
 
 		// Faces
 		public const uint Back = 0x0405;
@@ -223,6 +224,9 @@ namespace Samurai.Graphics
 
 		private delegate void __LinkProgram(uint program);
 		private __LinkProgram _LinkProgram;
+
+		[DllImport(Library, EntryPoint = "glScissor")]
+		private static extern void _Scissor(int x, int y, int width, int height);
 
 		private delegate void __ShaderSource(uint shader, int count, string[] @string, ref int length);
 		private __ShaderSource _ShaderSource;
@@ -593,6 +597,12 @@ namespace Samurai.Graphics
 		{
 			_LinkProgram(program);
 			CheckErrors("LinkProgram");
+		}
+
+		public void Scissor(int x, int y, int width, int height)
+		{
+			_Scissor(x, y, width, height);
+			CheckErrors("Scissor");
 		}
 
 		public void ShaderSource(uint shader, string source)

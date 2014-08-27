@@ -30,7 +30,14 @@ namespace Samurai.UserInterface
 
 		public override void Draw(IControlRenderer renderer)
 		{
+			Vector2 position = this.Position;
+			Size size = this.Size;
+
+			renderer.PushScissor(new Rectangle((int)position.X, (int)position.Y, size.Width, size.Height));
+
 			this.Controls.Draw(renderer);
+
+			renderer.PopScissor();
 		}
 	}
 }

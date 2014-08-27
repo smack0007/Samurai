@@ -74,7 +74,8 @@ namespace Samurai.UserInterface
 
 		public void Draw(IControlRenderer renderer)
 		{
-
+			foreach (Control control in this.controls)
+				control.Draw(renderer);
 		}
 	}
 }

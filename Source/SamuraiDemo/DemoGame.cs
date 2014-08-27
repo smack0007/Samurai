@@ -88,6 +88,7 @@ namespace SamuraiDemo
 		GamePad gamePad1;
 
 		ControlRenderer controlRenderer;
+		Panel panel;
 		Label label;
 
 		RasterizerState rasterizerState = new RasterizerState(
@@ -99,7 +100,9 @@ namespace SamuraiDemo
 			this.Window.Title = "Samurai Demo";
 						
 			this.Graphics.BlendState = BlendState.AlphaBlend;
-			
+			this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
+			this.Graphics.RasterizerState = this.rasterizerState;
+
 			this.shaderProgram = new ShaderProgram(
 				this.Graphics,
 				VertexShader.Compile(this.Graphics, File.ReadAllText("Shader.vert")),
@@ -128,12 +131,19 @@ namespace SamuraiDemo
 				BackgroundColor = Color4.Transparent
 			});
 
+			this.panel = new Panel()
+			{
+				Position = new Vector2(100, 100),
+				Size = new Size(100, 100)
+			};
+
 			this.label = new Label()
 			{
 				Text = "Hello World!",
-				Position = new Vector2(100, 100),
 				Font = TextureFont.Build(this.Graphics, "Segoe UI", 24, new TextureFontParams() { BackgroundColor = Color4.Transparent })
 			};
+
+			this.panel.Controls.Add(label);
 		}
 
 		protected override void Update(TimeSpan elapsed)
@@ -149,10 +159,7 @@ namespace SamuraiDemo
 		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
-
-			this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
-			this.Graphics.RasterizerState = this.rasterizerState;
-
+						
 			Vector3 eye = new Vector3(-this.translationX, 0, this.translationZ);
 			Vector3 target = new Vector3(-this.translationX + (float)Math.Sin(this.rotationZ), 0, this.translationZ + (float)-Math.Cos(this.rotationZ));
 			Vector3 up = Vector3.UnitY;
@@ -166,12 +173,9 @@ namespace SamuraiDemo
 			this.shaderProgram.SetSampler("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
-
-			this.Graphics.DepthBufferState = DepthBufferState.Disabled;
-			this.Graphics.RasterizerState = RasterizerState.Default;
-
+						
 			this.controlRenderer.Begin();
-			this.label.Draw(this.controlRenderer);
+			this.panel.Draw(this.controlRenderer);
 			this.controlRenderer.End();
 
 			this.Graphics.SwapBuffers();

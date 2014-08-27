@@ -8,6 +8,7 @@ namespace Samurai.Graphics
 	{		
 		Color4 clearColor;
 		Rectangle viewport;
+		Rectangle? scissor;
 
 		BlendState blendState;
 		DepthBufferState depthState;
@@ -38,6 +39,26 @@ namespace Samurai.Graphics
 			{
 				this.viewport = value;
 				this.GL.Viewport(value.X, value.Y, value.Width, value.Height);
+			}
+		}
+
+		public Rectangle? Scissor
+		{
+			get { return this.scissor; }
+
+			set
+			{
+				this.scissor = value;
+
+				if (this.scissor.HasValue)
+				{
+					this.ToggleCap(GLContext.ScissorTestCap, true);
+					this.GL.Scissor(this.scissor.Value.X, this.scissor.Value.Y, this.scissor.Value.Width, this.scissor.Value.Height);
+				}
+				else
+				{
+					this.ToggleCap(GLContext.ScissorTestCap, false);
+				}
 			}
 		}
 
@@ -97,6 +118,9 @@ namespace Samurai.Graphics
 			this.GL = new GLContext(window);
 
 			this.textures = new bool[32];
+
+			this.scissor = null;
+			this.ToggleCap(GLContext.ScissorTestCap, false);
 
 			this.blendState = BlendState.Disabled;
 			this.ApplyBlendState();
