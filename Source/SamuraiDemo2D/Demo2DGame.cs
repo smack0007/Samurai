@@ -69,21 +69,21 @@ namespace SamuraiDemo2D
 			}
 		}
 
-		protected override void Update(TimeSpan elapsed)
+		protected override void Update(TimingState time)
 		{
 			this.keyboard.Update();
-			this.mouse.Update(elapsed);
+			this.mouse.Update(time.ElapsedTime);
 
 			if (this.keyboard.IsKeyPressed(Key.Escape))
 				this.Exit();
 
 			foreach (Plane plane in this.planes)
 			{
-				plane.Update(elapsed);
+				plane.Update(time.ElapsedTime);
 			}
 		}
 
-		protected override void Draw(TimeSpan elapsed)
+		protected override void Draw(TimingState time)
 		{
 			this.Graphics.Clear(Color4.Black);
 
@@ -122,7 +122,7 @@ namespace SamuraiDemo2D
 			this.Graphics.SwapBuffers();
 
 			this.fpsCount++;
-			this.fpsTimer += (float)elapsed.TotalSeconds;
+			this.fpsTimer += (float)time.ElapsedTime.TotalSeconds;
 			if (this.fpsTimer >= 1.0f)
 			{
 				this.fps = this.fpsCount;

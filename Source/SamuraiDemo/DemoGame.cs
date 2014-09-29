@@ -87,6 +87,7 @@ namespace SamuraiDemo
 		Texture2D texture1;
 		GamePad gamePad1;
 
+		ControlInputHandler controlInputHandler;
 		ControlRenderer controlRenderer;
 		Panel panel;
 		Label label;
@@ -125,6 +126,8 @@ namespace SamuraiDemo
 
 			this.gamePad1 = new GamePad(GamePadIndex.One);
 
+			this.controlInputHandler = new ControlInputHandler(this.Window);
+
 			this.controlRenderer = new ControlRenderer(this.Graphics);
 			this.controlRenderer.DefaultFont = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
 			{
@@ -143,20 +146,26 @@ namespace SamuraiDemo
 				Font = TextureFont.Build(this.Graphics, "Segoe UI", 24, new TextureFontParams() { BackgroundColor = Color4.Transparent })
 			};
 
+			this.label.CursorEnter += (s, e) => { this.label.ForegroundColor = Color4.Black; };
+			this.label.CursorLeave += (s, e) => { this.label.ForegroundColor = Color4.White; };
+
 			this.panel.Controls.Add(label);
 		}
 
-		protected override void Update(TimeSpan elapsed)
+		protected override void Update(TimingState time)
 		{
 			this.gamePad1.Update();
 
 			Vector2 leftThumbStick = this.gamePad1.LeftThumbStick;
-			this.rotationZ += (float)(2.0f * elapsed.TotalSeconds * -leftThumbStick.X);
-			this.translationX += (float)(5.0f * elapsed.TotalSeconds * Math.Sin(this.rotationZ) * leftThumbStick.Y);
-			this.translationZ += (float)(5.0f * elapsed.TotalSeconds * Math.Cos(this.rotationZ) * leftThumbStick.Y);
+			this.rotationZ += (float)(2.0f * time.ElapsedTime.TotalSeconds * -leftThumbStick.X);
+			this.translationX += (float)(5.0f * time.ElapsedTime.TotalSeconds * Math.Sin(this.rotationZ) * leftThumbStick.Y);
+			this.translationZ += (float)(5.0f * time.ElapsedTime.TotalSeconds * Math.Cos(this.rotationZ) * leftThumbStick.Y);
+
+			this.controlInputHandler.Update(time);
+			this.panel.Update(time, this.controlInputHandler);
 		}
-		
-		protected override void Draw(TimeSpan elapsed)
+
+		protected override void Draw(TimingState time)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 						

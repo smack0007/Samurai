@@ -82,7 +82,7 @@ namespace WavingFlagSample
 			this.indexBuffer = new StaticIndexBuffer<ushort>(this.Graphics, indexData);
 		}
 				
-		protected override void Draw(TimeSpan elapsed)
+		protected override void Draw(TimingState time)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
@@ -96,7 +96,7 @@ namespace WavingFlagSample
 				M42 = 1f
 			};
 
-			totalElapsedSeconds += (float)elapsed.TotalSeconds;
+			totalElapsedSeconds += (float)time.ElapsedTime.TotalSeconds;
 
 			this.shader.SetValue("projection", ref projection);
 			this.shader.SetValue("startX", (float)((this.Window.Width - this.texture.Width) / 2));

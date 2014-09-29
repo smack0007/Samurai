@@ -19,11 +19,8 @@ namespace Samurai.UserInterface
 		{
 		}
 								
-		public override void Draw(IControlRenderer renderer)
+		protected override void DrawControl(IControlRenderer renderer)
 		{
-			if (renderer == null)
-				throw new ArgumentNullException("renderer");
-						
 			if (!string.IsNullOrEmpty(this.Text))
 				renderer.DrawString(this.Font, this.Text, this.Position, this.ForegroundColor);
 		}

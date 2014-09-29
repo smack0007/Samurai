@@ -23,21 +23,14 @@ namespace Samurai.UserInterface
 		{
 		}
 
-		public override void Update(TimeSpan elapsed, IControlInputHandler input)
+		protected override void UpdateControl(TimingState time, IControlInputHandler input)
 		{
-			this.Controls.Update(elapsed, input);
+			this.Controls.Update(time, input);
 		}
 
-		public override void Draw(IControlRenderer renderer)
+		protected override void DrawControl(IControlRenderer renderer)
 		{
-			Vector2 position = this.Position;
-			Size size = this.Size;
-
-			renderer.PushScissor(new Rectangle((int)position.X, (int)position.Y, size.Width, size.Height));
-
 			this.Controls.Draw(renderer);
-
-			renderer.PopScissor();
 		}
 	}
 }

@@ -48,7 +48,7 @@ namespace Samurai.UserInterface
 
 		public void PushScissor(Rectangle scissor)
 		{
-			scissor.Y = this.graphics.Viewport.Bottom - scissor.Y - scissor.Height;
+			scissor.Y = this.graphics.Viewport.Height - scissor.Y - scissor.Height;
 
 			this.graphics.Scissor = scissor;
 			this.scissorStack.Push(scissor);

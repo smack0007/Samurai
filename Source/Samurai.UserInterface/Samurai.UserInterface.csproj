@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Control.cs" />
     <Compile Include="ControlCollection.cs" />
-    <Compile Include="ControlEventArgs.cs" />
+    <Compile Include="ControlInputHandler.cs" />
     <Compile Include="ControlProperty.cs" />
     <Compile Include="ControlPropertyStore.cs" />
     <Compile Include="IControlContainer.cs" />

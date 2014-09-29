@@ -11,6 +11,12 @@ namespace Samurai.GameFramework
 	{
 		GameOptions options;
 
+		TimingState time;
+		Stopwatch stopwatch;
+		long timeBetweenTicks;
+		long lastTick;
+		long nextTick;
+
 		/// <summary>
 		/// Gets the GameWindow.
 		/// </summary>
@@ -83,12 +89,7 @@ namespace Samurai.GameFramework
 			if (this.options.AutoResizeViewport && this.Graphics != null)
 				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
-
-		Stopwatch stopwatch;
-		long timeBetweenTicks; 
-		long lastTick;
-		long nextTick;
-		
+						
 		/// <summary>
 		/// Starts the game loop.
 		/// </summary>
@@ -98,6 +99,7 @@ namespace Samurai.GameFramework
 
 			this.Initialize();
 
+			this.time = new TimingState();
 			this.stopwatch = new Stopwatch();
 			this.timeBetweenTicks = 1000 / this.options.FramesPerSecond;
 			
@@ -117,10 +119,11 @@ namespace Samurai.GameFramework
 
 			if (totalElapsedMilliseconds >= this.nextTick)
 			{
-				TimeSpan elapsed = TimeSpan.FromMilliseconds(totalElapsedMilliseconds - this.lastTick);
+				this.time.ElapsedTime = TimeSpan.FromMilliseconds(totalElapsedMilliseconds - this.lastTick);
+				this.time.TotalTime = TimeSpan.FromMilliseconds(totalElapsedMilliseconds);
 
-				this.Update(elapsed);
-				this.Draw(elapsed);
+				this.Update(this.time);
+				this.Draw(this.time);
 
 				this.lastTick = totalElapsedMilliseconds;
 				this.nextTick = totalElapsedMilliseconds + this.timeBetweenTicks;
@@ -145,16 +148,16 @@ namespace Samurai.GameFramework
 		/// <summary>
 		/// Called by the Run method when game logic should run.
 		/// </summary>
-		/// <param name="elapsed"></param>
-		protected virtual void Update(TimeSpan elapsed)
+		/// <param name="time"></param>
+		protected virtual void Update(TimingState time)
 		{
 		}
 
 		/// <summary>
 		/// Called by the Run method when the game should draw.
 		/// </summary>
-		/// <param name="elapsed"></param>
-		protected virtual void Draw(TimeSpan elapsed)
+		/// <param name="time"></param>
+		protected virtual void Draw(TimingState elapsed)
 		{
 		}
 

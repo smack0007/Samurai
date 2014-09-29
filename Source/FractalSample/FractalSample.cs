@@ -64,36 +64,36 @@ namespace FractalSample
 			this.keyboard = new Keyboard();
 		}
 
-		protected override void Update(TimeSpan elapsed)
+		protected override void Update(TimingState time)
 		{
 			this.keyboard.Update();
 
 			if (this.keyboard.IsKeyDown(Key.Left))
-				this.centerX -= 1.0f * (float)elapsed.TotalSeconds;
+				this.centerX -= 1.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Right))
-				this.centerX += 1.0f * (float)elapsed.TotalSeconds;
+				this.centerX += 1.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Up))
-				this.centerY -= 1.0f * (float)elapsed.TotalSeconds;
+				this.centerY -= 1.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Down))
-				this.centerY += 1.0f * (float)elapsed.TotalSeconds;
+				this.centerY += 1.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.A))
-				this.scale -= 1.0f * (float)elapsed.TotalSeconds;
+				this.scale -= 1.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Z))
-				this.scale += 1.0f * (float)elapsed.TotalSeconds;
+				this.scale += 1.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Q))
-				this.iterations -= 100.0f * (float)elapsed.TotalSeconds;
+				this.iterations -= 100.0f * (float)time.ElapsedTime.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.W))
-				this.iterations += 100.0f * (float)elapsed.TotalSeconds;
+				this.iterations += 100.0f * (float)time.ElapsedTime.TotalSeconds;
 		}
 		
-		protected override void Draw(TimeSpan elapsed)
+		protected override void Draw(TimingState time)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 						

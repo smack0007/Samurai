@@ -23,6 +23,7 @@ namespace Samurai.UserInterface
 			ControlProperty<Size>.Create();
 
 		ControlPropertyStore values;
+		bool containsCursor;
 
 		public Control Parent
 		{
@@ -60,6 +61,43 @@ namespace Samurai.UserInterface
 			set { SetValue(SizeProperty, value); }
 		}
 
+		public Rectangle Rectangle
+		{
+			get
+			{
+				Vector2 position = this.Position;
+				Size size = this.Size;
+
+				return new Rectangle((int)position.X, (int)position.Y, size.Width, size.Height);
+			}
+		}
+
+		public bool ContainsCursor
+		{
+			get { return this.containsCursor; }
+
+			set
+			{
+				if (value != this.containsCursor)
+				{
+					this.containsCursor = value;
+
+					if (this.containsCursor)
+					{
+						this.OnCursorEnter(EventArgs.Empty);
+					}
+					else
+					{
+						this.OnCursorLeave(EventArgs.Empty);
+					}
+				}
+			}
+		}
+
+		public event EventHandler CursorEnter;
+
+		public event EventHandler CursorLeave;
+
 		public Control()
 		{
 			this.values = new ControlPropertyStore();
@@ -94,51 +132,88 @@ namespace Samurai.UserInterface
 		{
 			if (property == BackgroundColorProperty)
 			{
-				this.OnBackgroundColorChanged();
+				this.OnBackgroundColorChanged(EventArgs.Empty);
 			}
 			else if (property == ForegroundColorProperty)
 			{
-				this.OnForegroundColorChanged();
+				this.OnForegroundColorChanged(EventArgs.Empty);
 			}
 			else if (property == FontProperty)
 			{
-				this.OnFontChanged();
+				this.OnFontChanged(EventArgs.Empty);
 			}
 			else if (property == PositionProperty)
 			{
-				this.OnPositionChanged();
+				this.OnPositionChanged(EventArgs.Empty);
 			}
 			else if (property == SizeProperty)
 			{
-				this.OnSizeChanged();
+				this.OnSizeChanged(EventArgs.Empty);
 			}
 		}
 
-		protected virtual void OnForegroundColorChanged()
+		protected virtual void OnBackgroundColorChanged(EventArgs e)
 		{
 		}
 
-		protected virtual void OnBackgroundColorChanged()
+		protected virtual void OnForegroundColorChanged(EventArgs e)
 		{
 		}
 
-		protected virtual void OnFontChanged()
+		protected virtual void OnFontChanged(EventArgs e)
 		{
 		}
 
-		protected virtual void OnPositionChanged()
+		protected virtual void OnPositionChanged(EventArgs e)
 		{
 		}
 
-		protected virtual void OnSizeChanged()
+		protected virtual void OnSizeChanged(EventArgs e)
 		{
 		}
 
-		public virtual void Update(TimeSpan elapsed, IControlInputHandler input)
-		{
+		public void Update(TimingState time, IControlInputHandler input)
+		{									
+			this.UpdateControl(time, input);
 		}
 
-		public virtual void Draw(IControlRenderer renderer)
+		protected virtual void UpdateControl(TimingState time, IControlInputHandler input)
+		{
+			if (time == null)
+				throw new ArgumentNullException("time");
+
+			if (input == null)
+				throw new ArgumentNullException("input");
+
+			Rectangle rectangle = this.Rectangle;
+			this.ContainsCursor = rectangle.Contains(input.CursorPosition);
+		}
+
+		protected virtual void OnCursorEnter(EventArgs e)
+		{
+			if (this.CursorEnter != null)
+				this.CursorEnter(this, e);
+		}
+
+		protected virtual void OnCursorLeave(EventArgs e)
+		{
+			if (this.CursorLeave != null)
+				this.CursorLeave(this, e);
+		}
+
+		public void Draw(IControlRenderer renderer)
+		{
+			if (renderer == null)
+				throw new ArgumentNullException("renderer");
+
+			renderer.PushScissor(this.Rectangle);
+
+			this.DrawControl(renderer);
+
+			renderer.PopScissor();
+		}
+
+		protected virtual void DrawControl(IControlRenderer renderer)
 		{
 		}
 	}

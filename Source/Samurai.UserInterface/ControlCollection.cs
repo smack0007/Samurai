@@ -66,10 +66,10 @@ namespace Samurai.UserInterface
 			}
 		}
 
-		public void Update(TimeSpan elapsed, IControlInputHandler input)
+		public void Update(TimingState time, IControlInputHandler input)
 		{
 			foreach (Control control in this.controls)
-				control.Update(elapsed, input);
+				control.Update(time, input);
 		}
 
 		public void Draw(IControlRenderer renderer)

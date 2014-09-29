@@ -166,7 +166,7 @@ namespace Samurai.Input
 		/// <summary>
 		/// Updates the state of the mouse.
 		/// </summary>
-		public void Update(TimeSpan elapsed)
+		public void Update(TimingState time)
 		{
 			Win32Point point;
 			GetCursorPos(out point);
@@ -202,7 +202,7 @@ namespace Samurai.Input
 
 			if (this.lastClickedButton != null)
 			{
-				this.elapsedSinceClick += elapsed;
+				this.elapsedSinceClick += time.ElapsedTime;
 
 				if (this.elapsedSinceClick > this.DoubleClickRate ||
 					this.elapsedSinceClick > TimeSpan.FromSeconds(5)) // Give up updating after 5 seconds

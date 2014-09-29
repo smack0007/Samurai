@@ -20,6 +20,11 @@ namespace Samurai
             this.Y = height;
         }
 
+		public override string ToString()
+		{
+			return string.Format("{{ {0}, {1} }}", this.X, this.Y);
+		}
+
         public override bool Equals(object obj)
         {
             if (obj == null)

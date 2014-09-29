@@ -92,6 +92,7 @@
     <Compile Include="Rectangle.cs" />
     <Compile Include="SamuraiException.cs" />
     <Compile Include="Size.cs" />
+    <Compile Include="TimingState.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
   </ItemGroup>
