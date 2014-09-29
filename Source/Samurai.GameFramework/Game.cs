@@ -11,6 +11,8 @@ namespace Samurai.GameFramework
 	{
 		GameOptions options;
 
+        int oldWindowWidth, oldWindowHeight;
+
 		TimingState time;
 		Stopwatch stopwatch;
 		long timeBetweenTicks;
@@ -54,9 +56,11 @@ namespace Samurai.GameFramework
 			this.options = options;
 					
 			this.Window = new GameWindow(this, this.options);
-			this.Window.Resize += this.Window_Resize;
+            this.oldWindowWidth = this.Window.Width;
+            this.oldWindowHeight = this.Window.Height;
+            this.Window.Resize += this.Window_Resize;
 
-			this.Graphics = new GraphicsContext(this.Window.Handle);
+			this.Graphics = new GraphicsContext(this.Window);
 			this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
 		}
 
@@ -86,8 +90,18 @@ namespace Samurai.GameFramework
 				
 		private void Window_Resize(object sender, EventArgs e)
 		{
-			if (this.options.AutoResizeViewport && this.Graphics != null)
-				this.Graphics.Viewport = new Rectangle(0, 0, this.Window.Width, this.Window.Height);
+            if (this.options.AutoResizeViewport && this.Graphics != null)
+            {
+                Rectangle oldViewport = this.Graphics.Viewport;
+                this.Graphics.Viewport = new Rectangle(
+                    oldViewport.X,
+                    oldViewport.Y,
+                    oldViewport.Width + (this.Window.Width - this.oldWindowWidth),
+                    oldViewport.Height + (this.Window.Height - this.oldWindowHeight));
+            }
+
+            this.oldWindowWidth = this.Window.Width;
+            this.oldWindowHeight = this.Window.Height;
 		}
 						
 		/// <summary>

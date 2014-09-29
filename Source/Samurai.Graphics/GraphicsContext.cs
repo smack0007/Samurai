@@ -5,7 +5,9 @@ using System.Runtime.InteropServices;
 namespace Samurai.Graphics
 {
 	public class GraphicsContext : DisposableObject
-	{		
+	{
+        IHostControl host;
+
 		Color4 clearColor;
 		Rectangle viewport;
 		Rectangle? scissor;
@@ -38,7 +40,7 @@ namespace Samurai.Graphics
 			set
 			{
 				this.viewport = value;
-				this.GL.Viewport(value.X, value.Y, value.Width, value.Height);
+                this.GL.Viewport(value.X, this.host.Height - value.Y - value.Height, value.Width, value.Height);
 			}
 		}
 
@@ -53,7 +55,7 @@ namespace Samurai.Graphics
 				if (this.scissor.HasValue)
 				{
 					this.ToggleCap(GLContext.ScissorTestCap, true);
-					this.GL.Scissor(this.scissor.Value.X, this.scissor.Value.Y, this.scissor.Value.Width, this.scissor.Value.Height);
+					this.GL.Scissor(this.scissor.Value.X, this.host.Height - value.Value.Y - value.Value.Height, value.Value.Width, value.Value.Height);
 				}
 				else
 				{
@@ -113,9 +115,14 @@ namespace Samurai.Graphics
 			}
 		}
 								
-		public GraphicsContext(IntPtr window)
+		public GraphicsContext(IHostControl host)
 		{
-			this.GL = new GLContext(window);
+            if (host == null)
+                throw new ArgumentNullException("host");
+
+            this.host = host;
+
+			this.GL = new GLContext(this.host.Handle);
 
 			this.textures = new bool[32];
 

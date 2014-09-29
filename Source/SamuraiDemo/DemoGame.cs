@@ -96,61 +96,61 @@ namespace SamuraiDemo
 			frontFace: FrontFace.Clockwise,
 			cullMode: CullMode.Back);
 
-		public DemoGame()
-		{
-			this.Window.Title = "Samurai Demo";
-						
-			this.Graphics.BlendState = BlendState.AlphaBlend;
-			this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
-			this.Graphics.RasterizerState = this.rasterizerState;
+        public DemoGame()
+        {
+            this.Window.Title = "Samurai Demo";
 
-			this.shaderProgram = new ShaderProgram(
-				this.Graphics,
-				VertexShader.Compile(this.Graphics, File.ReadAllText("Shader.vert")),
-				FragmentShader.Compile(this.Graphics, File.ReadAllText("Shader.frag")));
+            this.Graphics.BlendState = BlendState.AlphaBlend;
+            this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
+            this.Graphics.RasterizerState = this.rasterizerState;
 
-			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, this.vertexData);
-			this.indexBuffer = new StaticIndexBuffer<byte>(this.Graphics, this.indexData);
+            this.shaderProgram = new ShaderProgram(
+                this.Graphics,
+                VertexShader.Compile(this.Graphics, File.ReadAllText("Shader.vert")),
+                FragmentShader.Compile(this.Graphics, File.ReadAllText("Shader.frag")));
 
-			this.texture0 = Texture2D.LoadFromFile(this.Graphics, "Texture0.png", new TextureParams()
-			{
-				WrapS = TextureWrap.Repeat,
-				WrapT = TextureWrap.Repeat
-			});
+            this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, this.vertexData);
+            this.indexBuffer = new StaticIndexBuffer<byte>(this.Graphics, this.indexData);
 
-			this.texture1 = Texture2D.LoadFromFile(this.Graphics, "Texture1.png", new TextureParams()
-			{
-				WrapS = TextureWrap.Clamp,
-				WrapT = TextureWrap.Clamp
-			});
+            this.texture0 = Texture2D.LoadFromFile(this.Graphics, "Texture0.png", new TextureParams()
+            {
+                WrapS = TextureWrap.Repeat,
+                WrapT = TextureWrap.Repeat
+            });
 
-			this.gamePad1 = new GamePad(GamePadIndex.One);
+            this.texture1 = Texture2D.LoadFromFile(this.Graphics, "Texture1.png", new TextureParams()
+            {
+                WrapS = TextureWrap.Clamp,
+                WrapT = TextureWrap.Clamp
+            });
 
-			this.controlInputHandler = new ControlInputHandler(this.Window);
+            this.gamePad1 = new GamePad(GamePadIndex.One);
 
-			this.controlRenderer = new ControlRenderer(this.Graphics);
-			this.controlRenderer.DefaultFont = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
-			{
-				BackgroundColor = Color4.Transparent
-			});
+            this.controlInputHandler = new ControlInputHandler(this.Window);
 
-			this.panel = new Panel()
-			{
-				Position = new Vector2(100, 100),
-				Size = new Size(100, 100)
-			};
+            this.controlRenderer = new ControlRenderer(this.Graphics);
+            this.controlRenderer.DefaultFont = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
+            {
+                BackgroundColor = Color4.Transparent
+            });
 
-			this.label = new Label()
-			{
-				Text = "Hello World!",
-				Font = TextureFont.Build(this.Graphics, "Segoe UI", 24, new TextureFontParams() { BackgroundColor = Color4.Transparent })
-			};
+            this.panel = new Panel()
+            {
+                Position = new Vector2(100, 100),
+                Size = new Size(100, 100)
+            };
 
-			this.label.CursorEnter += (s, e) => { this.label.ForegroundColor = Color4.Black; };
-			this.label.CursorLeave += (s, e) => { this.label.ForegroundColor = Color4.White; };
+            this.label = new Label()
+            {
+                Text = "Hello World!",
+                Font = TextureFont.Build(this.Graphics, "Segoe UI", 24, new TextureFontParams() { BackgroundColor = Color4.Transparent })
+            };
 
-			this.panel.Controls.Add(label);
-		}
+            this.label.CursorEnter += (s, e) => { this.label.ForegroundColor = Color4.Black; };
+            this.label.CursorLeave += (s, e) => { this.label.ForegroundColor = Color4.White; };
+
+            this.panel.Controls.Add(label);
+        }
 
 		protected override void Update(TimingState time)
 		{
@@ -160,9 +160,6 @@ namespace SamuraiDemo
 			this.rotationZ += (float)(2.0f * time.ElapsedTime.TotalSeconds * -leftThumbStick.X);
 			this.translationX += (float)(5.0f * time.ElapsedTime.TotalSeconds * Math.Sin(this.rotationZ) * leftThumbStick.Y);
 			this.translationZ += (float)(5.0f * time.ElapsedTime.TotalSeconds * Math.Cos(this.rotationZ) * leftThumbStick.Y);
-
-			this.controlInputHandler.Update(time);
-			this.panel.Update(time, this.controlInputHandler);
 		}
 
 		protected override void Draw(TimingState time)

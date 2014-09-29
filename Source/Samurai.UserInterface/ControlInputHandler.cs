@@ -43,5 +43,15 @@ namespace Samurai.UserInterface
 					this.UpdateControl(control, time);
 			}
 		}
-	}
+
+        public Point CursorPosition
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public bool IsPrimaryButtonPressed
+        {
+            get { throw new NotImplementedException(); }
+        }
+    }
 }

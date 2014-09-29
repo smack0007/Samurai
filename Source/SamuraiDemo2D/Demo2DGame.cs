@@ -26,7 +26,11 @@ namespace SamuraiDemo2D
 		float fpsTimer;
 
 		public Demo2DGame()
-			: base()
+            : base(new GameOptions()
+            {
+                AutoResizeViewport = true,
+                WindowResizable = true
+            })
 		{
 			this.Window.Title = "Samurai 2D Demo";
 
@@ -34,6 +38,8 @@ namespace SamuraiDemo2D
 
 			this.Graphics.BlendState = BlendState.AlphaBlend;
 			this.Graphics.RasterizerState = RasterizerState.Default;
+
+            this.Graphics.Viewport = new Rectangle(this.Window.Width / 2 - 200, this.Window.Height / 2 - 150, 400, 300);
 						
 			this.spriteBatch = new SpriteBatch(this.Graphics);
 			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
@@ -72,7 +78,7 @@ namespace SamuraiDemo2D
 		protected override void Update(TimingState time)
 		{
 			this.keyboard.Update();
-			this.mouse.Update(time.ElapsedTime);
+			this.mouse.Update(time);
 
 			if (this.keyboard.IsKeyPressed(Key.Escape))
 				this.Exit();
