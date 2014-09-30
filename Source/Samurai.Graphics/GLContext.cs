@@ -675,6 +675,11 @@ namespace Samurai.Graphics
 			CheckErrors("Viewport");
 		}
 
+        public bool MakeCurrent()
+        {
+            return this.platformContext.MakeCurrent();
+        }
+
 		public void SwapBuffers()
 		{
 			this.platformContext.SwapBuffers();

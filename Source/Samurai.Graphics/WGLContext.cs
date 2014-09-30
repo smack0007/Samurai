@@ -12,28 +12,28 @@ namespace Samurai.Graphics
 	{
 		private const string Library = "opengl32.dll";
 
-		internal const uint ContextFlagsArb = 0x2094;
+        private const uint ContextFlagsArb = 0x2094;
 
-		internal const uint ContextMajorVersionArb = 0x2091;
+        private const uint ContextMajorVersionArb = 0x2091;
 
-		internal const uint ContextMinorVersionArb = 0x2092;
+        private const uint ContextMinorVersionArb = 0x2092;
 
 		[DllImport(Library, EntryPoint = "wglCreateContext", ExactSpelling = true)]
-		internal static extern IntPtr CreateContext(IntPtr hDc);
+		private static extern IntPtr CreateContext(IntPtr hDc);
 
 		[DllImport(Library, EntryPoint = "wglDeleteContext", ExactSpelling = true)]
-		internal static extern bool DeleteContext(IntPtr oldContext);
+        private static extern bool DeleteContext(IntPtr oldContext);
 
 		[DllImport(Library, EntryPoint = "wglGetProcAddress", ExactSpelling = true)]
-		internal static extern IntPtr GetProcAddress(string lpszProc);
+        private static extern IntPtr GetProcAddress(string lpszProc);
 
 		[DllImport(Library, EntryPoint = "wglMakeCurrent", ExactSpelling = true)]
-		internal static extern bool MakeCurrent(IntPtr hDc, IntPtr newContext);
+        private static extern bool MakeCurrent(IntPtr hDc, IntPtr newContext);
 
 		[DllImport(Library, EntryPoint = "wglSwapBuffers", ExactSpelling = true)]
-		internal static extern bool SwapBuffers(IntPtr hdc);
+        private static extern bool SwapBuffers(IntPtr hdc);
 
-		internal delegate IntPtr CreateContextAttribsARB(IntPtr hDC, IntPtr hShareContext, int[] attribList);
+        private delegate IntPtr CreateContextAttribsARB(IntPtr hDC, IntPtr hShareContext, int[] attribList);
 
 		private IntPtr hWnd;
 		private IntPtr hDC;
@@ -112,6 +112,11 @@ namespace Samurai.Graphics
 
 			return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
 		}
+
+        public bool MakeCurrent()
+        {
+            return MakeCurrent(this.hDC, this.hRC);
+        }
 
 		public void SwapBuffers()
 		{

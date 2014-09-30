@@ -33,6 +33,20 @@ namespace Samurai.Graphics
 			private set;
 		}
 
+        public Color4 ClearColor
+        {
+            get { return this.clearColor; }
+
+            set
+            {
+                if (!value.Equals(this.clearColor))
+                {
+                    this.clearColor = value;
+                    this.GL.ClearColor(value.R / 255.0f, value.G / 255.0f, value.B / 255.0f, value.A / 255.0f);
+                }
+            }
+        }
+
 		public Rectangle Viewport
 		{
 			get { return this.viewport; }
@@ -250,18 +264,23 @@ namespace Samurai.Graphics
 			}
 		}
 
+        public void Clear()
+        {
+            this.GL.Clear(GLContext.ColorBufferBit | GLContext.DepthBufferBit);
+        }
+
 		public void Clear(Color4 color)
 		{
-			if (!color.Equals(this.clearColor))
-			{
-				this.clearColor = color;
-				this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
-			}
-
-			this.GL.Clear(GLContext.ColorBufferBit | GLContext.DepthBufferBit);
+            this.ClearColor = color;
+            this.Clear();
 		}
 
-		public void SwapBuffers()
+        public bool MakeCurrent()
+        {
+            return this.GL.MakeCurrent();
+        }
+		
+        public void SwapBuffers()
 		{
 			this.GL.SwapBuffers();
 		}
