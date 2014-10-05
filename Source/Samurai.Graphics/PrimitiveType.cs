@@ -9,5 +9,9 @@ namespace Samurai.Graphics
 		Points = GLContext.Points,
 
 		Triangles = GLContext.Triangles,
+
+        TriangleStrip = GLContext.TriangleStrip,
+
+        TriangleFan = GLContext.TriangleFan
 	}
 }

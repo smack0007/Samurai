@@ -1,0 +1,3 @@
+侍
+Unicode: U+4F8D
+HTML: &#20365;

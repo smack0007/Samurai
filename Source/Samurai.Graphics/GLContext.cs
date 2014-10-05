@@ -86,6 +86,8 @@ namespace Samurai.Graphics
 		public const uint Lines = 0x0001;
 		public const uint Points = 0x0000;
 		public const uint Triangles = 0x0004;
+        public const uint TriangleStrip = 0x0005;
+        public const uint TriangleFan = 0x0006;
 
 		// Shaders
 		public const uint CompileStatus = 0x8B81;

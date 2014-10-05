@@ -22,9 +22,13 @@ namespace Samurai.Graphics
         {
             None,
 
-            Lines,
+            Line,
 
-            Triangles           
+            Triangle,
+   
+            TriangleStrip,
+
+            TriangleFan
         }
 
         GraphicsContext graphics;
@@ -152,12 +156,12 @@ namespace Samurai.Graphics
 
         public void DrawLine(Vector2 start, Vector2 end, float width, Color4 tint)
         {
-            this.DrawLine(start, end, width, tint, this.pixel, 0, 1);
+            this.DrawLine(this.pixel, start, 0, end, 0, width, tint);
         }
 
-        public void DrawLine(Vector2 start, Vector2 end, float width, Color4 tint, Texture2D texture, float startT, float endT)
+        public void DrawLine(Texture2D texture, Vector2 start, float startT, Vector2 end, float endT, float width, Color4 tint)
         {
-            this.SetState(State.Lines, 6, texture);
+            this.SetState(State.Line, 6, texture);
 
             float distance;
             Vector2.Distance(ref start, ref end, out distance);
@@ -196,15 +200,74 @@ namespace Samurai.Graphics
             this.AddVertex(ref bottomLeft, ref tint, ref bottomLeftUV);
         }
 
-        public void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color4 color)
+        public void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, Color4 tint)
         {
-            this.SetState(State.Triangles, 3, this.pixel);
+            this.DrawTriangle(this.pixel, v1, Vector2.Zero, v2, Vector2.Zero, v3, Vector2.Zero, tint);
+        }
+
+        public void DrawTriangle(Texture2D texture, Vector2 v1, Vector2 uv1, Vector2 v2, Vector2 uv2, Vector2 v3, Vector2 uv3, Color4 tint)
+        {
+            this.SetState(State.Triangle, 3, texture);
+
+            this.AddVertex(ref v1, ref tint, ref uv1);
+            this.AddVertex(ref v2, ref tint, ref uv2);
+            this.AddVertex(ref v3, ref tint, ref uv3);
+        }
+
+        private void DrawTriangleSet(State state, IList<Vector2> positions, Color4 tint)
+        {
+            if (positions == null)
+                throw new ArgumentNullException("positions");
+
+            this.SetState(state, positions.Count, this.pixel);
 
             Vector2 uv = Vector2.Zero;
+            for (int i = 0; i < positions.Count; i++)
+            {
+                Vector2 position = positions[i];
+                this.AddVertex(ref position, ref tint, ref uv);
+            }
+        }
 
-            this.AddVertex(ref v1, ref color, ref uv);
-            this.AddVertex(ref v2, ref color, ref uv);
-            this.AddVertex(ref v3, ref color, ref uv);
+        private void DrawTriangleSet(State state, Texture2D texture, IList<Vector2> positions, IList<Vector2> texCoords, Color4 tint)
+        {
+            if (positions == null)
+                throw new ArgumentNullException("positions");
+
+            if (texCoords == null)
+                throw new ArgumentNullException("texCoords");
+
+            if (positions.Count != texCoords.Count)
+                throw new InvalidOperationException("positions.Count and texCoords.Count must be equal.");
+
+            this.SetState(state, positions.Count, texture);
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                Vector2 position = positions[i];
+                Vector2 uv = texCoords[i];
+                this.AddVertex(ref position, ref tint, ref uv);
+            }
+        }
+
+        public void DrawTriangleStrip(IList<Vector2> positions, Color4 tint)
+        {
+            this.DrawTriangleSet(State.TriangleStrip, positions, tint);
+        }
+
+        public void DrawTriangleStrip(Texture2D texture, IList<Vector2> positions, IList<Vector2> texCoords, Color4 tint)
+        {
+            this.DrawTriangleSet(State.TriangleStrip, texture, positions, texCoords, tint);
+        }
+
+        public void DrawTriangleFan(IList<Vector2> positions, Color4 tint)
+        {
+            this.DrawTriangleSet(State.TriangleFan, positions, tint);
+        }
+
+        public void DrawTriangleFan(Texture2D texture, IList<Vector2> positions, IList<Vector2> texCoords, Color4 tint)
+        {
+            this.DrawTriangleSet(State.TriangleFan, texture, positions, texCoords, tint);
         }
 
         private void Flush()
@@ -222,7 +285,20 @@ namespace Samurai.Graphics
                 this.shader.SetValue("inTransform", ref this.projection);
                 this.shader.SetSampler("fragSampler", this.texture);
 
-                this.graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, 0, this.vertexCount);
+                PrimitiveType primitiveType = PrimitiveType.Triangles;
+
+                switch (this.state)
+                {
+                    case State.TriangleStrip:
+                        primitiveType = PrimitiveType.TriangleStrip;
+                        break;
+
+                    case State.TriangleFan:
+                        primitiveType = PrimitiveType.TriangleFan;
+                        break;
+                }
+
+                this.graphics.Draw(primitiveType, this.vertexBuffer, 0, this.vertexCount);
 
                 this.vertexCount = 0;
             }
