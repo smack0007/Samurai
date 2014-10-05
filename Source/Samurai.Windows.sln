@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samurai.Wpf", "Samurai.Wpf\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSandbox", "WpfSandbox\WpfSandbox.csproj", "{F081937A-564A-4478-96C2-ED91E51AE18B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canvas2DSandbox", "Canvas2DSandbox\Canvas2DSandbox.csproj", "{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,6 +205,18 @@ Global
 		{F081937A-564A-4478-96C2-ED91E51AE18B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F081937A-564A-4478-96C2-ED91E51AE18B}.Release|x64.ActiveCfg = Release|Any CPU
 		{F081937A-564A-4478-96C2-ED91E51AE18B}.Release|x86.ActiveCfg = Release|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Release|x64.ActiveCfg = Release|Any CPU
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,5 +233,6 @@ Global
 		{3E345553-6938-4C1C-82EA-E733A76603E3} = {9AB04245-6F43-4A8F-9055-86C8F8451A2D}
 		{2501D6A6-6937-492A-A633-0DB0294604B4} = {9AB04245-6F43-4A8F-9055-86C8F8451A2D}
 		{F081937A-564A-4478-96C2-ED91E51AE18B} = {9AB04245-6F43-4A8F-9055-86C8F8451A2D}
+		{8EE934A0-5BC3-4027-A80A-B7FEA4BD412E} = {9AB04245-6F43-4A8F-9055-86C8F8451A2D}
 	EndGlobalSection
 EndGlobal

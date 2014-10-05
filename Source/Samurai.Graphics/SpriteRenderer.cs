@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Samurai.Graphics
 {
-	public sealed class SpriteBatch : DisposableObject
-	{
-		public static readonly int SizeOfVertex = Marshal.SizeOf(typeof(Vertex));
-
+	public sealed class SpriteRenderer : DisposableObject
+	{		
 		[StructLayout(LayoutKind.Sequential)]
 		struct Vertex
 		{
@@ -28,7 +26,7 @@ namespace Samurai.Graphics
 		DynamicVertexBuffer<Vertex> vertexBuffer;
 		StaticIndexBuffer<ushort> indexBuffer;
 
-		ISpriteBatchShaderProgram shader;
+		ISpriteShaderProgram shader;
 		bool drawInProgress;
 
 		Matrix4 projection;
@@ -37,7 +35,7 @@ namespace Samurai.Graphics
 		DepthBufferState oldDepthBufferState;
 		RasterizerState oldRasterizerState;
 										
-		public SpriteBatch(GraphicsContext graphics)
+		public SpriteRenderer(GraphicsContext graphics)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -70,11 +68,6 @@ namespace Samurai.Graphics
 			};
 		}
 
-		~SpriteBatch()
-		{
-			this.Dispose(false);
-		}
-
 		protected override void DisposeManagedResources()
 		{
 			this.vertexBuffer.Dispose();
@@ -83,20 +76,14 @@ namespace Samurai.Graphics
 			this.indexBuffer.Dispose();
 			this.indexBuffer = null;
 		}
-				
-		private void EnsureDrawNotInProgressForProperty(string propertyName)
-		{
-			if (this.drawInProgress)
-				throw new InvalidOperationException(string.Format("The property \"{0}\" may not be changed while drawing is in progress.", propertyName));
-		}
-
+		
 		private void EnsureDrawInProgress()
 		{
 			if (!this.drawInProgress)
 				throw new InvalidOperationException("Draw not currently in progress.");
 		}
 
-		public void Begin(ISpriteBatchShaderProgram shader)
+		public void Begin(ISpriteShaderProgram shader)
 		{
 			if (shader == null)
 				throw new ArgumentNullException("shader");

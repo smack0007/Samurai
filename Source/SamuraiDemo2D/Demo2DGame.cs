@@ -9,8 +9,8 @@ namespace SamuraiDemo2D
 {
 	public class Demo2DGame : Game
 	{
-		SpriteBatch spriteBatch;
-		BasicSpriteBatchShaderProgram shaderProgram;
+		SpriteRenderer spriteBatch;
+		BasicSpriteShaderProgram shaderProgram;
 		Texture2D planesTexture;
 		SpriteSheet planeSpriteSheet;
 		TextureFont font;
@@ -38,11 +38,9 @@ namespace SamuraiDemo2D
 
 			this.Graphics.BlendState = BlendState.AlphaBlend;
 			this.Graphics.RasterizerState = RasterizerState.Default;
-
-            this.Graphics.Viewport = new Rectangle(this.Window.Width / 2 - 200, this.Window.Height / 2 - 150, 400, 300);
 						
-			this.spriteBatch = new SpriteBatch(this.Graphics);
-			this.shaderProgram = new BasicSpriteBatchShaderProgram(this.Graphics);
+			this.spriteBatch = new SpriteRenderer(this.Graphics);
+			this.shaderProgram = new BasicSpriteShaderProgram(this.Graphics);
 
 			this.planesTexture = Texture2D.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
 				{

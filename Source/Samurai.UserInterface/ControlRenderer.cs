@@ -10,8 +10,8 @@ namespace Samurai.UserInterface
 	public class ControlRenderer : IControlRenderer
 	{
 		GraphicsContext graphics;
-		SpriteBatch spriteBatch;
-		BasicSpriteBatchShaderProgram spriteBatchShader;
+		SpriteRenderer spriteBatch;
+		BasicSpriteShaderProgram spriteBatchShader;
 		
 		Stack<Rectangle> scissorStack;
 		Rectangle? oldScissor;
@@ -28,8 +28,8 @@ namespace Samurai.UserInterface
 				throw new ArgumentNullException("graphics");
 
 			this.graphics = graphics;
-			this.spriteBatch = new SpriteBatch(this.graphics);
-			this.spriteBatchShader = new BasicSpriteBatchShaderProgram(this.graphics);
+			this.spriteBatch = new SpriteRenderer(this.graphics);
+			this.spriteBatchShader = new BasicSpriteShaderProgram(this.graphics);
 
 			this.scissorStack = new Stack<Rectangle>();
 		}

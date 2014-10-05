@@ -2,7 +2,7 @@
 
 namespace Samurai.Graphics
 {
-	public interface ISpriteBatchShaderProgram
+	public interface ISpriteShaderProgram
 	{
 		ShaderProgram ShaderProgram { get; }
 

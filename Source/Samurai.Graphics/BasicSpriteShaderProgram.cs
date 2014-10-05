@@ -6,7 +6,7 @@ namespace Samurai.Graphics
 	/// <summary>
 	/// Implements the most basic ShaderProgram needed to use SpriteBatch.
 	/// </summary>
-	public class BasicSpriteBatchShaderProgram : DisposableObject, ISpriteBatchShaderProgram
+	public class BasicSpriteShaderProgram : DisposableObject, ISpriteShaderProgram
 	{
 		/// <summary>
 		/// Gets the underlying ShaderProgram.
@@ -21,16 +21,16 @@ namespace Samurai.Graphics
 		/// Constructor.
 		/// </summary>
 		/// <param name="graphics">Handle to the GraphicsContext.</param>
-		public BasicSpriteBatchShaderProgram(GraphicsContext graphics)
+		public BasicSpriteShaderProgram(GraphicsContext graphics)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
 
-			Assembly assembly = typeof(BasicSpriteBatchShaderProgram).Assembly;
+			Assembly assembly = typeof(BasicSpriteShaderProgram).Assembly;
 			this.ShaderProgram = new ShaderProgram(
 				graphics,
-				VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteBatchShader.vert")),
-				FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteBatchShader.frag")));
+                VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteRendererShader.vert")),
+                FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteRendererShader.frag")));
 		}
 
 		protected override void DisposeManagedResources()

@@ -66,7 +66,7 @@ namespace SamuraiDemo2D
 
 			Vector2 position = this.Position;
 			Vector2 newPosition = new Vector2(position.X, position.Y - ((float)elapsed.TotalSeconds * Speed));
-			Vector2.RotateAboutOrigin(ref newPosition, ref position, MathHelper.ToRadians(this.Rotation));
+			Vector2.RotateAboutOrigin(ref newPosition, ref position, MathHelper.ToRadians(this.Rotation), out newPosition);
 
 			if (newPosition.X < -HalfSize)
 			{

@@ -68,6 +68,21 @@ namespace Samurai
 			return (float)Math.Atan2(this.X, -this.Y);
 		}
 
+        public static float Distance(Vector2 v1, Vector2 v2)
+        {
+            float result;
+            Distance(ref v1, ref v2, out result);
+            return result;
+        }
+
+        public static void Distance(ref Vector2 v1, ref Vector2 v2, out float result)
+        {
+            float x = v1.X - v2.X;
+            float y = v1.Y - v2.Y;
+
+            result = (float)Math.Sqrt((x * x) + (y * y));
+        }
+
 		/// <summary>
 		/// Calculates the length of the Vector2.
 		/// </summary>
@@ -107,12 +122,15 @@ namespace Samurai
 								 (position.X * matrix.M12) + (position.Y * matrix.M22) + matrix.M42);
 		}
 				
-		public static void RotateAboutOrigin(ref Vector2 point, ref Vector2 origin, float rotation)
+		public static void RotateAboutOrigin(ref Vector2 point, ref Vector2 origin, float rotation, out Vector2 result)
 		{
 			Vector2 u = point - origin; // point relative to origin  
 
-			if (u == Vector2.Zero)
-				return;
+            if (u == Vector2.Zero)
+            {
+                result = point;
+                return;
+            }
 
 			float a = (float)Math.Atan2(u.Y, u.X); // angle relative to origin  
 			a += rotation; // rotate  
@@ -121,7 +139,7 @@ namespace Samurai
 			float length = u.Length();
 			u = new Vector2((float)Math.Cos(a) * length, (float)Math.Sin(a) * length);
 
-			point = u + origin;
+			result = u + origin;
 		}
 
 		#region Operator Overloads
