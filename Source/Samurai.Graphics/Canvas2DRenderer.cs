@@ -38,9 +38,9 @@ namespace Samurai.Graphics
         Texture2D texture;
 
         DynamicVertexBuffer<Vertex> vertexBuffer;
-        ShaderProgram shader;
         Texture2D pixel;
 
+        ICanvas2DShaderProgram shader;
         bool drawInProgress;
 
         Matrix4 projection;
@@ -70,12 +70,6 @@ namespace Samurai.Graphics
                 M42 = 1f
             };
 
-            Assembly assembly = typeof(Canvas2DRenderer).Assembly;
-			this.shader = new ShaderProgram(
-				this.graphics,
-                VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.Canvas2DShader.vert")),
-                FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.Canvas2DShader.frag")));
-
             this.pixel = Texture2D.LoadFromBytes(this.graphics, new byte[] { 255, 255, 255, 255 }, 1, 1, new TextureParams());
         }
                 
@@ -91,8 +85,11 @@ namespace Samurai.Graphics
                 throw new InvalidOperationException("Draw not currently in progress.");
         }
 
-        public void Begin()
+        public void Begin(ICanvas2DShaderProgram shader)
         {
+            if (shader == null)
+                throw new ArgumentNullException("shader");
+
             if (this.drawInProgress)
                 throw new InvalidOperationException("Draw already in progress.");
                         
@@ -107,6 +104,7 @@ namespace Samurai.Graphics
 
             this.state = State.None;
 
+            this.shader = shader;
             this.drawInProgress = true;
         }
 
@@ -276,14 +274,14 @@ namespace Samurai.Graphics
             {
                 this.vertexBuffer.SetData(this.vertices, 0, this.vertexCount);
 
-                this.graphics.SetShaderProgram(this.shader);
+                this.graphics.SetShaderProgram(this.shader.ShaderProgram);
 
                 Rectangle viewport = this.graphics.Viewport;
                 this.projection.M11 = 2f / viewport.Width;
                 this.projection.M22 = -2f / viewport.Height;
 
-                this.shader.SetValue("inTransform", ref this.projection);
-                this.shader.SetSampler("fragSampler", this.texture);
+                this.shader.SetTransform(ref this.projection);
+                this.shader.SetSampler(this.texture);
 
                 PrimitiveType primitiveType = PrimitiveType.Triangles;
 

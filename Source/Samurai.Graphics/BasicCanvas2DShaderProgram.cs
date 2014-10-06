@@ -3,12 +3,12 @@ using System.Reflection;
 
 namespace Samurai.Graphics
 {
-	/// <summary>
-	/// Implements the most basic ShaderProgram needed to use SpriteRenderer.
-	/// </summary>
-	public class BasicSpriteShaderProgram : DisposableObject, ISpriteShaderProgram
-	{
-		/// <summary>
+    /// <summary>
+    /// Implements the most basic ShaderProgram needed to use Canvas2DRenderer.
+    /// </summary>
+    public class BasicCanvas2DShaderProgram : DisposableObject, ICanvas2DShaderProgram
+    {
+        /// <summary>
 		/// Gets the underlying ShaderProgram.
 		/// </summary>
 		public ShaderProgram ShaderProgram
@@ -21,7 +21,7 @@ namespace Samurai.Graphics
 		/// Constructor.
 		/// </summary>
 		/// <param name="graphics">Handle to the GraphicsContext.</param>
-		public BasicSpriteShaderProgram(GraphicsContext graphics)
+        public BasicCanvas2DShaderProgram(GraphicsContext graphics)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
@@ -29,8 +29,8 @@ namespace Samurai.Graphics
 			Assembly assembly = typeof(BasicSpriteShaderProgram).Assembly;
 			this.ShaderProgram = new ShaderProgram(
 				graphics,
-                VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteShader.vert")),
-                FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteShader.frag")));
+                VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicCanvas2DShader.vert")),
+                FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicCanvas2DShader.frag")));
 		}
 
 		protected override void DisposeManagedResources()
@@ -40,12 +40,12 @@ namespace Samurai.Graphics
 		}
 				
 		/// <summary>
-		/// Sets the projection matrix.
+		/// Sets the transform matrix.
 		/// </summary>
-		/// <param name="projection"></param>
-		public void SetProjectionMatrix(ref Matrix4 projection)
+		/// <param name="transform"></param>
+		public void SetTransform(ref Matrix4 transform)
 		{
-			this.ShaderProgram.SetValue("inProjection", ref projection);
+			this.ShaderProgram.SetValue("inTransform", ref transform);
 		}
 
 		/// <summary>
@@ -56,5 +56,5 @@ namespace Samurai.Graphics
 		{
 			this.ShaderProgram.SetSampler("fragSampler", texture);
 		}
-	}
+    }
 }

@@ -12,6 +12,7 @@ namespace Canvas2DSandbox
     public class Canvas2DGame : Game
     {
         Canvas2DRenderer canvas;
+        BasicCanvas2DShaderProgram shader;
         Texture2D lineStripe;
         Texture2D samuraiLogo;
 
@@ -24,6 +25,7 @@ namespace Canvas2DSandbox
             this.Window.Title = "Canvas2D Sandbox";
 
             this.canvas = new Canvas2DRenderer(this.Graphics);
+            this.shader = new BasicCanvas2DShaderProgram(this.Graphics);
 
             this.lineStripe = Texture2D.LoadFromFile(this.Graphics, "LineStripe.png", new TextureParams()
             {
@@ -54,7 +56,7 @@ namespace Canvas2DSandbox
         {
             this.Graphics.Clear();
 
-            this.canvas.Begin();
+            this.canvas.Begin(this.shader);
 
             Vector2 center = new Vector2(this.Window.Width / 2, this.Window.Height / 2);
 
