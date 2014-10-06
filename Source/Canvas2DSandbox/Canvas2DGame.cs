@@ -38,18 +38,6 @@ namespace Canvas2DSandbox
                 WrapS = TextureWrap.Repeat,
                 WrapT = TextureWrap.Repeat
             });
-
-            this.circlePositions = new Vector2[362];
-            Vector2 center = new Vector2(100, 110);
-            this.circlePositions[0] = center;
-
-            for (int i = 0; i <= 360; i++)
-            {
-                Vector2 pos = new Vector2(100, this.circlePositions[0].Y - 100);
-                Vector2 pos2;
-                Vector2.RotateAboutOrigin(ref pos, ref center, MathHelper.ToRadians(i), out pos2);
-                this.circlePositions[i + 1] = pos2;
-            }
         }
                 
         protected override void Draw(TimingState time)
@@ -63,7 +51,7 @@ namespace Canvas2DSandbox
             this.canvas.DrawLine(Vector2.Zero, new Vector2(this.Window.Width, this.Window.Height), 1, Color4.Yellow);
             this.canvas.DrawLine(new Vector2(0, this.Window.Height), new Vector2(this.Window.Width, 0), 1, Color4.Yellow);
 
-            this.canvas.DrawTriangleFan(this.circlePositions, Color4.Green);
+            this.canvas.DrawCircle(new Vector2(110, 110), 100, Color4.Green);
 
             this.canvas.DrawTriangle(
                 this.samuraiLogo,

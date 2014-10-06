@@ -28,7 +28,9 @@ namespace Samurai.Graphics
    
             TriangleStrip,
 
-            TriangleFan
+            TriangleFan,
+            
+            Circle
         }
 
         GraphicsContext graphics;
@@ -268,6 +270,25 @@ namespace Samurai.Graphics
             this.DrawTriangleSet(State.TriangleFan, texture, positions, texCoords, tint);
         }
 
+        public void DrawCircle(Vector2 center, float radius, Color4 tint)
+        {
+            this.SetState(State.Circle, 362, this.pixel);
+
+            Vector2 uv = Vector2.Zero;
+
+            this.AddVertex(ref center, ref tint, ref uv);
+                        
+            for (int i = 0; i <= 360; i++)
+            {
+                Vector2 temp = new Vector2(center.X, center.Y - radius);
+                
+                Vector2 position;
+                Vector2.RotateAboutOrigin(ref temp, ref center, MathHelper.ToRadians(i), out position);
+                
+                this.AddVertex(ref position, ref tint, ref uv);
+            }
+        }
+
         private void Flush()
         {
             if (this.vertexCount > 0)
@@ -292,6 +313,7 @@ namespace Samurai.Graphics
                         break;
 
                     case State.TriangleFan:
+                    case State.Circle:
                         primitiveType = PrimitiveType.TriangleFan;
                         break;
                 }
