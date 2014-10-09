@@ -101,7 +101,7 @@ namespace WavingFlagSample
 			this.shader.SetValue("projection", ref projection);
 			this.shader.SetValue("startX", (float)((this.Window.Width - this.texture.Width) / 2));
 			this.shader.SetValue("time", totalElapsedSeconds);
-			this.shader.SetSampler("texture0", this.texture);
+			this.shader.SetValue("texture0", this.texture);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 

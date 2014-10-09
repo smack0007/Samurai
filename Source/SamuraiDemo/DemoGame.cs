@@ -176,7 +176,7 @@ namespace SamuraiDemo
 
 			this.Graphics.SetShaderProgram(this.shaderProgram);
 			this.shaderProgram.SetValue("projection", ref projection);
-			this.shaderProgram.SetSampler("texture0", this.texture1);
+			this.shaderProgram.SetValue("texture0", this.texture1);
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer);
 						

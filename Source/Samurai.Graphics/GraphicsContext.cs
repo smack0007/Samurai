@@ -21,6 +21,8 @@ namespace Samurai.Graphics
 
 		List<GraphicsObject> graphicsObjects;
 
+        uint shaderHandle;
+
 		internal GLContext GL
 		{
 			get;
@@ -290,7 +292,11 @@ namespace Samurai.Graphics
 			if (shader == null)
 				throw new ArgumentNullException("shader");
 
-			this.GL.UseProgram(shader.Handle);
+            if (shader.Handle != this.shaderHandle)
+            {
+                this.shaderHandle = shader.Handle;
+                this.GL.UseProgram(this.shaderHandle);
+            }
 		}
 
 		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer)

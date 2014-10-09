@@ -7,6 +7,8 @@ namespace Samurai.Graphics
 	{
 		VertexShader vertexShader;
 		FragmentShader fragmentShader;
+        
+        Dictionary<string, int> uniformLocations;
 
 		internal uint Handle
 		{
@@ -32,6 +34,8 @@ namespace Samurai.Graphics
 			this.Graphics.GL.AttachShader(this.Handle, this.fragmentShader.Handle);
 
 			this.Graphics.GL.LinkProgram(this.Handle);
+
+            this.uniformLocations = new Dictionary<string, int>();
 		}
 
 		~ShaderProgram()
@@ -52,22 +56,47 @@ namespace Samurai.Graphics
 		{
 			this.Graphics.GL.DeleteProgram(this.Handle);
 		}
-				
+
+        private int GetUniformLocation(string name)
+        {
+            int result;
+            
+            if (!this.uniformLocations.TryGetValue(name, out result))
+            {
+                result = this.Graphics.GL.GetUniformLocation(this.Handle, name);
+                this.uniformLocations[name] = result;
+            }
+            
+            return result;
+        }
+
+        public void SetValue(string name, int value)
+        {
+            int location = this.GetUniformLocation(name);
+            this.Graphics.GL.Uniform1i(location, value);
+        }
+		
 		public void SetValue(string name, float value)
 		{
-			int location = this.Graphics.GL.GetUniformLocation(this.Handle, name);
+            int location = this.GetUniformLocation(name);
 			this.Graphics.GL.Uniform1f(location, value);
 		}
 
+        public void SetValue(string name, ref Color4 value)
+        {
+            int location = this.GetUniformLocation(name);
+            this.Graphics.GL.Uniform4f(location, value.R / 255, value.G / 255, value.B / 255, value.A / 255);
+        }
+
 		public void SetValue(string name, ref Matrix4 value)
 		{
-			int location = this.Graphics.GL.GetUniformLocation(this.Handle, name);
+            int location = this.GetUniformLocation(name);
 			this.Graphics.GL.UniformMatrix4(location, ref value);
 		}
 
-		public void SetSampler(string name, Texture texture)
+		public void SetValue(string name, Texture texture)
 		{
-			int location = this.Graphics.GL.GetUniformLocation(this.Handle, name);
+            int location = this.GetUniformLocation(name);
 			this.Graphics.GL.Uniform1i(location, (int)texture.Index);
 		}
 	}

@@ -54,7 +54,7 @@ namespace Samurai.Graphics
 		/// <param name="texture"></param>
 		public void SetSampler(Texture2D texture)
 		{
-			this.ShaderProgram.SetSampler("fragSampler", texture);
+			this.ShaderProgram.SetValue("fragSampler", texture);
 		}
 	}
 }

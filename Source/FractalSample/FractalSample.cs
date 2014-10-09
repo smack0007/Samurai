@@ -100,7 +100,7 @@ namespace FractalSample
 			Matrix4 projection = Matrix4.InvertedYAxis;
 					
 			this.shaderProgram.SetValue("projection", ref projection);
-			this.shaderProgram.SetSampler("palette", this.palette);
+			this.shaderProgram.SetValue("palette", this.palette);
 			this.shaderProgram.SetValue("centerX", this.centerX);
 			this.shaderProgram.SetValue("centerY", this.centerY);
 			this.shaderProgram.SetValue("scale", this.scale);
