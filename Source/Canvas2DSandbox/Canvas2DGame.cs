@@ -83,6 +83,8 @@ namespace Canvas2DSandbox
                 new Vector2(center.X + 128, center.Y + 128),
                 new Vector2(center.X, center.Y - 128),
                 this.textureBrush);
+
+            this.canvas.DrawRectangle(new Rectangle((int)center.X - 128, (int)center.Y - 128, 256, 256), this.textureBrush);
                                   
             this.rotation += (float)time.ElapsedTime.TotalSeconds * 36.0f;
 

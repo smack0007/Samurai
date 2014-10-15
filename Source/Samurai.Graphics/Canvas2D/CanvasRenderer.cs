@@ -32,7 +32,9 @@ namespace Samurai.Graphics.Canvas2D
 
             TriangleFan,
             
-            Circle
+            Circle,
+
+            Rectangle
         }
 
         GraphicsContext graphics;
@@ -114,8 +116,6 @@ namespace Samurai.Graphics.Canvas2D
         {
             this.EnsureDrawInProgress();
 
-            this.Flush();
-
             this.graphics.BlendState = this.oldBlendState;
             this.oldBlendState = null;
 
@@ -135,23 +135,16 @@ namespace Samurai.Graphics.Canvas2D
                 throw new ArgumentNullException("brush");
 
             this.EnsureDrawInProgress();
-
-            if (state != this.state ||
-                (this.vertexCount + requiredVertices >= this.vertexBuffer.Count) ||
-                brush != this.brush)
-            {
-                this.Flush();
-            }
-
+                        
             this.state = state;
             this.brush = brush;
         }
         
-        private void AddVertex(ref Vector2 modelPosition, ref Vector2 screenPosition, ref Vector2 uv)
+        private void AddVertex(ref Vector2 modelPosition, ref Vector2 screenPosition, ref Vector2 texCoord)
         {
             this.vertices[this.vertexCount].ModelPosition = modelPosition;
             this.vertices[this.vertexCount].ScreenPosition = screenPosition;
-            this.vertices[this.vertexCount].TexCoord = uv;
+            this.vertices[this.vertexCount].TexCoord = texCoord;
             this.vertexCount++;
         }
                 
@@ -332,6 +325,39 @@ namespace Samurai.Graphics.Canvas2D
             this.Flush();
         }
 
+        public void DrawRectangle(Vector2 topLeft, Vector2 bottomRight, CanvasBrush brush)
+        {
+            this.SetState(State.Rectangle, 4, brush);
+
+            Vector2 topLeftModelPosition = Vector2.Zero;
+            Vector2 topLeftScreenPosition = topLeft;
+            Vector2 topLeftTexCoords = Vector2.Zero;
+
+            Vector2 topRightModelPosition = new Vector2(bottomRight.X - topLeft.X, 0);
+            Vector2 topRightScreenPosition = new Vector2(bottomRight.X, topLeft.Y);
+            Vector2 topRightTexCoords = Vector2.UnitX;
+
+            Vector2 bottomRightModelPosition = new Vector2(bottomRight.X - topLeft.X, bottomRight.Y - topLeft.Y);
+            Vector2 bottomRightScreenPosition = bottomRight;
+            Vector2 bottomRightTexCoords = Vector2.One;
+
+            Vector2 bottomLeftModelPosition = new Vector2(0, bottomRight.Y - topLeft.Y);
+            Vector2 bottomLeftScreenPosition = new Vector2(topLeft.X, bottomRight.Y);
+            Vector2 bottomLeftTexCoords = Vector2.UnitY;
+
+            this.AddVertex(ref topLeftModelPosition, ref topLeftScreenPosition, ref topLeftTexCoords);
+            this.AddVertex(ref topRightModelPosition, ref topRightScreenPosition, ref topRightTexCoords);
+            this.AddVertex(ref bottomLeftModelPosition, ref bottomLeftScreenPosition, ref bottomLeftTexCoords);
+            this.AddVertex(ref bottomRightModelPosition, ref bottomRightScreenPosition, ref bottomRightTexCoords);
+            
+            this.Flush();
+        }
+
+        public void DrawRectangle(Rectangle rectangle, CanvasBrush brush)
+        {
+            this.DrawRectangle(new Vector2(rectangle.Left, rectangle.Top), new Vector2(rectangle.Right, rectangle.Bottom), brush);
+        }
+
         private void Flush()
         {
             if (this.vertexCount > 0)
@@ -349,6 +375,7 @@ namespace Samurai.Graphics.Canvas2D
                 switch (this.state)
                 {
                     case State.TriangleStrip:
+                    case State.Rectangle:
                         primitiveType = PrimitiveType.TriangleStrip;
                         break;
 
