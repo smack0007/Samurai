@@ -14,15 +14,7 @@ namespace Samurai.Graphics.Canvas2D
         public Color4 Color
         {
             get { return this.color; }
-            
-            set
-            {
-                if (value != this.color)
-                {
-                    this.TriggerStateChanging();
-                    this.color = value;
-                }
-            }
+            set { this.color = value; }
         }
 
 		/// <summary>

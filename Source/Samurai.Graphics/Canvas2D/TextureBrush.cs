@@ -9,35 +9,18 @@ namespace Samurai.Graphics.Canvas2D
     public class TextureBrush : CanvasBrush
     {
         ShaderProgram shader;
-        Texture2D texture;
         Color4 tint;
 
         public Texture2D Texture
         {
-            get { return this.texture; }
-
-            set
-            {
-                if (value != this.texture)
-                {
-                    this.TriggerStateChanging();
-                    this.texture = value;
-                }
-            }
+            get;
+            set;
         }
 
         public Color4 Tint
         {
             get { return this.tint; }
-            
-            set
-            {
-                if (value != this.tint)
-                {
-                    this.TriggerStateChanging();
-                    this.tint = value;
-                }
-            }
+            set { this.tint = value; }
         }
 
 		/// <summary>
@@ -52,7 +35,7 @@ namespace Samurai.Graphics.Canvas2D
                 "Samurai.Graphics.Canvas2D.BasicCanvasShader.vert",
                 "Samurai.Graphics.Canvas2D.TextureBrush.frag");
 
-            this.tint = Color4.White;
+            this.Tint = Color4.White;
 		}
 
 		protected override void DisposeManagedResources()
@@ -63,11 +46,14 @@ namespace Samurai.Graphics.Canvas2D
 		
         public override void Apply(ref Matrix4 transform)
         {
+            if (this.Texture == null)
+                throw new InvalidOperationException("TextureBrush.Texture is null.");
+
             this.Grahpics.SetShaderProgram(this.shader);
             this.shader.SetValue("vertTransform", ref transform);
-            this.shader.SetValue("fragTexture", this.texture);
-            this.shader.SetValue("fragTextureWidth", this.texture.Width);
-            this.shader.SetValue("fragTextureHeight", this.texture.Height);
+            this.shader.SetValue("fragTexture", this.Texture);
+            this.shader.SetValue("fragTextureWidth", this.Texture.Width);
+            this.shader.SetValue("fragTextureHeight", this.Texture.Height);
             this.shader.SetValue("fragTint", ref this.tint);
         }
     }

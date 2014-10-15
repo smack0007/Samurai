@@ -13,8 +13,11 @@ namespace Samurai.Graphics.Canvas2D
         [StructLayout(LayoutKind.Sequential)]
         struct Vertex
         {
-            public Vector2 Position;
-            public Vector2 UV;
+            public Vector2 ModelPosition;
+
+            public Vector2 ScreenPosition;
+            
+            public Vector2 TexCoord;
         }
 
         enum State
@@ -49,16 +52,22 @@ namespace Samurai.Graphics.Canvas2D
         State state;
         CanvasBrush brush;
 
-        Action flushAction;
-
         public CanvasRenderer(GraphicsContext graphics)
+            : this(graphics, 1024)
+        {
+        }
+
+        public CanvasRenderer(GraphicsContext graphics, int bufferSize)
         {
             if (graphics == null)
                 throw new ArgumentNullException("graphics");
 
+            if (bufferSize < 512)
+                throw new ArgumentOutOfRangeException("bufferSize", "bufferSize should be >= 512");
+
             this.graphics = graphics;
 
-            this.vertices = new Vertex[1024 * 4];
+            this.vertices = new Vertex[1024];
 
             this.vertexBuffer = new DynamicVertexBuffer<Vertex>(this.graphics);
 
@@ -69,8 +78,6 @@ namespace Samurai.Graphics.Canvas2D
                 M41 = -1f,
                 M42 = 1f
             };
-
-            this.flushAction = this.Flush;
         }
                 
         protected override void DisposeManagedResources()
@@ -134,20 +141,17 @@ namespace Samurai.Graphics.Canvas2D
                 brush != this.brush)
             {
                 this.Flush();
-
-                if (this.brush != null)
-                    this.brush.StateChanging = null;
             }
 
             this.state = state;
             this.brush = brush;
-            this.brush.StateChanging = this.flushAction;
         }
         
-        private void AddVertex(ref Vector2 position, ref Vector2 uv)
+        private void AddVertex(ref Vector2 modelPosition, ref Vector2 screenPosition, ref Vector2 uv)
         {
-            this.vertices[this.vertexCount].Position = position;
-            this.vertices[this.vertexCount].UV = uv;
+            this.vertices[this.vertexCount].ModelPosition = modelPosition;
+            this.vertices[this.vertexCount].ScreenPosition = screenPosition;
+            this.vertices[this.vertexCount].TexCoord = uv;
             this.vertexCount++;
         }
                 
@@ -161,35 +165,42 @@ namespace Samurai.Graphics.Canvas2D
             float angle = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
 
             float halfWidth = width / 2.0f;
-                       
-            Vector2 v1Temp = new Vector2(start.X, start.Y - halfWidth);
-            Vector2 v1;
-            Vector2.RotateAboutOrigin(ref v1Temp, ref start, angle, out v1);
 
-            Vector2 v2Temp = new Vector2(start.X + distance, start.Y - halfWidth);
-            Vector2 v2;
-            Vector2.RotateAboutOrigin(ref v2Temp, ref start, angle, out v2);
+            Vector2 modelTopLeft = Vector2.Zero;
+            Vector2 modelTopRight = new Vector2(distance, 0);
+            Vector2 modelBottomRight = new Vector2(distance, width);
+            Vector2 modelBottomLeft = new Vector2(0, width);
 
-            Vector2 v3Temp = new Vector2(start.X + distance, start.Y + halfWidth);
-            Vector2 v3;
-            Vector2.RotateAboutOrigin(ref v3Temp, ref start, angle, out v3);
+            Vector2 screenTopLeftTemp = new Vector2(start.X, start.Y - halfWidth);
+            Vector2 screenTopLeft;
+            Vector2.RotateAboutOrigin(ref screenTopLeftTemp, ref start, angle, out screenTopLeft);
 
-            Vector2 v4Temp = new Vector2(start.X, start.Y + halfWidth);
-            Vector2 v4;
-            Vector2.RotateAboutOrigin(ref v4Temp, ref start, angle, out v4);
+            Vector2 screenTopRightTemp = new Vector2(start.X + distance, start.Y - halfWidth);
+            Vector2 screenTopRight;
+            Vector2.RotateAboutOrigin(ref screenTopRightTemp, ref start, angle, out screenTopRight);
 
-            Vector2 v1UV = new Vector2(0, 0);
-            Vector2 v2UV = new Vector2(distance, 0);
-            Vector2 v3UV = new Vector2(distance, width);
-            Vector2 v4UV = new Vector2(0, width);
+            Vector2 screenBottomRightTemp = new Vector2(start.X + distance, start.Y + halfWidth);
+            Vector2 screenBottomRight;
+            Vector2.RotateAboutOrigin(ref screenBottomRightTemp, ref start, angle, out screenBottomRight);
 
-            this.AddVertex(ref v1, ref v1UV);
-            this.AddVertex(ref v2, ref v2UV);
-            this.AddVertex(ref v4, ref v4UV);
+            Vector2 screenBottomLeftTemp = new Vector2(start.X, start.Y + halfWidth);
+            Vector2 screenBottomLeft;
+            Vector2.RotateAboutOrigin(ref screenBottomLeftTemp, ref start, angle, out screenBottomLeft);
 
-            this.AddVertex(ref v2, ref v2UV);
-            this.AddVertex(ref v3, ref v3UV);
-            this.AddVertex(ref v4, ref v4UV);
+            Vector2 topLeftTexCoord = Vector2.Zero;
+            Vector2 topRightUV = Vector2.UnitX;
+            Vector2 bottomRightUV = Vector2.One;
+            Vector2 bottomLeftUV = Vector2.UnitY;
+
+            this.AddVertex(ref modelTopLeft, ref screenTopLeft, ref topLeftTexCoord);
+            this.AddVertex(ref modelTopRight, ref screenTopRight, ref topRightUV);
+            this.AddVertex(ref modelBottomLeft, ref screenBottomLeft, ref bottomLeftUV);
+
+            this.AddVertex(ref modelTopRight, ref screenTopRight, ref topRightUV);
+            this.AddVertex(ref modelBottomRight, ref screenBottomRight, ref bottomRightUV);
+            this.AddVertex(ref modelBottomLeft, ref screenBottomLeft, ref bottomLeftUV);
+
+            this.Flush();
         }
                 
         public void DrawTriangle(Vector2 v1, Vector2 v2, Vector2 v3, CanvasBrush brush)
@@ -197,100 +208,128 @@ namespace Samurai.Graphics.Canvas2D
             this.SetState(State.Triangle, 3, brush);
 
             Vector2 min = v1;
+            Vector2 max = v1;
 
             if (v2.X < min.X)
                 min.X = v2.X;
 
+            if (v2.X > max.X)
+                max.X = v2.X;
+
             if (v3.X < min.X)
                 min.X = v3.X;
+
+            if (v3.X > max.X)
+                max.X = v3.X;
 
             if (v2.Y < min.Y)
                 min.Y = v2.Y;
 
+            if (v2.Y > max.Y)
+                max.Y = v2.Y;
+
             if (v3.Y < min.Y)
                 min.Y = v3.Y;
 
-            Vector2 uv1 = new Vector2(v1.X - min.X, v1.Y - min.Y);
-            Vector2 uv2 = new Vector2(v2.X - min.X, v2.Y - min.Y); 
-            Vector2 uv3 = new Vector2(v3.X - min.X, v3.Y - min.Y);
+            if (v3.Y > max.Y)
+                max.Y = v3.Y;
 
-            this.AddVertex(ref v1, ref uv1);
-            this.AddVertex(ref v2, ref uv2);
-            this.AddVertex(ref v3, ref uv3);
+            Vector2 modelPosition1 = new Vector2(v1.X - min.X, v1.Y - min.Y);
+            Vector2 modelPosition2 = new Vector2(v2.X - min.X, v2.Y - min.Y);
+            Vector2 modelPosition3 = new Vector2(v3.X - min.X, v3.Y - min.Y);
+
+            float width = max.X - min.X;
+            float height = max.Y - min.Y;
+
+            Vector2 texCoord1 = new Vector2(v1.X / width, v1.Y / height);
+            Vector2 texCoord2 = new Vector2(v2.X / width, v2.Y / height);
+            Vector2 texCoord3 = new Vector2(v3.X / width, v3.Y / height);
+
+            this.AddVertex(ref modelPosition1, ref v1, ref texCoord1);
+            this.AddVertex(ref modelPosition2, ref v2, ref texCoord2);
+            this.AddVertex(ref modelPosition3, ref v3, ref texCoord3);
+
+            this.Flush();
         }
 
-        //private void DrawTriangleSet(State state, IList<Vector2> positions, CanvasBrush brush)
-        //{
-        //    if (positions == null)
-        //        throw new ArgumentNullException("positions");
+        private void DrawTriangleSet(State state, IList<Vector2> positions, CanvasBrush brush)
+        {
+            if (positions == null)
+                throw new ArgumentNullException("positions");
 
-        //    this.SetState(state, positions.Count, brush);
+            if (positions.Count < 3)
+                return;
 
-        //    Vector2 uv = Vector2.Zero;
-        //    for (int i = 0; i < positions.Count; i++)
-        //    {
-        //        Vector2 position = positions[i];
-        //        this.AddVertex(ref position, ref uv);
-        //    }
-        //}
+            this.SetState(state, positions.Count, brush);
 
-        //private void DrawTriangleSet(State state, Texture2D texture, IList<Vector2> positions, IList<Vector2> texCoords, Color4 tint)
-        //{
-        //    if (positions == null)
-        //        throw new ArgumentNullException("positions");
+            Vector2 min = positions[0];
+            Vector2 max = positions[0];
 
-        //    if (texCoords == null)
-        //        throw new ArgumentNullException("texCoords");
+            for (int i = 1; i < positions.Count; i++)
+            {
+                if (positions[i].X < min.X)
+                    min.X = positions[i].X;
 
-        //    if (positions.Count != texCoords.Count)
-        //        throw new InvalidOperationException("positions.Count and texCoords.Count must be equal.");
+                if (positions[i].Y < min.Y)
+                    min.Y = positions[i].Y;
 
-        //    this.SetState(state, positions.Count, texture);
+                if (positions[i].X > max.X)
+                    max.X = positions[i].X;
 
-        //    for (int i = 0; i < positions.Count; i++)
-        //    {
-        //        Vector2 position = positions[i];
-        //        Vector2 uv = texCoords[i];
-        //        this.AddVertex(ref position, ref tint, ref uv);
-        //    }
-        //}
+                if (positions[i].Y > max.Y)
+                    max.Y = positions[i].Y;
+            }
 
-        //public void DrawTriangleStrip(IList<Vector2> positions, Color4 tint)
-        //{
-        //    this.DrawTriangleSet(State.TriangleStrip, positions, tint);
-        //}
+            float width = max.X - min.X;
+            float height = max.Y - min.Y;
+            
+            for (int i = 0; i < positions.Count; i++)
+            {
+                Vector2 modelPosition = new Vector2(positions[i].X - min.X, positions[i].Y - min.Y);
+                Vector2 screenPosition = positions[i];
+                Vector2 texCoord = new Vector2(positions[i].X / width, positions[i].Y / height);
+                this.AddVertex(ref modelPosition, ref screenPosition, ref texCoord);
+            }
 
-        //public void DrawTriangleStrip(Texture2D texture, IList<Vector2> positions, IList<Vector2> texCoords, Color4 tint)
-        //{
-        //    this.DrawTriangleSet(State.TriangleStrip, texture, positions, texCoords, tint);
-        //}
+            this.Flush();
+        }
 
-        //public void DrawTriangleFan(IList<Vector2> positions, Color4 tint)
-        //{
-        //    this.DrawTriangleSet(State.TriangleFan, positions, tint);
-        //}
+        public void DrawTriangleStrip(IList<Vector2> positions, CanvasBrush brush)
+        {
+            this.DrawTriangleSet(State.TriangleStrip, positions, brush);
+        }
 
-        //public void DrawTriangleFan(Texture2D texture, IList<Vector2> positions, IList<Vector2> texCoords, Color4 tint)
-        //{
-        //    this.DrawTriangleSet(State.TriangleFan, texture, positions, texCoords, tint);
-        //}
+        public void DrawTriangleFan(IList<Vector2> positions, CanvasBrush brush)
+        {
+            this.DrawTriangleSet(State.TriangleFan, positions, brush);
+        }
 
         public void DrawCircle(Vector2 center, float radius, CanvasBrush brush)
         {
             this.SetState(State.Circle, 362, brush);
 
-            Vector2 uv = new Vector2(radius, radius);
-            this.AddVertex(ref center, ref uv);
+            Vector2 modelPositionCenter = new Vector2(radius, radius);
+            Vector2 texCoordCenter = new Vector2(0.5f, 0.5f);
+            this.AddVertex(ref modelPositionCenter, ref center, ref texCoordCenter);
+
+            Vector2 topLeft = new Vector2(center.X - radius, center.Y - radius);
 
             for (int i = 0; i <= 360; i++)
             {
-                Vector2 temp = new Vector2(center.X, center.Y - radius);
+                Vector2 screenPositionTemp = new Vector2(center.X, center.Y - radius);
+                Vector2 screenPosition;
+                Vector2.RotateAboutOrigin(ref screenPositionTemp, ref center, MathHelper.ToRadians(i), out screenPosition);
 
-                Vector2 position;
-                Vector2.RotateAboutOrigin(ref temp, ref center, MathHelper.ToRadians(i), out position);
+                Vector2 modelPosition = new Vector2(screenPosition.X - topLeft.X, screenPosition.Y - topLeft.Y);
 
-                this.AddVertex(ref position, ref tint, ref uv);
+                Vector2 texCoordTemp = new Vector2(0.5f, 0.0f);
+                Vector2 texCoord;
+                Vector2.RotateAboutOrigin(ref screenPositionTemp, ref texCoordCenter, MathHelper.ToRadians(i), out texCoord);
+
+                this.AddVertex(ref modelPosition, ref screenPosition, ref texCoord);
             }
+
+            this.Flush();
         }
 
         private void Flush()

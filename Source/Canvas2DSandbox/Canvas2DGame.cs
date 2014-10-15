@@ -21,7 +21,7 @@ namespace Canvas2DSandbox
 
         float rotation;
 
-        Vector2[] circlePositions;
+        Vector2[] polygonPositions;
 
         public Canvas2DGame()
         {
@@ -44,6 +44,16 @@ namespace Canvas2DSandbox
                 WrapS = TextureWrap.Repeat,
                 WrapT = TextureWrap.Repeat
             });
+
+            this.polygonPositions = new Vector2[8];
+            this.polygonPositions[0] = new Vector2(400, 400);
+            this.polygonPositions[1] = new Vector2(450, 300);
+            this.polygonPositions[2] = new Vector2(500, 450);
+            this.polygonPositions[3] = new Vector2(550, 250);
+            this.polygonPositions[4] = new Vector2(600, 500);
+            this.polygonPositions[5] = new Vector2(650, 200);
+            this.polygonPositions[6] = new Vector2(700, 550);
+            this.polygonPositions[7] = new Vector2(750, 150);
         }
                 
         protected override void Draw(TimingState time)
@@ -58,10 +68,15 @@ namespace Canvas2DSandbox
             this.canvas.DrawLine(Vector2.Zero, new Vector2(this.Window.Width, this.Window.Height), 1, solidColorBrush);
             this.canvas.DrawLine(new Vector2(0, this.Window.Height), new Vector2(this.Window.Width, 0), 1, solidColorBrush);
 
-            //this.canvas.DrawCircle(new Vector2(110, 110), 100, Color4.Green);
+            this.textureBrush.Texture = this.lineStripe;
+            this.textureBrush.Tint = Color4.Blue;
+
+            this.canvas.DrawTriangleStrip(this.polygonPositions, this.textureBrush);
 
             this.textureBrush.Texture = this.samuraiLogo;
             this.textureBrush.Tint = Color4.White;
+
+            this.canvas.DrawCircle(new Vector2(128, 128), 128, this.textureBrush);
 
             this.canvas.DrawTriangle(
                 new Vector2(center.X - 128, center.Y + 128),

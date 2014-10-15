@@ -11,8 +11,6 @@ namespace Samurai.Graphics.Canvas2D
     /// </summary>
     public abstract class CanvasBrush : DisposableObject
     {
-        internal Action StateChanging;
-
         public GraphicsContext Grahpics
         {
             get;
@@ -28,11 +26,5 @@ namespace Samurai.Graphics.Canvas2D
         }
 
         public abstract void Apply(ref Matrix4 matrix);
-
-        protected void TriggerStateChanging()
-        {
-            if (this.StateChanging != null)
-                this.StateChanging();
-        }
     }
 }
