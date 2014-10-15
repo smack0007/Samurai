@@ -70,6 +70,7 @@ namespace Canvas2DSandbox
 
             this.textureBrush.Texture = this.lineStripe;
             this.textureBrush.Tint = Color4.Blue;
+            this.textureBrush.Source = null;
 
             this.canvas.DrawTriangleStrip(this.polygonPositions, this.textureBrush);
 
@@ -84,12 +85,14 @@ namespace Canvas2DSandbox
                 new Vector2(center.X, center.Y - 128),
                 this.textureBrush);
 
-            this.canvas.DrawRectangle(new Rectangle((int)center.X - 128, (int)center.Y - 128, 256, 256), this.textureBrush);
+            this.textureBrush.Source = new Rectangle(96, 96, 64, 64);
+            this.canvas.DrawRectangle(new Rectangle((int)center.X - 32, (int)center.Y - 32, 64, 64), this.textureBrush);
                                   
             this.rotation += (float)time.ElapsedTime.TotalSeconds * 36.0f;
 
             this.textureBrush.Texture = this.lineStripe;
             this.textureBrush.Tint = Color4.Red;
+            this.textureBrush.Source = null;
 
             Vector2 end = new Vector2(center.X, center.Y - 300);
             Vector2.RotateAboutOrigin(ref end, ref center, MathHelper.ToRadians(this.rotation), out end);
