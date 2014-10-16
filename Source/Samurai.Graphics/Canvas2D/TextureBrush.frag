@@ -16,9 +16,13 @@ out vec4 outColor;
 
 void main() 
 { 
+	vec2 offset = vec2(
+		fract(fragModelPosition.x / fragTextureSourceWidth) * fragTextureSourceWidth,
+		fract(fragModelPosition.y / fragTextureSourceHeight) * fragTextureSourceHeight
+	);
 	vec2 source = vec2(
-		(fragModelPosition.x + fragTextureSourceX) / fragTextureWidth,
-		(fragModelPosition.y + fragTextureSourceY) / fragTextureHeight
+		(fragTextureSourceX + offset.x) / fragTextureWidth,
+		(fragTextureSourceY + offset.y) / fragTextureHeight
 	);
 	outColor = texture(fragTexture, source) * fragTint;
 }
