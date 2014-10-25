@@ -251,6 +251,12 @@ namespace Samurai.Graphics
 		private delegate void __Uniform1i(int location, int v0);
 		private __Uniform1i _Uniform1i;
 
+        private delegate void __Uniform2f(int location, float v0, float v1);
+        private __Uniform2f _Uniform2f;
+
+        private delegate void __Uniform3f(int location, float v0, float v1, float v2);
+        private __Uniform3f _Uniform3f;
+
         private delegate void __Uniform4f(int location, float v0, float v1, float v2, float v3);
         private __Uniform4f _Uniform4f;
 
@@ -295,6 +301,8 @@ namespace Samurai.Graphics
 			_ShaderSource = (__ShaderSource)this.platformContext.GetProcAddress<__ShaderSource>("glShaderSource");
 			_Uniform1f = (__Uniform1f)this.platformContext.GetProcAddress<__Uniform1f>("glUniform1f");
 			_Uniform1i = (__Uniform1i)this.platformContext.GetProcAddress<__Uniform1i>("glUniform1i");
+            _Uniform2f = (__Uniform2f)this.platformContext.GetProcAddress<__Uniform2f>("glUniform2f");
+            _Uniform3f = (__Uniform3f)this.platformContext.GetProcAddress<__Uniform3f>("glUniform3f");
             _Uniform4f = (__Uniform4f)this.platformContext.GetProcAddress<__Uniform4f>("glUniform4f");
 			_UniformMatrix4fv = (__UniformMatrix4fv)this.platformContext.GetProcAddress<__UniformMatrix4fv>("glUniformMatrix4fv");
 			_UseProgram = (__UseProgram)this.platformContext.GetProcAddress<__UseProgram>("glUseProgram");
@@ -656,6 +664,18 @@ namespace Samurai.Graphics
 			_Uniform1i(location, v0);
 			CheckErrors("Uniform1i");
 		}
+
+        public void Uniform2f(int location, float v0, float v1)
+        {
+            _Uniform2f(location, v0, v1);
+            CheckErrors("Uniform2f");
+        }
+
+        public void Uniform3f(int location, float v0, float v1, float v2)
+        {
+            _Uniform3f(location, v0, v1, v2);
+            CheckErrors("Uniform3f");
+        }
 
         public void Uniform4f(int location, float v0, float v1, float v2, float v3)
         {

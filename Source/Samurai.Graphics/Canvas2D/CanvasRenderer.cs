@@ -280,7 +280,7 @@ namespace Samurai.Graphics.Canvas2D
             {
                 Vector2 modelPosition = new Vector2(positions[i].X - min.X, positions[i].Y - min.Y);
                 Vector2 screenPosition = positions[i];
-                Vector2 texCoord = new Vector2(positions[i].X / width, positions[i].Y / height);
+                Vector2 texCoord = new Vector2(modelPosition.X / width, modelPosition.Y / height);
                 this.AddVertex(ref modelPosition, ref screenPosition, ref texCoord);
             }
 

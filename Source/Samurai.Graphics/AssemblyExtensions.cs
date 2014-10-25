@@ -15,12 +15,12 @@ namespace Samurai.Graphics
             Stream vertexShaderStream = assembly.GetManifestResourceStream(vertexShaderName);
 
             if (vertexShaderStream == null)
-                throw new FileNotFoundException(string.Format("Unable to fetch \"{0}\" from assembly.", vertexShaderName));
+                throw new FileNotFoundException(string.Format("Unable to load \"{0}\" from assembly.", vertexShaderName));
 
             Stream fragmentShaderStream = assembly.GetManifestResourceStream(fragmentShaderName);
 
             if (fragmentShaderStream == null)
-                throw new FileNotFoundException(string.Format("Unable to fetch \"{0}\" from assembly.", fragmentShaderName));
+                throw new FileNotFoundException(string.Format("Unable to load \"{0}\" from assembly.", fragmentShaderName));
 
             return new ShaderProgram(
                 graphics,

@@ -25,6 +25,6 @@ namespace Samurai.Graphics.Canvas2D
             this.Grahpics = graphics;
         }
 
-        public abstract void Apply(ref Matrix4 matrix);
+        public abstract void Apply(ref Matrix4 transform);
     }
 }

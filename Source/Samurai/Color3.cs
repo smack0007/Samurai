@@ -70,7 +70,7 @@ namespace Samurai
 		public static readonly Color3 Gold = new Color3(0xFF, 0xD7, 0x00);
 		public static readonly Color3 GoldenRod = new Color3(0xDA, 0xA5, 0x20);
 		public static readonly Color3 Gray = new Color3(0x80, 0x80, 0x80);
-		public static readonly Color3 Grey = new Color3(0x80, 0x80, 0x80);
+		public static readonly Color3 Grey = new Color3(0x80, 0xFF, 0x80);
 		public static readonly Color3 Green = new Color3(0x00, 0x80, 0x00);
 		public static readonly Color3 GreenYellow = new Color3(0xAD, 0xFF, 0x2F);
 		public static readonly Color3 HoneyDew = new Color3(0xF0, 0xFF, 0xF0);

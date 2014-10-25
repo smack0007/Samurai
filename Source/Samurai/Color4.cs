@@ -71,7 +71,7 @@ namespace Samurai
 		public static readonly Color4 GoldenRod = new Color4(0xDA, 0xA5, 0x20, 0xFF);
 		public static readonly Color4 Gray = new Color4(0x80, 0x80, 0x80, 0xFF);
 		public static readonly Color4 Grey = new Color4(0x80, 0x80, 0x80, 0xFF);
-		public static readonly Color4 Green = new Color4(0x00, 0x80, 0x00, 0xFF);
+		public static readonly Color4 Green = new Color4(0x00, 0xFF, 0x00, 0xFF);
 		public static readonly Color4 GreenYellow = new Color4(0xAD, 0xFF, 0x2F, 0xFF);
 		public static readonly Color4 HoneyDew = new Color4(0xF0, 0xFF, 0xF0, 0xFF);
 		public static readonly Color4 HotPink = new Color4(0xFF, 0x69, 0xB4, 0xFF);

@@ -14,8 +14,9 @@ namespace Canvas2DSandbox
     {
         CanvasRenderer canvas;
         SolidColorBrush solidColorBrush;
+        LinearGradientBrush linearGradientBrush;
         TextureBrush textureBrush;
-        
+                
         Texture2D lineStripe;
         Texture2D samuraiLogo;
 
@@ -30,6 +31,7 @@ namespace Canvas2DSandbox
             this.canvas = new CanvasRenderer(this.Graphics);
             this.solidColorBrush = new SolidColorBrush(this.Graphics);
             this.textureBrush = new TextureBrush(this.Graphics);
+            this.linearGradientBrush = new LinearGradientBrush(this.Graphics);
 
             this.lineStripe = Texture2D.LoadFromFile(this.Graphics, "LineStripe.png", new TextureParams()
             {
@@ -72,7 +74,11 @@ namespace Canvas2DSandbox
             this.textureBrush.Tint = Color4.Blue;
             this.textureBrush.Source = null;
 
-            this.canvas.DrawTriangleStrip(this.polygonPositions, this.textureBrush);
+            this.linearGradientBrush.Angle = MathHelper.ToRadians(this.rotation);
+            this.linearGradientBrush.StartColor = Color4.Red;
+            this.linearGradientBrush.EndColor = Color4.Green;
+            //this.canvas.DrawTriangleStrip(this.polygonPositions, this.linearGradientBrush);
+            this.canvas.DrawRectangle(new Rectangle(400, 400, 200, 200), this.linearGradientBrush);
 
             this.textureBrush.Texture = this.samuraiLogo;
             this.textureBrush.Tint = Color4.White;

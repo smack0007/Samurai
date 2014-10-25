@@ -82,6 +82,18 @@ namespace Samurai.Graphics
 			this.Graphics.GL.Uniform1f(location, value);
 		}
 
+        public void SetValue(string name, ref Vector2 value)
+        {
+            int location = this.GetUniformLocation(name);
+            this.Graphics.GL.Uniform2f(location, value.X, value.Y);
+        }
+
+        public void SetValue(string name, ref Vector3 value)
+        {
+            int location = this.GetUniformLocation(name);
+            this.Graphics.GL.Uniform3f(location, value.X, value.Y, value.Z);
+        }
+
         public void SetValue(string name, ref Color4 value)
         {
             int location = this.GetUniformLocation(name);
