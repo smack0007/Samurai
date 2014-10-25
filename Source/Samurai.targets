@@ -1,0 +1,5 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <Target Name="AfterBuild">
+    <Exec Condition="Exists('$(SolutionDir)..\AfterBuild.bat')" Command="$(SolutionDir)..\AfterBuild.bat $(TargetFileName) $(TargetPath)" />
+  </Target>
+</Project>
