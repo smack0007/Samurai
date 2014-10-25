@@ -10,7 +10,7 @@ namespace SamuraiDemo2D
 {
 	public class Demo2DGame : Game
 	{
-		SpriteRenderer spriteBatch;
+		SpriteRenderer spriteRenderer;
 		BasicSpriteShaderProgram shaderProgram;
 		Texture2D planesTexture;
 		SpriteSheet planeSpriteSheet;
@@ -20,7 +20,7 @@ namespace SamuraiDemo2D
 		
 		List<Plane> planes;
 
-		const int PlaneCount = 1000;
+		const int PlaneCount = 5000;
 
 		int fps = 0;
 		int fpsCount;
@@ -40,7 +40,7 @@ namespace SamuraiDemo2D
 			this.Graphics.BlendState = BlendState.AlphaBlend;
 			this.Graphics.RasterizerState = RasterizerState.Default;
 						
-			this.spriteBatch = new SpriteRenderer(this.Graphics);
+			this.spriteRenderer = new SpriteRenderer(this.Graphics, 1024);
 			this.shaderProgram = new BasicSpriteShaderProgram(this.Graphics);
 
 			this.planesTexture = Texture2D.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
@@ -92,7 +92,7 @@ namespace SamuraiDemo2D
 		{
 			this.Graphics.Clear(Color4.Black);
 
-			this.spriteBatch.Begin(this.shaderProgram);
+			this.spriteRenderer.Begin(this.shaderProgram);
 
 			string text = string.Format("FPS: {0}", fps);
 
@@ -102,7 +102,7 @@ namespace SamuraiDemo2D
 			int halfTextWidth = textSize.Width / 2;
 			int halfTextHeight = textSize.Height / 2;
 
-			this.spriteBatch.DrawString(
+			this.spriteRenderer.DrawString(
 				this.font,
 				text,
 				new Rectangle(halfWindowWidth - halfTextWidth, halfWindowHeight - halfTextHeight, textSize.Width, textSize.Height),
@@ -113,7 +113,7 @@ namespace SamuraiDemo2D
 
 			foreach (Plane plane in this.planes)
 			{
-				this.spriteBatch.Draw(
+				this.spriteRenderer.Draw(
 					this.planeSpriteSheet,
 					plane.StartFrame + plane.FrameOffset,
 					plane.Position,
@@ -122,7 +122,7 @@ namespace SamuraiDemo2D
 				);
 			}
 
-			this.spriteBatch.End();
+			this.spriteRenderer.End();
 
 			this.Graphics.SwapBuffers();
 

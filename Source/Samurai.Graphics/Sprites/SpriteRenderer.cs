@@ -36,13 +36,26 @@ namespace Samurai.Graphics.Sprites
 		RasterizerState oldRasterizerState;
 										
 		public SpriteRenderer(GraphicsContext graphics)
+            : this(graphics, 1024)
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="maxSprites">The maximum number of sprites which can be batched.</param>
+        public SpriteRenderer(GraphicsContext graphics, int maxSprites)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
 
+            if (maxSprites <= 0)
+                throw new ArgumentOutOfRangeException("maxSprites", "MaxSprites must be >= 1.");
+
 			this.graphics = graphics;
 
-			this.vertices = new Vertex[1024 * 4];
+            this.vertices = new Vertex[maxSprites * 4];
 
 			this.vertexBuffer = new DynamicVertexBuffer<Vertex>(this.graphics);
 
