@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	public sealed class SpriteRenderer : DisposableObject
 	{		
@@ -29,7 +29,7 @@ namespace Samurai.Graphics
 		ISpriteShaderProgram shader;
 		bool drawInProgress;
 
-		Matrix4 projection;
+		Matrix4 transform;
 
 		BlendState oldBlendState;
 		DepthBufferState oldDepthBufferState;
@@ -59,7 +59,7 @@ namespace Samurai.Graphics
 
 			this.indexBuffer = new StaticIndexBuffer<ushort>(this.graphics, indices);
 
-			this.projection = new Matrix4()
+			this.transform = new Matrix4()
 			{
 				M33 = 1f,
 				M44 = 1f,
@@ -430,10 +430,10 @@ namespace Samurai.Graphics
 				this.graphics.SetShaderProgram(this.shader.ShaderProgram);
 
 				Rectangle viewport = this.graphics.Viewport;
-				this.projection.M11 = 2f / viewport.Width;
-				this.projection.M22 = -2f / viewport.Height;
+				this.transform.M11 = 2f / viewport.Width;
+				this.transform.M22 = -2f / viewport.Height;
 								
-				this.shader.SetProjectionMatrix(ref this.projection);
+				this.shader.SetTransform(ref this.transform);
 				this.shader.SetSampler(this.texture);
 
 				this.graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer, this.indexBuffer, 0, (this.vertexCount / 4) * 6);

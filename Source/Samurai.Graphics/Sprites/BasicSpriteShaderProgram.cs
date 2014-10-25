@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	/// <summary>
 	/// Implements the most basic ShaderProgram needed to use SpriteRenderer.
@@ -26,11 +26,10 @@ namespace Samurai.Graphics
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
 
-			Assembly assembly = typeof(BasicSpriteShaderProgram).Assembly;
-			this.ShaderProgram = new ShaderProgram(
-				graphics,
-                VertexShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteShader.vert")),
-                FragmentShader.Compile(graphics, assembly.GetManifestResourceStream("Samurai.Graphics.BasicSpriteShader.frag")));
+            this.ShaderProgram = typeof(BasicSpriteShaderProgram).Assembly.LoadShaderProgram(
+               graphics,
+               "Samurai.Graphics.Sprites.BasicSpriteShader.vert",
+               "Samurai.Graphics.Sprites.BasicSpriteShader.frag");
 		}
 
 		protected override void DisposeManagedResources()
@@ -40,12 +39,12 @@ namespace Samurai.Graphics
 		}
 				
 		/// <summary>
-		/// Sets the projection matrix.
+		/// Sets the transform matrix.
 		/// </summary>
-		/// <param name="projection"></param>
-		public void SetProjectionMatrix(ref Matrix4 projection)
+		/// <param name="transform"></param>
+		public void SetTransform(ref Matrix4 transform)
 		{
-			this.ShaderProgram.SetValue("inProjection", ref projection);
+			this.ShaderProgram.SetValue("vertTransform", ref transform);
 		}
 
 		/// <summary>

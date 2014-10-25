@@ -80,7 +80,7 @@
     <Compile Include="Canvas2D\CanvasBrush.cs" />
     <Compile Include="Canvas2D\LinearGradientBrush.cs" />
     <Compile Include="Canvas2D\SolidColorBrush.cs" />
-    <Compile Include="BasicSpriteShaderProgram.cs" />
+    <Compile Include="Sprites\BasicSpriteShaderProgram.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BlendState.cs" />
     <Compile Include="Canvas2D\TextureBrush.cs" />
@@ -97,7 +97,7 @@
     <Compile Include="GraphicsContext.cs" />
     <Compile Include="GraphicsObject.cs" />
     <Compile Include="IndexBuffer.cs" />
-    <Compile Include="ISpriteShaderProgram.cs" />
+    <Compile Include="Sprites\ISpriteShaderProgram.cs" />
     <Compile Include="PrimitiveType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RasterizerState.cs" />
@@ -106,9 +106,9 @@
     <Compile Include="ShaderProgram.cs" />
     <Compile Include="ShaderType.cs" />
     <Compile Include="SourceBlendFactor.cs" />
-    <Compile Include="SpriteRenderer.cs" />
-    <Compile Include="SpriteSheet.Build.cs" />
-    <Compile Include="SpriteSheet.cs" />
+    <Compile Include="Sprites\SpriteRenderer.cs" />
+    <Compile Include="Sprites\SpriteSheet.Build.cs" />
+    <Compile Include="Sprites\SpriteSheet.cs" />
     <Compile Include="StaticIndexBuffer.cs" />
     <Compile Include="StaticVertexBuffer.cs" />
     <Compile Include="Texture.cs" />
@@ -133,10 +133,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BasicSpriteShader.frag" />
+    <EmbeddedResource Include="Sprites\BasicSpriteShader.frag" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BasicSpriteShader.vert" />
+    <EmbeddedResource Include="Sprites\BasicSpriteShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Canvas2D\SolidColorBrush.frag" />

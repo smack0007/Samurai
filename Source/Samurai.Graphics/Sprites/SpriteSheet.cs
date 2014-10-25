@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	/// <summary>
 	/// Wraps a texture and keeps track of the frames within it.

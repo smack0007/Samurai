@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	public sealed partial class SpriteSheet
 	{

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Samurai.Graphics;
+using Samurai.Graphics.Sprites;
 
 namespace Samurai.UserInterface
 {

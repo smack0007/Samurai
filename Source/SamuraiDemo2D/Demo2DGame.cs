@@ -1,6 +1,7 @@
 ﻿using Samurai;
 using Samurai.GameFramework;
 using Samurai.Graphics;
+using Samurai.Graphics.Sprites;
 using Samurai.Input;
 using System;
 using System.Collections.Generic;
