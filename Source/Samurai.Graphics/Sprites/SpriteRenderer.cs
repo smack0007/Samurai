@@ -137,10 +137,10 @@ namespace Samurai.Graphics.Sprites
 		}
 
 		private void AddQuad(
-			Vector2 topLeft,
-			Vector2 topRight,
-			Vector2 bottomRight,
-			Vector2 bottomLeft,
+			ref Vector2 topLeft,
+			ref Vector2 topRight,
+			ref Vector2 bottomRight,
+			ref Vector2 bottomLeft,
 			Rectangle source,
 			Color4 color,
 			float layerDepth)
@@ -308,10 +308,10 @@ namespace Samurai.Graphics.Sprites
 			bottomLeft = bottomLeft.Transform(ref transform3);
 
 			this.AddQuad(
-				topLeft,
-				topRight,
-				bottomRight,
-				bottomLeft,
+				ref topLeft,
+                ref topRight,
+                ref bottomRight,
+                ref bottomLeft,
 				source.Value,
 				tint.Value,
 				layerDepth);
