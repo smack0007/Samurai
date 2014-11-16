@@ -80,6 +80,7 @@
     <Compile Include="Canvas2D\CanvasBrush.cs" />
     <Compile Include="Canvas2D\LinearGradientBrush.cs" />
     <Compile Include="Canvas2D\SolidColorBrush.cs" />
+    <Compile Include="GraphicsContextDescription.cs" />
     <Compile Include="Sprites\BasicSpriteShaderProgram.cs" />
     <Compile Include="BitmapHelper.cs" />
     <Compile Include="BlendState.cs" />

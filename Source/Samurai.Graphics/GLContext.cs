@@ -78,6 +78,16 @@ namespace Samurai.Graphics
 		public const uint StackUnderflow = 0x0504;
 		public const uint TableTooLarge = 0x8031;
 
+		// Get
+		public const uint NumExtensions = 0x821D;
+
+        // GetString
+        public const uint Vendor = 0x1F00;
+        public const uint Renderer = 0x1F01;
+        public const uint Version = 0x1F02;
+        public const uint Extensions = 0x1F03;
+        public const uint ShadingLanguageVersion = 0x8B8C;
+
 		// Pixels
 		public const uint Rgba = 0x1908;
 		public const uint Rgba8 = 0x8058;
@@ -200,6 +210,15 @@ namespace Samurai.Graphics
 		[DllImport(Library, EntryPoint = "glFrontFace")]
 		private static extern void _FrontFace(uint mode);
 
+		private delegate void __GetIntegerv(uint pname, out int value);
+		private __GetIntegerv _GetIntegerv;
+
+        [DllImport(Library, EntryPoint = "glGetString")]
+        private static extern IntPtr _GetString(uint name);
+
+		private delegate IntPtr __GetStringi(uint name, uint index);
+		private __GetStringi _GetStringi;
+
 		private delegate void __GenBuffers(int n, [Out] uint[] buffers);
 		private __GenBuffers _GenBuffers;
 
@@ -294,8 +313,10 @@ namespace Samurai.Graphics
 			_EnableVertexAttribArray = (__EnableVertexAttribArray)this.platformContext.GetProcAddress<__EnableVertexAttribArray>("glEnableVertexAttribArray");
 			_GenBuffers = (__GenBuffers)this.platformContext.GetProcAddress<__GenBuffers>("glGenBuffers");
 			_GenVertexArrays = (__GenVertexArrays)this.platformContext.GetProcAddress<__GenVertexArrays>("glGenVertexArrays");
+			_GetIntegerv = (__GetIntegerv)this.platformContext.GetProcAddress<__GetIntegerv>("glGetIntegerv");
 			_GetShaderInfoLog = (__GetShaderInfoLog)this.platformContext.GetProcAddress<__GetShaderInfoLog>("glGetShaderInfoLog");
 			_GetShaderiv = (__GetShaderiv)this.platformContext.GetProcAddress<__GetShaderiv>("glGetShaderiv");
+			_GetStringi = (__GetStringi)this.platformContext.GetProcAddress<__GetStringi>("glGetStringi");
 			_GetUniformLocation = (__GetUniformLocation)this.platformContext.GetProcAddress<__GetUniformLocation>("glGetUniformLocation");
 			_LinkProgram = (__LinkProgram)this.platformContext.GetProcAddress<__LinkProgram>("glLinkProgram");
 			_ShaderSource = (__ShaderSource)this.platformContext.GetProcAddress<__ShaderSource>("glShaderSource");
@@ -530,6 +551,27 @@ namespace Samurai.Graphics
 		{
 			_FrontFace(mode);
 			CheckErrors("FrontFace");
+		}
+
+		public int GetIntegerv(uint pname)
+		{
+			int value;
+			_GetIntegerv(pname, out value);
+			return value;
+		}
+
+        public string GetString(uint name)
+        {
+            IntPtr data = _GetString(name);
+            CheckErrors("GetString");
+            return Marshal.PtrToStringAnsi(data);
+        }
+
+		public string GetStringi(uint name, uint index)
+		{
+			IntPtr data = _GetStringi(name, index);
+			CheckErrors("GetStringi");
+			return Marshal.PtrToStringAnsi(data);
 		}
 
 		public uint GenBuffer()

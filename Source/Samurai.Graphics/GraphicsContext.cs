@@ -130,7 +130,7 @@ namespace Samurai.Graphics
 				}
 			}
 		}
-								
+						
 		public GraphicsContext(IHostControl host)
 		{
             if (host == null)
@@ -276,6 +276,11 @@ namespace Samurai.Graphics
             this.ClearColor = color;
             this.Clear();
 		}
+
+        public GraphicsContextDescription GetDescription()
+        {
+            return new GraphicsContextDescription(this);
+        }
 
         public bool MakeCurrent()
         {

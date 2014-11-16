@@ -26,6 +26,8 @@ namespace Canvas2DSandbox
 
         public Canvas2DGame()
         {
+            var info = this.Graphics.GetDescription();
+
             this.Window.Title = "Canvas2D Sandbox";
 
             this.canvas = new CanvasRenderer(this.Graphics);
