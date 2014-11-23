@@ -47,7 +47,7 @@ namespace Samurai.Wpf
             set;
         }
                 
-        public event EventHandler<GraphicsContextEventArgs> ContextCreated;
+        public event EventHandler<GraphicsContextEventArgs> GraphicsContextCreated;
 
         public event EventHandler<GraphicsContextEventArgs> Render;
 
@@ -65,7 +65,7 @@ namespace Samurai.Wpf
             {
                 this.Graphics = new GraphicsContext(this);
                 this.Graphics.Viewport = new Rectangle(0, 0, (int)this.ActualWidth, (int)this.ActualHeight);
-                this.OnContextCreated(new GraphicsContextEventArgs(this.Graphics));
+                this.OnGraphicsContextCreated(new GraphicsContextEventArgs(this.Graphics));
 
                 CompositionTarget.Rendering += CompositionTarget_Rendering;
             }
@@ -154,13 +154,13 @@ namespace Samurai.Wpf
             base.OnRenderSizeChanged(sizeInfo);
         }
 
-        protected virtual void OnContextCreated(GraphicsContextEventArgs e)
+        protected virtual void OnGraphicsContextCreated(GraphicsContextEventArgs e)
         {
             this.oldWindowWidth = (int)this.ActualWidth;
             this.oldWindowHeight = (int)this.ActualHeight;
 
-            if (this.ContextCreated != null)
-                this.ContextCreated(this, e);
+            if (this.GraphicsContextCreated != null)
+                this.GraphicsContextCreated(this, e);
         }
 
         protected virtual void OnRender(GraphicsContextEventArgs e)

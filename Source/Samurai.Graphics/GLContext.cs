@@ -209,9 +209,9 @@ namespace Samurai.Graphics
 
 		[DllImport(Library, EntryPoint = "glFrontFace")]
 		private static extern void _FrontFace(uint mode);
-
-		private delegate void __GetIntegerv(uint pname, out int value);
-		private __GetIntegerv _GetIntegerv;
+				
+		[DllImport(Library, EntryPoint = "glGetIntegerv")]
+		private static extern void _GetIntegerv(uint pname, out int value);
 
         [DllImport(Library, EntryPoint = "glGetString")]
         private static extern IntPtr _GetString(uint name);
@@ -313,7 +313,6 @@ namespace Samurai.Graphics
 			_EnableVertexAttribArray = (__EnableVertexAttribArray)this.platformContext.GetProcAddress<__EnableVertexAttribArray>("glEnableVertexAttribArray");
 			_GenBuffers = (__GenBuffers)this.platformContext.GetProcAddress<__GenBuffers>("glGenBuffers");
 			_GenVertexArrays = (__GenVertexArrays)this.platformContext.GetProcAddress<__GenVertexArrays>("glGenVertexArrays");
-			_GetIntegerv = (__GetIntegerv)this.platformContext.GetProcAddress<__GetIntegerv>("glGetIntegerv");
 			_GetShaderInfoLog = (__GetShaderInfoLog)this.platformContext.GetProcAddress<__GetShaderInfoLog>("glGetShaderInfoLog");
 			_GetShaderiv = (__GetShaderiv)this.platformContext.GetProcAddress<__GetShaderiv>("glGetShaderiv");
 			_GetStringi = (__GetStringi)this.platformContext.GetProcAddress<__GetStringi>("glGetStringi");

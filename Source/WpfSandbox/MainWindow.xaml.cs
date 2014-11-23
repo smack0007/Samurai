@@ -24,7 +24,7 @@ namespace WpfSandbox
         public MainWindow()
         {
             this.InitializeComponent();
-            this.Canvas.ContextCreated += this.Canvas_ContextCreated;
+            this.Canvas.GraphicsContextCreated += this.Canvas_ContextCreated;
             this.Canvas.Render += this.Canvas_Render;
         }
 
