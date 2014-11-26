@@ -9,7 +9,7 @@ namespace Samurai.Wpf
 {
     public class GraphicsContextEventArgs : EventArgs
     {
-        public GraphicsContext Context
+        public GraphicsContext Graphics
         {
             get;
             private set;
@@ -20,7 +20,7 @@ namespace Samurai.Wpf
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            this.Context = context;
+            this.Graphics = context;
         }
     }
 }

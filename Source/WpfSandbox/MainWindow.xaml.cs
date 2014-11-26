@@ -34,7 +34,7 @@ namespace WpfSandbox
 
         private void Canvas_Render(object sender, GraphicsContextEventArgs e)
         {
-            e.Context.Clear();
+            e.Graphics.Clear();
         }
     }
 }
