@@ -44,7 +44,7 @@ namespace Samurai.Graphics
 			if (shader.Graphics.GL.GetShader(shader.Handle, GLContext.CompileStatus) == 0)
 			{
 				string infoLog = shader.Graphics.GL.GetShaderInfoLog(shader.Handle);
-				throw new SamuraiException(string.Format("Failed to compile {0}: {1}", typeof(T).Name, infoLog));
+				throw new ShaderCompilationException(string.Format("Failed to compile {0}.", typeof(T).Name), infoLog);
 			}
 		}
 	}

@@ -46,10 +46,10 @@ void main()
     texCoords = vertTexCoords; 
 }";
 
-		private static readonly string defaultFragmentShader =
-@"#version 330
+		private static readonly string versionHeader = "#version 330" + Environment.NewLine;
 
-smooth in vec2 texCoords; 
+		private static readonly string defaultFragmentShader =
+@"smooth in vec2 texCoords; 
 
 uniform sampler2D sampler;
 
@@ -117,7 +117,7 @@ void main()
 			this.shaderProgram = new ShaderProgram(
 				e.Graphics,
 				VertexShader.Compile(e.Graphics, vertexShader),
-				FragmentShader.Compile(e.Graphics, defaultFragmentShader));
+				FragmentShader.Compile(e.Graphics, versionHeader + defaultFragmentShader));
 
 			this.texture = Texture2D.LoadFromFile(e.Graphics, "SamuraiLogo.png", new TextureParams());
 		}
@@ -145,16 +145,24 @@ void main()
 		{
 			ShaderProgram program = null;
 
+			this.OutputBox.Text = string.Empty;
+			this.OutputBox.Foreground = Brushes.Black;
+
 			try
 			{
 				program = new ShaderProgram(
 					this.GraphicsBox.Graphics,
 					VertexShader.Compile(this.GraphicsBox.Graphics, vertexShader),
-					FragmentShader.Compile(this.GraphicsBox.Graphics, this.ShaderCodeBox.Text));
+					FragmentShader.Compile(this.GraphicsBox.Graphics, versionHeader + this.ShaderCodeBox.Text));
+
+				this.OutputBox.Text = "Shader compiled successfully.";
 			}
-			catch (SamuraiException ex)
+			catch (ShaderCompilationException ex)
 			{
 				program = null;
+
+				this.OutputBox.Text = "Failed to compile shader:" + Environment.NewLine + ex.ErrorText;
+				this.OutputBox.Foreground = Brushes.Red;
 			}
 
 			if (program != null)
