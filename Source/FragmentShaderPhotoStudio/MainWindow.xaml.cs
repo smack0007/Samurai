@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Microsoft.Win32;
 using Samurai;
 using Samurai.Graphics;
 using Samurai.Wpf;
@@ -29,7 +30,7 @@ namespace FragmentShaderPhotoStudio
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private static readonly string vertexShader =
+		private static readonly string vertexShaderCode =
 @"#version 330 
 
 uniform vec2 vertSize; 
@@ -48,7 +49,7 @@ void main()
 
 		private static readonly string versionHeader = "#version 330" + Environment.NewLine;
 
-		private static readonly string defaultFragmentShader =
+		private static readonly string defaultFragmentShaderCode =
 @"smooth in vec2 texCoords; 
 
 uniform sampler2D sampler;
@@ -68,13 +69,18 @@ void main()
 		}
 
 		StaticVertexBuffer<Vertex> vertexBuffer;
-		ShaderProgram shaderProgram;
-		Texture2D texture;
+		ShaderProgram currentShaderProgram;
+		Texture2D currentPicture;
 		Matrix4 transform;
 
 		public MainWindow()
 		{
 			this.InitializeComponent();
+
+			this.FileExitButton.Click += this.FileExitButton_Click;
+
+			this.CompileButton.Click += this.CompileButton_Click;
+			this.ImportPictureButton.Click += this.ImportPictureButton_Click;
 
 			using (Stream file = Assembly.GetExecutingAssembly().GetManifestResourceStream("FragmentShaderPhotoStudio.glsl.xshd"))
 			using (XmlTextReader reader = new XmlTextReader(file))
@@ -83,12 +89,10 @@ void main()
 				this.ShaderCodeBox.SyntaxHighlighting = HighlightingLoader.Load(xshd, HighlightingManager.Instance);
 			}
 
-			this.ShaderCodeBox.Text = defaultFragmentShader;
+			this.ShaderCodeBox.Text = defaultFragmentShaderCode;
 
 			this.GraphicsBox.GraphicsContextCreated += this.GraphicsBox_GraphicsContextCreated;
 			this.GraphicsBox.Render += this.GraphicsBox_Render;
-
-			this.CompileButton.Click += this.CompileButton_Click;
 
 			this.transform = new Matrix4()
 			{
@@ -98,7 +102,22 @@ void main()
 				M42 = 1f
 			};
 		}
-		
+
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			base.OnKeyDown(e);
+
+			if (e.Key == Key.F5)
+			{
+				this.Compile();
+			}
+		}
+
+		private void FileExitButton_Click(object sender, EventArgs e)
+		{
+			this.Exit();
+		}
+
 		private void GraphicsBox_GraphicsContextCreated(object sender, GraphicsContextEventArgs e)
 		{
 			e.Graphics.ClearColor = Color4.CornflowerBlue;
@@ -114,19 +133,19 @@ void main()
 				new Vertex() { Position = Vector2.One, TexCoords = Vector2.One },
 			});
 
-			this.shaderProgram = new ShaderProgram(
+			this.currentShaderProgram = new ShaderProgram(
 				e.Graphics,
-				VertexShader.Compile(e.Graphics, vertexShader),
-				FragmentShader.Compile(e.Graphics, versionHeader + defaultFragmentShader));
+				VertexShader.Compile(e.Graphics, vertexShaderCode),
+				FragmentShader.Compile(e.Graphics, versionHeader + defaultFragmentShaderCode));
 
-			this.texture = Texture2D.LoadFromFile(e.Graphics, "SamuraiLogo.png", new TextureParams());
+			this.currentPicture = Texture2D.LoadFromFile(e.Graphics, "SamuraiLogo.png", new TextureParams());
 		}
 
 		private void GraphicsBox_Render(object sender, GraphicsContextEventArgs e)
 		{
 			e.Graphics.Clear();
 
-			e.Graphics.SetShaderProgram(this.shaderProgram);
+			e.Graphics.SetShaderProgram(this.currentShaderProgram);
 
 			Vector2 size = new Vector2(256, 256);
 
@@ -134,41 +153,90 @@ void main()
 			this.transform.M11 = 2f / viewport.Width;
 			this.transform.M22 = -2f / viewport.Height;
 			
-			this.shaderProgram.SetValue("vertSize", ref size);
-			this.shaderProgram.SetValue("vertTransform", ref this.transform);
-			this.shaderProgram.SetValue("sampler", this.texture);
+			this.currentShaderProgram.SetValue("vertSize", ref size);
+			this.currentShaderProgram.SetValue("vertTransform", ref this.transform);
+			this.currentShaderProgram.SetValue("sampler", this.currentPicture);
 			
 			e.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer);
 		}
 
 		private void CompileButton_Click(object sender, EventArgs e)
 		{
-			ShaderProgram program = null;
+			this.Compile();
+		}
+
+		private void ImportPictureButton_Click(object sender, EventArgs e)
+		{
+			this.ImportPicture();
+		}
+
+		private void Exit()
+		{
+			this.Close();
+		}
+
+		private void Compile()
+		{
+			ShaderProgram shaderProgram = null;
+			VertexShader vertexShader = VertexShader.Compile(this.GraphicsBox.Graphics, vertexShaderCode);
+			FragmentShader fragmentShader = null;
 
 			this.OutputBox.Text = string.Empty;
 			this.OutputBox.Foreground = Brushes.Black;
 
 			try
 			{
-				program = new ShaderProgram(
-					this.GraphicsBox.Graphics,
-					VertexShader.Compile(this.GraphicsBox.Graphics, vertexShader),
-					FragmentShader.Compile(this.GraphicsBox.Graphics, versionHeader + this.ShaderCodeBox.Text));
+				fragmentShader = FragmentShader.Compile(this.GraphicsBox.Graphics, versionHeader + this.ShaderCodeBox.Text);
+
+				shaderProgram = new ShaderProgram(this.GraphicsBox.Graphics, vertexShader, fragmentShader);
 
 				this.OutputBox.Text = "Shader compiled successfully.";
 			}
 			catch (ShaderCompilationException ex)
 			{
-				program = null;
+				if (fragmentShader != null)
+				{
+					fragmentShader.Dispose();
+				}
+
+				shaderProgram = null;
 
 				this.OutputBox.Text = "Failed to compile shader:" + Environment.NewLine + ex.ErrorText;
 				this.OutputBox.Foreground = Brushes.Red;
 			}
 
-			if (program != null)
+			if (shaderProgram != null)
 			{
-				this.shaderProgram.Dispose();
-				this.shaderProgram = program;
+				this.currentShaderProgram.Dispose();
+				this.currentShaderProgram = shaderProgram;
+			}
+		}
+
+		private void ImportPicture()
+		{
+			OpenFileDialog dialog = new OpenFileDialog()
+			{
+				Filter = "Image Files (*.jpg,*.png)|*.jpg;*.png"
+			};
+
+			if (dialog.ShowDialog() == true)
+			{
+				Texture2D picture = null;
+
+				try
+				{
+					picture = Texture2D.LoadFromFile(this.GraphicsBox.Graphics, dialog.FileName, new TextureParams());
+				}
+				catch (Exception)
+				{
+					picture = null;
+				}
+
+				if (picture != null)
+				{
+					this.currentPicture.Dispose();
+					this.currentPicture = picture;
+				}
 			}
 		}
 	}
