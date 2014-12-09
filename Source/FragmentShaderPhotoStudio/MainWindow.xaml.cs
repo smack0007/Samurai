@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,26 +40,30 @@ uniform mat4 vertTransform;
 layout(location = 0) in vec2 vertPosition; 
 layout(location = 1) in vec2 vertTexCoords; 
 
-smooth out vec2 texCoords;
+smooth out vec2 pixelCoords;
 
 void main() 
 { 
 	gl_Position = vertTransform * vec4(vertPosition.x * vertSize.x, vertPosition.y * vertSize.y, 1.0, 1.0); 
-    texCoords = vertTexCoords; 
+    pixelCoords = vertTexCoords; 
 }";
 
 		private static readonly string versionHeader = "#version 330" + Environment.NewLine;
 
 		private static readonly string defaultFragmentShaderCode =
-@"smooth in vec2 texCoords; 
+@"uniform sampler2D picture;
+uniform vec2 pictureSize;
+uniform float time;
 
-uniform sampler2D sampler;
+smooth in vec2 pixelCoords;
 
-out vec4 outColor; 
+out vec4 pixel; 
 
 void main() 
 { 
-	outColor = texture(sampler, vec2(texCoords.x, texCoords.y));
+	pixel = texture(picture, vec2(pixelCoords.x, pixelCoords.y));
+	
+	// TODO: Do stuff here...
 }";
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -72,6 +77,7 @@ void main()
 		ShaderProgram currentShaderProgram;
 		Texture2D currentPicture;
 		Matrix4 transform;
+		Stopwatch stopwatch;
 
 		public MainWindow()
 		{
@@ -101,6 +107,8 @@ void main()
 				M41 = -1f,
 				M42 = 1f
 			};
+
+			this.stopwatch = new Stopwatch();
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)
@@ -139,6 +147,8 @@ void main()
 				FragmentShader.Compile(e.Graphics, versionHeader + defaultFragmentShaderCode));
 
 			this.currentPicture = Texture2D.LoadFromFile(e.Graphics, "SamuraiLogo.png", new TextureParams());
+
+			this.stopwatch.Start();
 		}
 
 		private void GraphicsBox_Render(object sender, GraphicsContextEventArgs e)
@@ -147,7 +157,7 @@ void main()
 
 			e.Graphics.SetShaderProgram(this.currentShaderProgram);
 
-			Vector2 size = new Vector2(256, 256);
+			Vector2 size = new Vector2(this.currentPicture.Width, this.currentPicture.Height);
 
 			Samurai.Rectangle viewport = e.Graphics.Viewport;
 			this.transform.M11 = 2f / viewport.Width;
@@ -155,7 +165,12 @@ void main()
 			
 			this.currentShaderProgram.SetValue("vertSize", ref size);
 			this.currentShaderProgram.SetValue("vertTransform", ref this.transform);
-			this.currentShaderProgram.SetValue("sampler", this.currentPicture);
+			this.currentShaderProgram.SetValue("picture", this.currentPicture);
+
+			Vector2 pictureSize = new Vector2(this.currentPicture.Width, this.currentPicture.Height);
+			this.currentShaderProgram.SetValue("pictureSize", ref pictureSize);
+
+			this.currentShaderProgram.SetValue("time", (float)this.stopwatch.ElapsedMilliseconds);
 			
 			e.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer);
 		}
@@ -181,7 +196,7 @@ void main()
 			VertexShader vertexShader = VertexShader.Compile(this.GraphicsBox.Graphics, vertexShaderCode);
 			FragmentShader fragmentShader = null;
 
-			this.OutputBox.Text = string.Empty;
+			this.OutputBox.Text = string.Format("Compile started at {0}:", DateTime.Now) + Environment.NewLine;
 			this.OutputBox.Foreground = Brushes.Black;
 
 			try
@@ -190,7 +205,9 @@ void main()
 
 				shaderProgram = new ShaderProgram(this.GraphicsBox.Graphics, vertexShader, fragmentShader);
 
-				this.OutputBox.Text = "Shader compiled successfully.";
+				this.OutputBox.Text += "Shader compiled successfully.";
+
+				this.stopwatch.Restart();
 			}
 			catch (ShaderCompilationException ex)
 			{
@@ -201,7 +218,7 @@ void main()
 
 				shaderProgram = null;
 
-				this.OutputBox.Text = "Failed to compile shader:" + Environment.NewLine + ex.ErrorText;
+				this.OutputBox.Text += "Failed to compile shader:" + Environment.NewLine + ex.ErrorText;
 				this.OutputBox.Foreground = Brushes.Red;
 			}
 
