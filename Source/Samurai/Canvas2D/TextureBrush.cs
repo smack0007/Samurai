@@ -57,7 +57,7 @@ namespace Samurai.Canvas2D
 
             Rectangle? source = this.Source;
 
-            this.Grahpics.SetShaderProgram(this.shader);
+            this.Grahpics.ShaderProgram = this.shader;
             this.shader.SetValue("vertTransform", ref transform);
             this.shader.SetValue("fragTexture", this.Texture);
             this.shader.SetValue("fragTextureWidth", this.Texture.Width);

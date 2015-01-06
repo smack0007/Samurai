@@ -36,7 +36,7 @@ namespace WavingFlagSample
 				VertexShader.Compile(this.Graphics, File.ReadAllText("WavingFlag.vert")),
 				FragmentShader.Compile(this.Graphics, File.ReadAllText("WavingFlag.frag")));
 
-			this.Graphics.SetShaderProgram(this.shader);
+			this.Graphics.ShaderProgram = this.shader;
 			
 			this.texture = Texture2D.LoadFromFile(this.Graphics, "Flag.png", TextureParams.Default);
 

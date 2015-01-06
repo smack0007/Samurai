@@ -65,7 +65,7 @@ void main()
 				FragmentShader.Compile(this.Graphics, fragmentShaderCode)	
 			);
 
-			this.Graphics.SetShaderProgram(this.shaderProgram);
+			this.Graphics.ShaderProgram = this.shaderProgram;
 		}
 
 		protected override void Dispose(bool disposing)

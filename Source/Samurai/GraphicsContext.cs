@@ -21,7 +21,7 @@ namespace Samurai
 
 		List<GraphicsObject> graphicsObjects;
 
-        uint shaderHandle;
+		ShaderProgram shaderProgram;
 
 		internal GLContext GL
 		{
@@ -130,7 +130,24 @@ namespace Samurai
 				}
 			}
 		}
-						
+
+		public ShaderProgram ShaderProgram
+		{
+			get { return this.shaderProgram; }
+
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("ShaderProgram");
+
+				if (value!= this.shaderProgram)
+				{
+					this.shaderProgram = value;
+					this.GL.UseProgram(value.Handle);
+				}
+			}
+		}
+		
 		public GraphicsContext(IGraphicsHost host)
 		{
             if (host == null)
@@ -290,18 +307,6 @@ namespace Samurai
         public void SwapBuffers()
 		{
 			this.GL.SwapBuffers();
-		}
-				
-		public void SetShaderProgram(ShaderProgram shader)
-		{
-			if (shader == null)
-				throw new ArgumentNullException("shader");
-
-            if (shader.Handle != this.shaderHandle)
-            {
-                this.shaderHandle = shader.Handle;
-                this.GL.UseProgram(this.shaderHandle);
-            }
 		}
 
 		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer)

@@ -38,7 +38,7 @@ namespace Samurai.Canvas2D
 		
         public override void Apply(ref Matrix4 transform)
         {
-            this.Grahpics.SetShaderProgram(this.shader);
+            this.Grahpics.ShaderProgram = this.shader;
             this.shader.SetValue("vertTransform", ref transform);
             this.shader.SetValue("fragColor", ref this.color);
         }

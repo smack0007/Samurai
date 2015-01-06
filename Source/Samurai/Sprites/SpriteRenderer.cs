@@ -440,7 +440,7 @@ namespace Samurai.Sprites
 			{
 				this.vertexBuffer.SetData(this.vertices, 0, this.vertexCount);
 
-				this.graphics.SetShaderProgram(this.shader.ShaderProgram);
+				this.graphics.ShaderProgram = this.shader.ShaderProgram;
 
 				Rectangle viewport = this.graphics.Viewport;
 				this.transform.M11 = 2f / viewport.Width;
