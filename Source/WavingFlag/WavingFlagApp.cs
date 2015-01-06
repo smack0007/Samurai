@@ -1,6 +1,4 @@
 ﻿using Samurai;
-using Samurai.GameFramework;
-using Samurai.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,16 +6,16 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Samurai.Samples.Common;
 
 namespace WavingFlagSample
 {
-	public class WavingFlagSample : Game
+	public class WavingFlagApp : SampleApp
 	{
 		[StructLayout(LayoutKind.Sequential)]
 		struct Vertex
 		{
 			public Vector2 Position;
-
 			public Vector2 UV;
 		}
 
@@ -28,15 +26,15 @@ namespace WavingFlagSample
 
 		float totalElapsedSeconds;
 
-		public WavingFlagSample()
+		public WavingFlagApp()
 			: base()
 		{
-			this.Window.Title = "Samurai Waving Flag Sample";
+			this.Title = "Samurai Waving Flag Sample";
 
 			this.shader = new ShaderProgram(
 				this.Graphics,
-				VertexShader.Compile(this.Graphics, File.ReadAllText("WavingFlagSample.vert")),
-				FragmentShader.Compile(this.Graphics, File.ReadAllText("WavingFlagSample.frag")));
+				VertexShader.Compile(this.Graphics, File.ReadAllText("WavingFlag.vert")),
+				FragmentShader.Compile(this.Graphics, File.ReadAllText("WavingFlag.frag")));
 
 			this.Graphics.SetShaderProgram(this.shader);
 			
@@ -45,8 +43,8 @@ namespace WavingFlagSample
 			int totalChunks = 100;
 			int chunkSize = this.texture.Width / totalChunks;
 			Rectangle destination = new Rectangle(
-				(this.Window.Width - this.texture.Width) / 2,
-				(this.Window.Height - this.texture.Height) / 2,
+				(this.Width - this.texture.Width) / 2,
+				(this.Height - this.texture.Height) / 2,
 				chunkSize,
 				this.texture.Height);
 
@@ -82,24 +80,24 @@ namespace WavingFlagSample
 			this.indexBuffer = new StaticIndexBuffer<ushort>(this.Graphics, indexData);
 		}
 				
-		protected override void Draw(TimingState time)
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
 			Matrix4 projection = new Matrix4()
 			{
-				M11 = 2f / this.Window.Width,
-				M22 = -2f / this.Window.Height,
+				M11 = 2f / this.Width,
+				M22 = -2f / this.Height,
 				M33 = 1f,
 				M44 = 1f,
 				M41 = -1f,
 				M42 = 1f
 			};
 
-			totalElapsedSeconds += (float)time.ElapsedTime.TotalSeconds;
+			totalElapsedSeconds += (float)elapsed.TotalSeconds;
 
 			this.shader.SetValue("projection", ref projection);
-			this.shader.SetValue("startX", (float)((this.Window.Width - this.texture.Width) / 2));
+			this.shader.SetValue("startX", (float)((this.Width - this.texture.Width) / 2));
 			this.shader.SetValue("time", totalElapsedSeconds);
 			this.shader.SetValue("texture0", this.texture);
 
@@ -110,7 +108,7 @@ namespace WavingFlagSample
 
 		public static void Main()
 		{
-			using (WavingFlagSample sample = new WavingFlagSample())
+			using (WavingFlagApp sample = new WavingFlagApp())
 				sample.Run();
 		}
 	}

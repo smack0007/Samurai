@@ -85,26 +85,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WavingFlagSample.cs" />
+    <Compile Include="WavingFlagApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="WavingFlagSample.frag">
+    <None Include="WavingFlag.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="WavingFlagSample.vert">
+    <None Include="WavingFlag.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Samurai.GameFramework\Samurai.GameFramework.csproj">
-      <Project>{449baa7e-2062-49b3-9d48-f57606057629}</Project>
-      <Name>Samurai.GameFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samurai.Graphics\Samurai.Graphics.csproj">
-      <Project>{206d7c47-54b6-4562-b49f-c15009d6b8c6}</Project>
-      <Name>Samurai.Graphics</Name>
+    <ProjectReference Include="..\Samurai.Samples.Common\Samurai.Samples.Common.csproj">
+      <Project>{6fe6be8e-2477-4f4c-b8d5-df92557a57a6}</Project>
+      <Name>Samurai.Samples.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Samurai\Samurai.csproj">
       <Project>{0d380a23-56eb-4a8f-a32b-c081592ed576}</Project>

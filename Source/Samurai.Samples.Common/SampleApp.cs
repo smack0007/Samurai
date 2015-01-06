@@ -96,7 +96,6 @@ namespace Samurai.Samples.Common
 
 				this.Update(this.elapsed);
 				this.Draw(this.elapsed);
-				this.Graphics.SwapBuffers();
 
 				this.lastTick = totalElapsedMilliseconds;
 				this.nextTick = totalElapsedMilliseconds + TimeBetweenTicks;

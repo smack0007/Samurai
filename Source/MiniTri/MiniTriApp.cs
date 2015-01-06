@@ -54,7 +54,7 @@ void main()
 
 		public MiniTriApp()
 		{
-			this.Title = "MiniTri Sample";
+			this.Title = "Samurai Mini Tri Sample";
 
 			this.Graphics.ClearColor = Color4.CornflowerBlue;
 
@@ -80,6 +80,8 @@ void main()
 			this.Graphics.Clear();
 
 			this.Graphics.Draw(PrimitiveType.Triangles, this.vertexBuffer);
+
+			this.Graphics.SwapBuffers();
 		}
 
 		public static void Main()
