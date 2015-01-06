@@ -249,7 +249,7 @@ namespace Samurai
 		[DllImport(Library, EntryPoint = "glScissor")]
 		private static extern void _Scissor(int x, int y, int width, int height);
 
-		private delegate void __ShaderSource(uint shader, int count, string[] @string, ref int length);
+		private delegate void __ShaderSource(uint shader, int count, ref string @string, ref int length);
 		private __ShaderSource _ShaderSource;
 
 		[DllImport(Library, EntryPoint = "glTexImage1D")]
@@ -662,11 +662,8 @@ namespace Samurai
 
 		public void ShaderSource(uint shader, string source)
 		{
-			string[] sources = new string[] { source };
             int length = source.Length;
-
-			_ShaderSource(shader, 1, sources, ref length);
-
+			_ShaderSource(shader, 1, ref source, ref length);
 			CheckErrors("ShaderSource");
 		}
 
