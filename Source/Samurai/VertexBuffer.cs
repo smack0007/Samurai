@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -28,7 +29,7 @@ namespace Samurai
 			Type vertexType = typeof(T);
 
 			uint index = 0;
-			foreach (var fieldInfo in vertexType.GetFields(BindingFlags.Public | BindingFlags.Instance))
+			foreach (var fieldInfo in vertexType.GetFields(BindingFlags.Public | BindingFlags.Instance).OrderBy(x => x.MetadataToken))
 			{
 				this.Graphics.GL.EnableVertexAttribArray(index);
 				uint type = GLHelper.GetVertexAttribPointerTypeForType(fieldInfo.FieldType);
