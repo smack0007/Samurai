@@ -147,6 +147,8 @@ namespace Samurai
 				}
 			}
 		}
+
+		public bool PrependShaderVersionDirective { get; set; }
 		
 		public GraphicsContext(IGraphicsHost host)
 		{
@@ -175,6 +177,8 @@ namespace Samurai
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
 												
 			this.graphicsObjects = new List<GraphicsObject>();
+
+			this.PrependShaderVersionDirective = true;
 		}
 
 		~GraphicsContext()

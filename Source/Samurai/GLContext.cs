@@ -9,6 +9,11 @@ namespace Samurai
 {
 	internal class GLContext : IDisposable
 	{
+		public const int VersionMajor = 4;
+		public const int VersionMinor = 0;
+		
+		public readonly string ShaderVersionDirective = "#version 400";
+
 #if WINDOWS
 		private const string Library = "opengl32.dll";
 		WGLContext platformContext;
@@ -294,7 +299,7 @@ namespace Samurai
 		public GLContext(IntPtr window)
 		{
 #if WINDOWS
-			this.platformContext = new WGLContext(window, 3, 3);
+			this.platformContext = new WGLContext(window, VersionMajor, VersionMinor);
 #endif
 
 			_ActiveTexture = (__ActiveTexture)this.platformContext.GetProcAddress<__ActiveTexture>("glActiveTexture");

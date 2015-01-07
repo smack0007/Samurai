@@ -36,7 +36,10 @@ namespace Samurai
 
 			if (source == null)
 				throw new ArgumentNullException("source");
-					
+			
+			if (shader.Graphics.PrependShaderVersionDirective)
+				source = string.Concat(shader.Graphics.GL.ShaderVersionDirective, Environment.NewLine, source);
+
 			shader.Graphics.GL.ShaderSource(shader.Handle, source);
 
 			shader.Graphics.GL.CompileShader(shader.Handle);

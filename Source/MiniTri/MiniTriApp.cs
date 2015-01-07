@@ -25,8 +25,7 @@ namespace Samurai.Samples.MiniTri
 			new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.5f), Color = new Color4(0, 0, 255, 255) }
 		};
 		
-		const string vertexShaderCode = @"#version 330 core
-
+		const string vertexShaderCode = @"
 layout(location = 0) in vec3 inPosition; 
 layout(location = 1) in vec4 inColor; 
 
@@ -38,8 +37,7 @@ void main()
 	fragColor = inColor;
 }";
 
-		const string fragmentShaderCode = @"#version 330
-
+		const string fragmentShaderCode = @"
 in vec4 fragColor;
 
 out vec4 outColor; 
