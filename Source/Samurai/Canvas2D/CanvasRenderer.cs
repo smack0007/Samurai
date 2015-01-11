@@ -47,7 +47,7 @@ namespace Samurai.Canvas2D
         Matrix4 projection;
 
         BlendState oldBlendState;
-        DepthBufferState oldDepthBufferState;
+        DepthStencilState oldDepthBufferState;
         RasterizerState oldRasterizerState;
 
         bool drawInProgress;
@@ -103,7 +103,7 @@ namespace Samurai.Canvas2D
             this.graphics.BlendState = BlendState.AlphaBlend;
 
             this.oldDepthBufferState = this.graphics.DepthBufferState;
-            this.graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
+            this.graphics.DepthBufferState = DepthStencilState.DepthLessThanOrEqual;
 
             this.oldRasterizerState = this.graphics.RasterizerState;
             this.graphics.RasterizerState = RasterizerState.Default;

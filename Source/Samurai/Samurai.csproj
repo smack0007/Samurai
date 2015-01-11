@@ -91,9 +91,10 @@
     <Compile Include="Canvas2D\TextureBrush.cs" />
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />
+    <Compile Include="ColorMask.cs" />
     <Compile Include="CullMode.cs" />
-    <Compile Include="DepthBufferState.cs" />
-    <Compile Include="DepthFunc.cs" />
+    <Compile Include="DepthStencilState.cs" />
+    <Compile Include="DepthFunction.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DynamicIndexBuffer.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="GraphicsContext.cs" />
     <Compile Include="GraphicsContextDescription.cs" />
     <Compile Include="GraphicsObject.cs" />
+    <Compile Include="GraphicsState.cs" />
     <Compile Include="IGraphicsHost.cs" />
     <Compile Include="IndexBuffer.cs" />
     <Compile Include="MathHelper.cs" />
@@ -128,6 +130,8 @@
     <Compile Include="Sprites\SpriteSheet.cs" />
     <Compile Include="StaticIndexBuffer.cs" />
     <Compile Include="StaticVertexBuffer.cs" />
+    <Compile Include="StencilFunction.cs" />
+    <Compile Include="StencilOperation.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Texture1D.cs" />
     <Compile Include="Texture2D.cs" />

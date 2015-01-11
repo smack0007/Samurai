@@ -2,28 +2,50 @@
 
 namespace Samurai
 {
-	public class RasterizerState
+	public class RasterizerState : GraphicsState
 	{
 		public static readonly RasterizerState Default = new RasterizerState();
 
+		FrontFace frontFace = FrontFace.CounterClockwise;
+		CullMode cullMode = CullMode.None;
+		ColorMask colorMask = ColorMask.All;
+
 		public FrontFace FrontFace
 		{
-			get;
-			private set;
+			get { return this.frontFace; }
+			
+			set
+			{
+				this.EnsureNotFrozen();
+				this.frontFace = value;
+			}
 		}
 
 		public CullMode CullMode
 		{
-			get;
-			private set;
+			get { return this.cullMode; }
+			
+			set
+			{
+				this.EnsureNotFrozen();
+				this.cullMode = value;
+			}
 		}
 
-		public RasterizerState(
-			FrontFace frontFace = FrontFace.Clockwise,
-			CullMode cullMode = CullMode.None)
+		public ColorMask ColorMask
 		{
-			this.FrontFace = frontFace;
-			this.CullMode = cullMode;
+			get { return this.colorMask; }
+			
+			set
+			{
+				this.EnsureNotFrozen();
+				this.colorMask = value;
+			}
+		}
+
+		public RasterizerState()
+			: base()
+		{
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Samurai
 		Rectangle? scissor;
 
 		BlendState blendState;
-		DepthBufferState depthState;
+		DepthStencilState depthStencilState;
 		RasterizerState rasterizerState;
 								
 		bool[] textures;
@@ -97,19 +97,19 @@ namespace Samurai
 			}
 		}
 
-		public DepthBufferState DepthBufferState
+		public DepthStencilState DepthBufferState
 		{
-			get { return this.depthState; }
+			get { return this.depthStencilState; }
 
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException("DepthState");
 
-				if (value != this.depthState)
+				if (value != this.depthStencilState)
 				{
-					this.depthState = value;
-					this.ApplyDepthBufferState();
+					this.depthStencilState = value;
+					this.ApplyDepthStencilState();
 				}
 			}
 		}
@@ -167,8 +167,8 @@ namespace Samurai
 			this.blendState = BlendState.Disabled;
 			this.ApplyBlendState();
 
-			this.depthState = DepthBufferState.Disabled;
-			this.ApplyDepthBufferState();
+			this.depthStencilState = DepthStencilState.Disabled;
+			this.ApplyDepthStencilState();
 
 			this.rasterizerState = RasterizerState.Default;
 			this.ApplyRasterizerState();
@@ -258,18 +258,31 @@ namespace Samurai
 
 		private void ApplyBlendState()
 		{
+			this.blendState.Freeze();
+
 			this.ToggleCap(GLContext.BlendCap, this.blendState.Enabled);
 
 			if (this.blendState.Enabled)
 				this.GL.BlendFunc((uint)this.blendState.SourceFactor, (uint)this.blendState.DestinationFactor);
 		}
 				
-		private void ApplyDepthBufferState()
+		private void ApplyDepthStencilState()
 		{
-			this.ToggleCap(GLContext.DepthTestCap, this.depthState.Enabled);
+			this.ToggleCap(GLContext.DepthTestCap, this.depthStencilState.DepthBufferEnabled);
+			this.ToggleCap(GLContext.StencilTestCap, this.depthStencilState.StencilBufferEnabled);
 
-			if (this.depthState.Enabled)
-				this.GL.DepthFunc((uint)this.depthState.DepthFunc);
+			if (this.depthStencilState.DepthBufferEnabled)
+			{
+				this.GL.DepthFunc((uint)this.depthStencilState.DepthFunction);
+				this.GL.DepthMask(this.depthStencilState.DepthWriteEnabled);
+			}
+
+			if (this.depthStencilState.StencilBufferEnabled)
+			{
+				this.GL.StencilFunc((uint)this.depthStencilState.StencilFunction, this.depthStencilState.StencilReferenceValue, this.depthStencilState.StencilMask);
+				this.GL.StencilOp((uint)this.depthStencilState.StencilFail, (uint)this.depthStencilState.StencilDepthFail, (uint)this.depthStencilState.StencilPass);
+				this.GL.StencilMask(this.depthStencilState.StencilMask);
+			}
 		}
 
 		private void ApplyRasterizerState()
@@ -285,6 +298,12 @@ namespace Samurai
 				this.ToggleCap(GLContext.CullFaceCap, true);
 				this.GL.CullFace((uint)this.rasterizerState.CullMode);
 			}
+
+			this.GL.ColorMask(
+				(this.rasterizerState.ColorMask & ColorMask.Red) == ColorMask.Red,
+				(this.rasterizerState.ColorMask & ColorMask.Green) == ColorMask.Green,
+				(this.rasterizerState.ColorMask & ColorMask.Blue) == ColorMask.Blue,
+				(this.rasterizerState.ColorMask & ColorMask.Alpha) == ColorMask.Alpha);
 		}
 
         public void Clear()

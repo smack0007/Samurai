@@ -2,46 +2,57 @@
 
 namespace Samurai
 {
-	public class BlendState
+	public class BlendState : GraphicsState
 	{
-		public static readonly BlendState Disabled = new BlendState(
-			enabled: false,
-			sourceFactor: SourceBlendFactor.One,
-			destinationFactor: DestinationBlendFactor.Zero
-		);
+		public static readonly BlendState Disabled = new BlendState();
 
-		public static readonly BlendState AlphaBlend = new BlendState(
-			enabled: true,
-			sourceFactor: SourceBlendFactor.SourceAlpha,
-			destinationFactor: DestinationBlendFactor.OneMinusSourceAlpha
-		);
+		public static readonly BlendState AlphaBlend = new BlendState()
+		{
+			Enabled = true,
+			SourceFactor = SourceBlendFactor.SourceAlpha,
+			DestinationFactor = DestinationBlendFactor.OneMinusSourceAlpha
+		};
+
+		bool enabled = false;
+		SourceBlendFactor sourceFactor = SourceBlendFactor.One;
+		DestinationBlendFactor destinationFactor = DestinationBlendFactor.Zero;
 
 		public bool Enabled
 		{
-			get;
-			private set;
+			get { return this.enabled; }
+
+			set
+			{
+				this.EnsureNotFrozen();
+				this.enabled = value;
+			}
 		}
 
 		public SourceBlendFactor SourceFactor
 		{
-			get;
-			private set;
+			get { return this.sourceFactor; }
+			
+			set
+			{
+				this.EnsureNotFrozen();
+				this.sourceFactor = value;
+			}
 		}
 
 		public DestinationBlendFactor DestinationFactor
 		{
-			get;
-			private set;
+			get { return this.destinationFactor; }
+			
+			set
+			{
+				this.EnsureNotFrozen();
+				this.destinationFactor = value;
+			}
 		}
 
-		public BlendState(
-			bool enabled = false,
-			SourceBlendFactor sourceFactor = SourceBlendFactor.One,
-			DestinationBlendFactor destinationFactor = DestinationBlendFactor.Zero)
+		public BlendState()
+			: base()
 		{
-			this.Enabled = enabled;
-			this.SourceFactor = sourceFactor;
-			this.DestinationFactor = destinationFactor;
 		}
 	}
 }
