@@ -1,20 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Samurai
 {
-	public class DepthStencilState : GraphicsState
+	public class StencilBufferState : GraphicsState
 	{
-		public static readonly DepthStencilState Disabled = new DepthStencilState();
+		public static readonly StencilBufferState Disabled = new StencilBufferState();
 
-		public static readonly DepthStencilState DepthLessThanOrEqual = new DepthStencilState()
-		{
-			DepthBufferEnabled = true,
-			DepthFunction = DepthFunction.LessThanOrEqual
-		};
-
-		bool depthBufferEnabled = false;
-		DepthFunction depthFunction = DepthFunction.Less;
-		bool depthWriteEnabled = true;
 		bool stencilBufferEnabled = false;
 		StencilFunction stencilFunction = StencilFunction.Always;
 		int stencilReferenceValue = 0;
@@ -24,43 +19,10 @@ namespace Samurai
 		StencilOperation stencilPass = StencilOperation.Keep;
 		uint stencilWriteMask = 0xFFFFFFFF;
 
-		public bool DepthBufferEnabled
-		{
-			get { return this.depthBufferEnabled; }
-			
-			set
-			{
-				this.EnsureNotFrozen();
-				this.depthBufferEnabled = value;
-			}
-		}
-
-		public DepthFunction DepthFunction
-		{
-			get { return this.depthFunction; }
-			
-			set
-			{
-				this.EnsureNotFrozen();
-				this.depthFunction = value;
-			}
-		}
-
-		public bool DepthWriteEnabled
-		{
-			get { return this.depthWriteEnabled; }
-
-			set
-			{
-				this.EnsureNotFrozen();
-				this.depthWriteEnabled = value;
-			}
-		}
-
 		public bool StencilBufferEnabled
 		{
 			get { return this.stencilBufferEnabled; }
-			
+
 			set
 			{
 				this.EnsureNotFrozen();
@@ -71,7 +33,7 @@ namespace Samurai
 		public StencilFunction StencilFunction
 		{
 			get { return this.stencilFunction; }
-			
+
 			set
 			{
 				this.EnsureNotFrozen();
@@ -82,7 +44,7 @@ namespace Samurai
 		public int StencilReferenceValue
 		{
 			get { return this.stencilReferenceValue; }
-			
+
 			set
 			{
 				this.EnsureNotFrozen();
@@ -93,7 +55,7 @@ namespace Samurai
 		public uint StencilMask
 		{
 			get { return this.stencilMask; }
-			
+
 			set
 			{
 				this.EnsureNotFrozen();
@@ -137,7 +99,7 @@ namespace Samurai
 		public uint StencilWriteMask
 		{
 			get { return this.stencilWriteMask; }
-			
+
 			set
 			{
 				this.EnsureNotFrozen();
@@ -145,7 +107,8 @@ namespace Samurai
 			}
 		}
 
-		public DepthStencilState()
+		public StencilBufferState()
+			: base()
 		{
 		}
 	}

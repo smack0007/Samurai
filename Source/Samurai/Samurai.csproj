@@ -93,7 +93,7 @@
     <Compile Include="Color4.cs" />
     <Compile Include="ColorMask.cs" />
     <Compile Include="CullMode.cs" />
-    <Compile Include="DepthStencilState.cs" />
+    <Compile Include="DepthBufferState.cs" />
     <Compile Include="DepthFunction.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DisposableObject.cs" />
@@ -132,6 +132,7 @@
     <Compile Include="StaticVertexBuffer.cs" />
     <Compile Include="StencilFunction.cs" />
     <Compile Include="StencilOperation.cs" />
+    <Compile Include="StencilBufferState.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Texture1D.cs" />
     <Compile Include="Texture2D.cs" />

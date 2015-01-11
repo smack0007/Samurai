@@ -97,7 +97,7 @@ namespace SamuraiDemo
             this.Window.Title = "Samurai Demo";
 
             this.Graphics.BlendState = BlendState.AlphaBlend;
-            this.Graphics.DepthBufferState = DepthStencilState.DepthLessThanOrEqual;
+            this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
             this.Graphics.RasterizerState = this.rasterizerState;
 
             this.shaderProgram = new ShaderProgram(

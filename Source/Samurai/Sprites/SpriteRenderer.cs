@@ -32,8 +32,9 @@ namespace Samurai.Sprites
 		Matrix4 transform;
 
 		BlendState oldBlendState;
-		DepthStencilState oldDepthBufferState;
+		DepthBufferState oldDepthBufferState;
 		RasterizerState oldRasterizerState;
+		StencilBufferState oldStencilBufferState;
 										
 		public SpriteRenderer(GraphicsContext graphics)
             : this(graphics, 1024)
@@ -110,10 +111,13 @@ namespace Samurai.Sprites
 			this.graphics.BlendState = BlendState.AlphaBlend;
 
 			this.oldDepthBufferState = this.graphics.DepthBufferState;
-			this.graphics.DepthBufferState = DepthStencilState.DepthLessThanOrEqual;
+			this.graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
 
 			this.oldRasterizerState = this.graphics.RasterizerState;
 			this.graphics.RasterizerState = RasterizerState.Default;
+
+			this.oldStencilBufferState = this.graphics.StencilBufferState;
+			this.graphics.StencilBufferState = StencilBufferState.Disabled;
 
 			this.drawInProgress = true;
 		}
