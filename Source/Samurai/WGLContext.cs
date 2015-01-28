@@ -86,7 +86,7 @@ namespace Samurai
 			MakeCurrent(IntPtr.Zero, IntPtr.Zero);
 			DeleteContext(tempContext);
 
-			if (this.hRC == null)
+			if (this.hRC == IntPtr.Zero)
 				throw new SamuraiException("Unable to create render context.");
 
 			if (!MakeCurrent(this.hDC, this.hRC))
