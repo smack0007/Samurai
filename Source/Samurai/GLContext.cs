@@ -9,10 +9,10 @@ namespace Samurai
 {
 	internal class GLContext : IDisposable
 	{
-		public const int VersionMajor = 4;
-		public const int VersionMinor = 0;
+		public const int VersionMajor = 3;
+		public const int VersionMinor = 3;
 		
-		public readonly string ShaderVersionDirective = "#version 400";
+		public readonly string ShaderVersionDirective = "#version 330";
 
 #if WINDOWS
 		private const string Library = "opengl32.dll";

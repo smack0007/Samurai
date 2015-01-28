@@ -3,16 +3,7 @@
 namespace Samurai
 {
 	public class BlendState : GraphicsState
-	{
-		public static readonly BlendState Disabled = new BlendState();
-
-		public static readonly BlendState AlphaBlend = new BlendState()
-		{
-			Enabled = true,
-			SourceFactor = SourceBlendFactor.SourceAlpha,
-			DestinationFactor = DestinationBlendFactor.OneMinusSourceAlpha
-		};
-
+	{		
 		bool enabled = false;
 		SourceBlendFactor sourceFactor = SourceBlendFactor.One;
 		DestinationBlendFactor destinationFactor = DestinationBlendFactor.Zero;
@@ -23,8 +14,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.enabled = value;
+				if (value != this.enabled)
+				{
+					this.enabled = value;
+					this.ApplyBlendCap();
+				}
 			}
 		}
 
@@ -34,8 +28,11 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.sourceFactor = value;
+				if (value != this.sourceFactor)
+				{
+					this.sourceFactor = value;
+					this.ApplyBlendFunc();
+				}
 			}
 		}
 
@@ -45,14 +42,33 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.destinationFactor = value;
+				if (value != this.destinationFactor)
+				{
+					this.destinationFactor = value;
+					this.ApplyBlendFunc();
+				}
 			}
 		}
 
 		public BlendState()
 			: base()
 		{
+		}
+
+		protected override void Apply()
+		{
+			this.ApplyBlendCap();
+			this.ApplyBlendFunc();			
+		}
+
+		private void ApplyBlendCap()
+		{
+			this.Graphics.ToggleCap(GLContext.BlendCap, this.Enabled);
+		}
+
+		private void ApplyBlendFunc()
+		{
+			this.Graphics.GL.BlendFunc((uint)this.SourceFactor, (uint)this.DestinationFactor);
 		}
 	}
 }

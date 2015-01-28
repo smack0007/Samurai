@@ -92,8 +92,9 @@ namespace Samurai
 
 				if (value != this.blendState)
 				{
+					this.blendState.SetGraphicsContext(null);
 					this.blendState = value;
-					this.ApplyBlendState();					
+					this.blendState.SetGraphicsContext(this);					
 				}
 			}
 		}
@@ -109,8 +110,9 @@ namespace Samurai
 
 				if (value != this.depthBufferState)
 				{
+					this.depthBufferState.SetGraphicsContext(null);
 					this.depthBufferState = value;
-					this.ApplyDepthBufferState();
+					this.depthBufferState.SetGraphicsContext(this);
 				}
 			}
 		}
@@ -126,8 +128,9 @@ namespace Samurai
 
 				if (value != this.rasterizerState)
 				{
+					this.rasterizerState.SetGraphicsContext(null);
 					this.rasterizerState = value;
-					this.ApplyRasterizerState();
+					this.rasterizerState.SetGraphicsContext(this);
 				}
 			}
 		}
@@ -143,8 +146,9 @@ namespace Samurai
 
 				if (value != this.stencilBufferState)
 				{
+					this.stencilBufferState.SetGraphicsContext(null);
 					this.stencilBufferState = value;
-					this.ApplyStencilBufferState();
+					this.stencilBufferState.SetGraphicsContext(this);
 				}
 			}
 		}
@@ -182,17 +186,17 @@ namespace Samurai
 			this.scissor = null;
 			this.ToggleCap(GLContext.ScissorTestCap, false);
 
-			this.blendState = BlendState.Disabled;
-			this.ApplyBlendState();
+			this.blendState = new BlendState();
+			this.blendState.SetGraphicsContext(this);
 
-			this.depthBufferState = DepthBufferState.Disabled;
-			this.ApplyDepthBufferState();
+			this.depthBufferState = new DepthBufferState();
+			this.depthBufferState.SetGraphicsContext(this);
 
-			this.rasterizerState = RasterizerState.Default;
-			this.ApplyRasterizerState();
+			this.rasterizerState = new RasterizerState();
+			this.rasterizerState.SetGraphicsContext(this);
 
-			this.stencilBufferState = StencilBufferState.Disabled;
-			this.ApplyStencilBufferState();
+			this.stencilBufferState = new StencilBufferState();
+			this.stencilBufferState.SetGraphicsContext(this);
 						
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
@@ -265,7 +269,7 @@ namespace Samurai
 			this.textures[index] = false;
 		}
 		
-		private void ToggleCap(uint cap, bool isEnabled)
+		internal void ToggleCap(uint cap, bool isEnabled)
 		{
 			if (isEnabled)
 			{
@@ -275,68 +279,8 @@ namespace Samurai
 			{
 				this.GL.Disable(cap);
 			}
-		}
-
-		private void ApplyBlendState()
-		{
-			this.blendState.Freeze();
-
-			this.ToggleCap(GLContext.BlendCap, this.blendState.Enabled);
-
-			if (this.blendState.Enabled)
-				this.GL.BlendFunc((uint)this.blendState.SourceFactor, (uint)this.blendState.DestinationFactor);
-		}
-				
-		private void ApplyDepthBufferState()
-		{
-			this.depthBufferState.Freeze();
-
-			this.ToggleCap(GLContext.DepthTestCap, this.depthBufferState.Enabled);
-
-			if (this.depthBufferState.Enabled)
-			{
-				this.GL.DepthFunc((uint)this.depthBufferState.Function);
-				this.GL.DepthMask(this.depthBufferState.WriteEnabled);
-			}
-		}
-
-		private void ApplyRasterizerState()
-		{
-			this.rasterizerState.Freeze();
-
-			this.GL.FrontFace((uint)this.rasterizerState.FrontFace);
-
-			if (this.rasterizerState.CullMode == CullMode.None)
-			{
-				this.ToggleCap(GLContext.CullFaceCap, false);
-			}
-			else
-			{
-				this.ToggleCap(GLContext.CullFaceCap, true);
-				this.GL.CullFace((uint)this.rasterizerState.CullMode);
-			}
-
-			this.GL.ColorMask(
-				(this.rasterizerState.ColorMask & ColorMask.Red) == ColorMask.Red,
-				(this.rasterizerState.ColorMask & ColorMask.Green) == ColorMask.Green,
-				(this.rasterizerState.ColorMask & ColorMask.Blue) == ColorMask.Blue,
-				(this.rasterizerState.ColorMask & ColorMask.Alpha) == ColorMask.Alpha);
-		}
-
-		private void ApplyStencilBufferState()
-		{
-			this.stencilBufferState.Freeze();
-
-			this.ToggleCap(GLContext.StencilTestCap, this.stencilBufferState.StencilBufferEnabled);
-
-			if (this.stencilBufferState.StencilBufferEnabled)
-			{
-				this.GL.StencilFunc((uint)this.stencilBufferState.StencilFunction, this.stencilBufferState.StencilReferenceValue, this.stencilBufferState.StencilMask);
-				this.GL.StencilOp((uint)this.stencilBufferState.StencilFail, (uint)this.stencilBufferState.StencilDepthFail, (uint)this.stencilBufferState.StencilPass);
-				this.GL.StencilMask(this.stencilBufferState.StencilMask);
-			}
-		}
-
+		}	
+		
         public void Clear()
         {
             this.GL.Clear(GLContext.ColorBufferBit | GLContext.DepthBufferBit);

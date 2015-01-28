@@ -8,7 +8,7 @@ namespace Samurai
 {
 	public abstract class GraphicsState
 	{
-		public bool IsFrozen
+		public GraphicsContext Graphics
 		{
 			get;
 			private set;
@@ -18,15 +18,14 @@ namespace Samurai
 		{
 		}
 
-		internal void Freeze()
+		internal void SetGraphicsContext(GraphicsContext context)
 		{
-			this.IsFrozen = true;
+			this.Graphics = context;
+
+			if (this.Graphics != null)
+				this.Apply();
 		}
 
-		protected void EnsureNotFrozen()
-		{
-			if (this.IsFrozen)
-				throw new SamuraiException(string.Format("{0} is frozen and cannot be modifieid directly. It must be cloned first.", this.GetType().Name));
-		}
+		protected abstract void Apply();
 	}
 }

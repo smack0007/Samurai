@@ -4,8 +4,6 @@ namespace Samurai
 {
 	public class RasterizerState : GraphicsState
 	{
-		public static readonly RasterizerState Default = new RasterizerState();
-
 		FrontFace frontFace = FrontFace.CounterClockwise;
 		CullMode cullMode = CullMode.None;
 		ColorMask colorMask = ColorMask.All;
@@ -16,8 +14,11 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.frontFace = value;
+				if (value != this.frontFace)
+				{
+					this.frontFace = value;
+					this.ApplyFrontFace();
+				}
 			}
 		}
 
@@ -27,8 +28,11 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.cullMode = value;
+				if (value != this.cullMode)
+				{
+					this.cullMode = value;
+					this.ApplyCullMode();
+				}
 			}
 		}
 
@@ -38,14 +42,51 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.colorMask = value;
+				if (value != this.colorMask)
+				{
+					this.colorMask = value;
+					this.ApplyColorMask();
+				}
 			}
 		}
 
 		public RasterizerState()
 			: base()
 		{
+		}
+
+		protected override void Apply()
+		{
+			this.ApplyFrontFace();
+			this.ApplyCullMode();
+			this.ApplyColorMask();			
+		}
+
+		private void ApplyFrontFace()
+		{
+			this.Graphics.GL.FrontFace((uint)this.FrontFace);
+		}
+
+		private void ApplyCullMode()
+		{
+			if (this.CullMode == CullMode.None)
+			{
+				this.Graphics.ToggleCap(GLContext.CullFaceCap, false);
+			}
+			else
+			{
+				this.Graphics.ToggleCap(GLContext.CullFaceCap, true);
+				this.Graphics.GL.CullFace((uint)this.CullMode);
+			}
+		}
+
+		private void ApplyColorMask()
+		{
+			this.Graphics.GL.ColorMask(
+				(this.ColorMask & ColorMask.Red) == ColorMask.Red,
+				(this.ColorMask & ColorMask.Green) == ColorMask.Green,
+				(this.ColorMask & ColorMask.Blue) == ColorMask.Blue,
+				(this.ColorMask & ColorMask.Alpha) == ColorMask.Alpha);
 		}
 	}
 }

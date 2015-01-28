@@ -4,14 +4,6 @@ namespace Samurai
 {
 	public class DepthBufferState : GraphicsState
 	{
-		public static readonly DepthBufferState Disabled = new DepthBufferState();
-
-		public static readonly DepthBufferState LessThanOrEqual = new DepthBufferState()
-		{
-			Enabled = true,
-			Function = DepthFunction.LessThanOrEqual
-		};
-
 		bool enabled = false;
 		DepthFunction function = DepthFunction.Less;
 		bool writeEnabled = true;
@@ -22,8 +14,11 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.enabled = value;
+				if (value != this.enabled)
+				{
+					this.enabled = value;
+					this.ApplyDepthTestCap();
+				}
 			}
 		}
 
@@ -33,8 +28,11 @@ namespace Samurai
 			
 			set
 			{
-				this.EnsureNotFrozen();
-				this.function = value;
+				if (value != this.function)
+				{
+					this.function = value;
+					this.ApplyDepthFunc();
+				}
 			}
 		}
 
@@ -44,13 +42,35 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
 				this.writeEnabled = value;
+				this.ApplyDepthMask();
 			}
 		}
 
 		public DepthBufferState()
 		{
+		}
+
+		protected override void Apply()
+		{
+			this.ApplyDepthTestCap();
+			this.ApplyDepthFunc();
+			this.ApplyDepthMask();
+		}
+
+		private void ApplyDepthTestCap()
+		{
+			this.Graphics.ToggleCap(GLContext.DepthTestCap, this.Enabled);
+		}
+
+		private void ApplyDepthFunc()
+		{
+			this.Graphics.GL.DepthFunc((uint)this.Function);
+		}
+
+		private void ApplyDepthMask()
+		{
+			this.Graphics.GL.DepthMask(this.WriteEnabled);
 		}
 	}
 }

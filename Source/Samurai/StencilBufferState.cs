@@ -25,8 +25,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilBufferEnabled = value;
+				if (value != this.stencilBufferEnabled)
+				{
+					this.stencilBufferEnabled = value;
+					this.ApplyStencilTestCap();
+				}
 			}
 		}
 
@@ -36,8 +39,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilFunction = value;
+				if (value != this.stencilFunction)
+				{
+					this.stencilFunction = value;
+					this.ApplyStencilFunc();
+				}
 			}
 		}
 
@@ -47,8 +53,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilReferenceValue = value;
+				if (value != this.stencilReferenceValue)
+				{
+					this.stencilReferenceValue = value;
+					this.ApplyStencilFunc();
+				}
 			}
 		}
 
@@ -58,8 +67,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilMask = value;
+				if (value != this.stencilMask)
+				{
+					this.stencilMask = value;
+					this.ApplyStencilFunc();
+				}
 			}
 		}
 
@@ -69,8 +81,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilFail = value;
+				if (value != this.stencilFail)
+				{
+					this.stencilFail = value;
+					this.ApplyStencilOp();
+				}
 			}
 		}
 
@@ -80,8 +95,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilDepthFail = value;
+				if (value != this.stencilDepthFail)
+				{
+					this.stencilDepthFail = value;
+					this.ApplyStencilOp();
+				}
 			}
 		}
 
@@ -91,8 +109,11 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilPass = value;
+				if (value != this.stencilPass)
+				{
+					this.stencilPass = value;
+					this.ApplyStencilOp();
+				}
 			}
 		}
 
@@ -102,14 +123,45 @@ namespace Samurai
 
 			set
 			{
-				this.EnsureNotFrozen();
-				this.stencilWriteMask = value;
+				if (value != this.stencilWriteMask)
+				{
+					this.stencilWriteMask = value;
+					this.ApplyStencilWriteMask();
+				}
 			}
 		}
 
 		public StencilBufferState()
 			: base()
 		{
+		}
+
+		protected override void Apply()
+		{
+			this.ApplyStencilTestCap();
+			this.ApplyStencilFunc();
+			this.ApplyStencilOp();
+			this.ApplyStencilWriteMask();
+		}
+
+		private void ApplyStencilTestCap()
+		{
+			this.Graphics.ToggleCap(GLContext.StencilTestCap, this.StencilBufferEnabled);
+		}
+
+		private void ApplyStencilFunc()
+		{
+			this.Graphics.GL.StencilFunc((uint)this.StencilFunction, this.StencilReferenceValue, this.StencilMask);
+		}
+
+		private void ApplyStencilOp()
+		{
+			this.Graphics.GL.StencilOp((uint)this.StencilFail, (uint)this.StencilDepthFail, (uint)this.StencilPass);
+		}
+
+		private void ApplyStencilWriteMask()
+		{
+			this.Graphics.GL.StencilMask(this.StencilWriteMask);
 		}
 	}
 }
