@@ -17,7 +17,9 @@ namespace Samurai
 				if (value != this.frontFace)
 				{
 					this.frontFace = value;
-					this.ApplyFrontFace();
+
+					if (this.Graphics != null)
+						this.ApplyFrontFace();
 				}
 			}
 		}
@@ -31,7 +33,9 @@ namespace Samurai
 				if (value != this.cullMode)
 				{
 					this.cullMode = value;
-					this.ApplyCullMode();
+
+					if (this.Graphics != null)
+						this.ApplyCullMode();
 				}
 			}
 		}
@@ -45,7 +49,9 @@ namespace Samurai
 				if (value != this.colorMask)
 				{
 					this.colorMask = value;
-					this.ApplyColorMask();
+
+					if (this.Graphics != null)
+						this.ApplyColorMask();
 				}
 			}
 		}

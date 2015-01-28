@@ -17,7 +17,9 @@ namespace Samurai
 				if (value != this.enabled)
 				{
 					this.enabled = value;
-					this.ApplyDepthTestCap();
+
+					if (this.Graphics != null)
+						this.ApplyDepthTestCap();
 				}
 			}
 		}
@@ -31,7 +33,9 @@ namespace Samurai
 				if (value != this.function)
 				{
 					this.function = value;
-					this.ApplyDepthFunc();
+
+					if (this.Graphics != null)
+						this.ApplyDepthFunc();
 				}
 			}
 		}
@@ -43,7 +47,9 @@ namespace Samurai
 			set
 			{
 				this.writeEnabled = value;
-				this.ApplyDepthMask();
+
+				if (this.Graphics != null)
+					this.ApplyDepthMask();
 			}
 		}
 

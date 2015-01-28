@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SamuraiDemo2D")]
+[assembly: AssemblyTitle("Planes")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SamuraiDemo2D")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCompany("Aagon Consulting GmbH")]
+[assembly: AssemblyProduct("Planes")]
+[assembly: AssemblyCopyright("Copyright © Aagon Consulting GmbH 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9c3704b1-3024-436f-b6c9-8fbd8994d8d1")]
+[assembly: Guid("b4b7c82f-f89c-4411-83d1-8ef126696dfc")]
 
 // Version information for an assembly consists of the following four values:
 //

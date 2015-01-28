@@ -17,7 +17,9 @@ namespace Samurai
 				if (value != this.enabled)
 				{
 					this.enabled = value;
-					this.ApplyBlendCap();
+
+					if (this.Graphics != null)
+						this.ApplyBlendCap();
 				}
 			}
 		}
@@ -31,7 +33,9 @@ namespace Samurai
 				if (value != this.sourceFactor)
 				{
 					this.sourceFactor = value;
-					this.ApplyBlendFunc();
+					
+					if (this.Graphics != null)
+						this.ApplyBlendFunc();
 				}
 			}
 		}
@@ -45,7 +49,9 @@ namespace Samurai
 				if (value != this.destinationFactor)
 				{
 					this.destinationFactor = value;
-					this.ApplyBlendFunc();
+
+					if (this.Graphics != null)
+						this.ApplyBlendFunc();
 				}
 			}
 		}

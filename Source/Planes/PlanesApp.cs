@@ -1,50 +1,39 @@
 ﻿using Samurai;
-using Samurai.GameFramework;
-using Samurai.Graphics;
-using Samurai.Graphics.Sprites;
-using Samurai.Input;
+using Samurai.Sprites;
 using System;
 using System.Collections.Generic;
+using Samurai.Samples.Common;
 
-namespace SamuraiDemo2D
+namespace Planes
 {
-	public class Demo2DGame : Game
+	public class PlanesApp : SampleApp
 	{
 		SpriteRenderer spriteRenderer;
 		BasicSpriteShaderProgram shaderProgram;
 		Texture2D planesTexture;
 		SpriteSheet planeSpriteSheet;
 		TextureFont font;
-		Keyboard keyboard;
-		Mouse mouse;
-		
+				
 		List<Plane> planes;
 
-		const int PlaneCount = 5000;
+		const int PlaneCount = 100;
 
 		int fps = 0;
 		int fpsCount;
 		float fpsTimer;
 
-		public Demo2DGame()
-            : base(new GameOptions()
-            {
-                AutoResizeViewport = true,
-                WindowResizable = true
-            })
+		public PlanesApp()
+            : base()
 		{
-			this.Window.Title = "Samurai 2D Demo";
+			this.Title = "Samurai Planes Sample";
 
-			this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
-
-			this.Graphics.BlendState = BlendState.AlphaBlend;
-			this.Graphics.RasterizerState = RasterizerState.Default;
-						
-			this.spriteRenderer = new SpriteRenderer(this.Graphics, 1024);
+			this.spriteRenderer = new SpriteRenderer(this.Graphics);
 			this.shaderProgram = new BasicSpriteShaderProgram(this.Graphics);
 
 			this.planesTexture = Texture2D.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
 				{
+					ColorKey = Color4.Black,
+					TransparentPixel = Color4.Transparent
 				});
 
 			this.planeSpriteSheet = SpriteSheet.Build(this.planesTexture, 64, 64);
@@ -53,12 +42,8 @@ namespace SamuraiDemo2D
 				{
 					Color = Color4.White,
 					BackgroundColor = Color4.Transparent,
-					//ColorKey = Color4.Black
 				});
-
-			this.keyboard = new Keyboard();
-			this.mouse = new Mouse(this.Window);
-
+						
 			Random random = new Random();
 
 			this.planes = new List<Plane>();
@@ -67,28 +52,22 @@ namespace SamuraiDemo2D
 			{
 				this.planes.Add(new Plane(
 					random.Next(4) * 3,
-					new Vector2(random.Next(this.Window.Width), random.Next(this.Window.Height)),
+					new Vector2(random.Next(this.Width), random.Next(this.Height)),
 					(float)random.Next(360),
-					this.Window.Size
+					new Size(this.Width, this.Height)
 				));
 			}
 		}
 
-		protected override void Update(TimingState time)
+		protected override void Update(TimeSpan elapsed)
 		{
-			this.keyboard.Update();
-			this.mouse.Update(time);
-
-			if (this.keyboard.IsKeyPressed(Key.Escape))
-				this.Exit();
-
 			foreach (Plane plane in this.planes)
 			{
-				plane.Update(time.ElapsedTime);
+				plane.Update(elapsed);
 			}
 		}
 
-		protected override void Draw(TimingState time)
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.Black);
 
@@ -97,8 +76,8 @@ namespace SamuraiDemo2D
 			string text = string.Format("FPS: {0}", fps);
 
 			Size textSize = this.font.MeasureString(text);
-			int halfWindowWidth = this.Window.Width / 2;
-			int halfWindowHeight = this.Window.Height / 2;
+			int halfWindowWidth = this.Width / 2;
+			int halfWindowHeight = this.Height / 2;
 			int halfTextWidth = textSize.Width / 2;
 			int halfTextHeight = textSize.Height / 2;
 
@@ -127,7 +106,7 @@ namespace SamuraiDemo2D
 			this.Graphics.SwapBuffers();
 
 			this.fpsCount++;
-			this.fpsTimer += (float)time.ElapsedTime.TotalSeconds;
+			this.fpsTimer += (float)elapsed.TotalSeconds;
 			if (this.fpsTimer >= 1.0f)
 			{
 				this.fps = this.fpsCount;
@@ -138,7 +117,7 @@ namespace SamuraiDemo2D
 
 		private static void Main(string[] args)
 		{
-			using (Demo2DGame game = new Demo2DGame())
+			using (PlanesApp game = new PlanesApp())
 				game.Run();
 		}
 	}

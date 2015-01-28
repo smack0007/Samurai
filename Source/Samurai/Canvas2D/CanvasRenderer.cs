@@ -89,6 +89,7 @@ namespace Samurai.Canvas2D
 
 			this.blendState = new BlendState()
 			{
+				Enabled = true,
 				SourceFactor = SourceBlendFactor.SourceAlpha,
 				DestinationFactor = DestinationBlendFactor.OneMinusSourceAlpha
 			};

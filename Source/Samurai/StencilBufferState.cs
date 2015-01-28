@@ -28,7 +28,9 @@ namespace Samurai
 				if (value != this.stencilBufferEnabled)
 				{
 					this.stencilBufferEnabled = value;
-					this.ApplyStencilTestCap();
+
+					if (this.Graphics != null)
+						this.ApplyStencilTestCap();
 				}
 			}
 		}
@@ -42,7 +44,9 @@ namespace Samurai
 				if (value != this.stencilFunction)
 				{
 					this.stencilFunction = value;
-					this.ApplyStencilFunc();
+
+					if (this.Graphics != null)
+						this.ApplyStencilFunc();
 				}
 			}
 		}
@@ -56,7 +60,9 @@ namespace Samurai
 				if (value != this.stencilReferenceValue)
 				{
 					this.stencilReferenceValue = value;
-					this.ApplyStencilFunc();
+
+					if (this.Graphics != null)
+						this.ApplyStencilFunc();
 				}
 			}
 		}
@@ -70,7 +76,9 @@ namespace Samurai
 				if (value != this.stencilMask)
 				{
 					this.stencilMask = value;
-					this.ApplyStencilFunc();
+
+					if (this.Graphics != null)
+						this.ApplyStencilFunc();
 				}
 			}
 		}
@@ -84,7 +92,9 @@ namespace Samurai
 				if (value != this.stencilFail)
 				{
 					this.stencilFail = value;
-					this.ApplyStencilOp();
+
+					if (this.Graphics != null)
+						this.ApplyStencilOp();
 				}
 			}
 		}
@@ -98,7 +108,9 @@ namespace Samurai
 				if (value != this.stencilDepthFail)
 				{
 					this.stencilDepthFail = value;
-					this.ApplyStencilOp();
+
+					if (this.Graphics != null)
+						this.ApplyStencilOp();
 				}
 			}
 		}
@@ -112,7 +124,9 @@ namespace Samurai
 				if (value != this.stencilPass)
 				{
 					this.stencilPass = value;
-					this.ApplyStencilOp();
+
+					if (this.Graphics != null)
+						this.ApplyStencilOp();
 				}
 			}
 		}
@@ -126,7 +140,9 @@ namespace Samurai
 				if (value != this.stencilWriteMask)
 				{
 					this.stencilWriteMask = value;
-					this.ApplyStencilWriteMask();
+
+					if (this.Graphics != null)
+						this.ApplyStencilWriteMask();
 				}
 			}
 		}

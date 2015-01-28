@@ -1,6 +1,4 @@
-﻿#version 330 
-
-uniform vec4 fragColor;
+﻿uniform vec4 fragColor;
 
 smooth in vec2 fragModelPosition;
 smooth in vec2 fragTexCoord; 

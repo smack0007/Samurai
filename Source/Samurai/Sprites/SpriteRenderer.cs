@@ -88,6 +88,7 @@ namespace Samurai.Sprites
 
 			this.blendState = new BlendState()
 			{
+				Enabled = true,
 				SourceFactor = SourceBlendFactor.SourceAlpha,
 				DestinationFactor = DestinationBlendFactor.OneMinusSourceAlpha
 			};
@@ -156,6 +157,9 @@ namespace Samurai.Sprites
 
 			this.graphics.RasterizerState = this.oldRasterizerState;
 			this.oldRasterizerState = null;
+
+			this.graphics.StencilBufferState = this.oldStencilBufferState;
+			this.oldStencilBufferState = null;
 
 			this.shader = null;
 			this.drawInProgress = false;
