@@ -45,17 +45,7 @@ namespace Samurai.Canvas2D
         DynamicVertexBuffer<Vertex> vertexBuffer;        
                         
         Matrix4 projection;
-
-		BlendState blendState;
-		DepthBufferState depthBufferState;
-		RasterizerState rasterizerState;
-		StencilBufferState stencilBufferState;
-
-        BlendState oldBlendState;
-        DepthBufferState oldDepthBufferState;
-        RasterizerState oldRasterizerState;
-		StencilBufferState oldStencilBufferState;
-
+				
         bool drawInProgress;
         State state;
         CanvasBrush brush;
@@ -86,22 +76,6 @@ namespace Samurai.Canvas2D
                 M41 = -1f,
                 M42 = 1f
             };
-
-			this.blendState = new BlendState()
-			{
-				Enabled = true,
-				SourceFactor = SourceBlendFactor.SourceAlpha,
-				DestinationFactor = DestinationBlendFactor.OneMinusSourceAlpha
-			};
-
-			this.depthBufferState = new DepthBufferState()
-			{
-				Enabled = true,
-				Function = DepthFunction.LessThanOrEqual
-			};
-
-			this.rasterizerState = new RasterizerState();
-			this.stencilBufferState = new StencilBufferState();
         }
                 
         protected override void DisposeManagedResources()
@@ -120,18 +94,13 @@ namespace Samurai.Canvas2D
         {
             if (this.drawInProgress)
                 throw new InvalidOperationException("Draw already in progress.");
-                        
-            this.oldBlendState = this.graphics.BlendState;
-            this.graphics.BlendState = this.blendState;
 
-            this.oldDepthBufferState = this.graphics.DepthBufferState;
-            this.graphics.DepthBufferState = this.depthBufferState;
+			this.graphics.BlendEnabled = true;
+			this.graphics.SourceBlendFactor = SourceBlendFactor.SourceAlpha;
+			this.graphics.DestinationBlendFactor = DestinationBlendFactor.OneMinusSourceAlpha;
 
-            this.oldRasterizerState = this.graphics.RasterizerState;
-            this.graphics.RasterizerState = this.rasterizerState;
-
-			this.oldStencilBufferState = this.graphics.StencilBufferState;
-			this.graphics.StencilBufferState = this.stencilBufferState;
+			this.graphics.DepthBufferEnabled = true;
+			this.graphics.DepthFunction = DepthFunction.LessThanOrEqual;
 
             this.state = State.None;
             this.drawInProgress = true;
@@ -140,16 +109,7 @@ namespace Samurai.Canvas2D
         public void End()
         {
             this.EnsureDrawInProgress();
-
-            this.graphics.BlendState = this.oldBlendState;
-            this.oldBlendState = null;
-
-            this.graphics.DepthBufferState = this.oldDepthBufferState;
-            this.oldDepthBufferState = null;
-
-            this.graphics.RasterizerState = this.oldRasterizerState;
-            this.oldRasterizerState = null;
-
+			
             this.brush = null;
             this.drawInProgress = false;
         }

@@ -83,7 +83,6 @@
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="BitmapHelper.cs" />
-    <Compile Include="BlendState.cs" />
     <Compile Include="Canvas2D\CanvasBrush.cs" />
     <Compile Include="Canvas2D\CanvasRenderer.cs" />
     <Compile Include="Canvas2D\LinearGradientBrush.cs" />
@@ -93,7 +92,6 @@
     <Compile Include="Color4.cs" />
     <Compile Include="ColorMask.cs" />
     <Compile Include="CullMode.cs" />
-    <Compile Include="DepthBufferState.cs" />
     <Compile Include="DepthFunction.cs" />
     <Compile Include="DestinationBlendFactor.cs" />
     <Compile Include="DisposableObject.cs" />
@@ -106,7 +104,6 @@
     <Compile Include="GraphicsContext.cs" />
     <Compile Include="GraphicsContextDescription.cs" />
     <Compile Include="GraphicsObject.cs" />
-    <Compile Include="GraphicsState.cs" />
     <Compile Include="IGraphicsHost.cs" />
     <Compile Include="IndexBuffer.cs" />
     <Compile Include="MathHelper.cs" />
@@ -114,7 +111,6 @@
     <Compile Include="Point.cs" />
     <Compile Include="PrimitiveType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RasterizerState.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="SamuraiException.cs" />
     <Compile Include="Shader.cs" />
@@ -132,7 +128,6 @@
     <Compile Include="StaticVertexBuffer.cs" />
     <Compile Include="StencilFunction.cs" />
     <Compile Include="StencilOperation.cs" />
-    <Compile Include="StencilBufferState.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Texture1D.cs" />
     <Compile Include="Texture2D.cs" />

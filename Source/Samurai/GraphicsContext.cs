@@ -12,10 +12,26 @@ namespace Samurai
 		Rectangle viewport;
 		Rectangle? scissor;
 
-		BlendState blendState;
-		DepthBufferState depthBufferState;
-		RasterizerState rasterizerState;
-		StencilBufferState stencilBufferState;
+		bool blendEnabled = false;
+		SourceBlendFactor sourceFactor = SourceBlendFactor.One;
+		DestinationBlendFactor destinationFactor = DestinationBlendFactor.Zero;
+
+		FrontFace frontFace = FrontFace.CounterClockwise;
+		CullMode cullMode = CullMode.None;
+		ColorMask colorMask = ColorMask.All;
+
+		bool depthBufferEnabled = false;
+		DepthFunction depthBufferFunction = DepthFunction.Less;
+		bool depthBufferWriteEnabled = true;
+
+		bool stencilBufferEnabled = false;
+		StencilFunction stencilFunction = StencilFunction.Always;
+		int stencilReferenceValue = 0;
+		uint stencilMask = 0;
+		StencilOperation stencilFail = StencilOperation.Keep;
+		StencilOperation stencilDepthFail = StencilOperation.Keep;
+		StencilOperation stencilPass = StencilOperation.Keep;
+		uint stencilWriteMask = 0xFFFFFFFF;
 								
 		bool[] textures;
 		uint nextTexture;
@@ -81,74 +97,237 @@ namespace Samurai
 			}
 		}
 
-		public BlendState BlendState
+		public bool BlendEnabled
 		{
-			get { return this.blendState; }
+			get { return this.blendEnabled; }
 
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException("BlendState");
-
-				if (value != this.blendState)
+				if (value != this.blendEnabled)
 				{
-					this.blendState.SetGraphicsContext(null);
-					this.blendState = value;
-					this.blendState.SetGraphicsContext(this);					
+					this.blendEnabled = value;
+					this.ApplyBlendCap();
 				}
 			}
 		}
 
-		public DepthBufferState DepthBufferState
+		public SourceBlendFactor SourceBlendFactor
 		{
-			get { return this.depthBufferState; }
+			get { return this.sourceFactor; }
 
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException("DepthBufferState");
-
-				if (value != this.depthBufferState)
+				if (value != this.sourceFactor)
 				{
-					this.depthBufferState.SetGraphicsContext(null);
-					this.depthBufferState = value;
-					this.depthBufferState.SetGraphicsContext(this);
+					this.sourceFactor = value;
+					this.ApplyBlendFunc();
 				}
 			}
 		}
 
-		public RasterizerState RasterizerState
+		public DestinationBlendFactor DestinationBlendFactor
 		{
-			get { return this.rasterizerState; }
+			get { return this.destinationFactor; }
 
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException("RasterizerState");
-
-				if (value != this.rasterizerState)
+				if (value != this.destinationFactor)
 				{
-					this.rasterizerState.SetGraphicsContext(null);
-					this.rasterizerState = value;
-					this.rasterizerState.SetGraphicsContext(this);
+					this.destinationFactor = value;
+					this.ApplyBlendFunc();
 				}
 			}
 		}
 
-		public StencilBufferState StencilBufferState
+		public bool DepthBufferEnabled
 		{
-			get { return this.stencilBufferState; }
+			get { return this.depthBufferEnabled; }
 
 			set
 			{
-				if (value == null)
-					throw new ArgumentNullException("StencilBufferState");
-
-				if (value != this.stencilBufferState)
+				if (value != this.depthBufferEnabled)
 				{
-					this.stencilBufferState.SetGraphicsContext(null);
-					this.stencilBufferState = value;
-					this.stencilBufferState.SetGraphicsContext(this);
+					this.depthBufferEnabled = value;
+					this.ApplyDepthTestCap();
+				}
+			}
+		}
+
+		public DepthFunction DepthFunction
+		{
+			get { return this.depthBufferFunction; }
+
+			set
+			{
+				if (value != this.depthBufferFunction)
+				{
+					this.depthBufferFunction = value;
+					this.ApplyDepthFunc();
+				}
+			}
+		}
+
+		public bool DepthBufferWriteEnabled
+		{
+			get { return this.depthBufferWriteEnabled; }
+
+			set
+			{
+				this.depthBufferWriteEnabled = value;
+				this.ApplyDepthMask();
+			}
+		}
+
+		public FrontFace FrontFace
+		{
+			get { return this.frontFace; }
+
+			set
+			{
+				if (value != this.frontFace)
+				{
+					this.frontFace = value;
+					this.ApplyFrontFace();
+				}
+			}
+		}
+
+		public CullMode CullMode
+		{
+			get { return this.cullMode; }
+
+			set
+			{
+				if (value != this.cullMode)
+				{
+					this.cullMode = value;
+					this.ApplyCullMode();
+				}
+			}
+		}
+
+		public ColorMask ColorMask
+		{
+			get { return this.colorMask; }
+
+			set
+			{
+				if (value != this.colorMask)
+				{
+					this.colorMask = value;
+					this.ApplyColorMask();
+				}
+			}
+		}
+
+		public bool StencilBufferEnabled
+		{
+			get { return this.stencilBufferEnabled; }
+
+			set
+			{
+				if (value != this.stencilBufferEnabled)
+				{
+					this.stencilBufferEnabled = value;
+					this.ApplyStencilTestCap();
+				}
+			}
+		}
+
+		public StencilFunction StencilFunction
+		{
+			get { return this.stencilFunction; }
+
+			set
+			{
+				if (value != this.stencilFunction)
+				{
+					this.stencilFunction = value;
+					this.ApplyStencilFunc();
+				}
+			}
+		}
+
+		public int StencilReferenceValue
+		{
+			get { return this.stencilReferenceValue; }
+
+			set
+			{
+				if (value != this.stencilReferenceValue)
+				{
+					this.stencilReferenceValue = value;
+					this.ApplyStencilFunc();
+				}
+			}
+		}
+
+		public uint StencilMask
+		{
+			get { return this.stencilMask; }
+
+			set
+			{
+				if (value != this.stencilMask)
+				{
+					this.stencilMask = value;
+					this.ApplyStencilFunc();
+				}
+			}
+		}
+
+		public StencilOperation StencilFail
+		{
+			get { return this.stencilFail; }
+
+			set
+			{
+				if (value != this.stencilFail)
+				{
+					this.stencilFail = value;
+					this.ApplyStencilOp();
+				}
+			}
+		}
+
+		public StencilOperation StencilDepthFail
+		{
+			get { return this.stencilDepthFail; }
+
+			set
+			{
+				if (value != this.stencilDepthFail)
+				{
+					this.stencilDepthFail = value;
+					this.ApplyStencilOp();
+				}
+			}
+		}
+
+		public StencilOperation StencilPass
+		{
+			get { return this.stencilPass; }
+
+			set
+			{
+				if (value != this.stencilPass)
+				{
+					this.stencilPass = value;
+					this.ApplyStencilOp();
+				}
+			}
+		}
+
+		public uint StencilWriteMask
+		{
+			get { return this.stencilWriteMask; }
+
+			set
+			{
+				if (value != this.stencilWriteMask)
+				{
+					this.stencilWriteMask = value;
+					this.ApplyStencilWriteMask();
 				}
 			}
 		}
@@ -186,17 +365,21 @@ namespace Samurai
 			this.scissor = null;
 			this.ToggleCap(GLContext.ScissorTestCap, false);
 
-			this.blendState = new BlendState();
-			this.blendState.SetGraphicsContext(this);
+			this.ApplyBlendCap();
+			this.ApplyBlendFunc();
 
-			this.depthBufferState = new DepthBufferState();
-			this.depthBufferState.SetGraphicsContext(this);
+			this.ApplyDepthTestCap();
+			this.ApplyDepthFunc();
+			this.ApplyDepthMask();
 
-			this.rasterizerState = new RasterizerState();
-			this.rasterizerState.SetGraphicsContext(this);
+			this.ApplyFrontFace();
+			this.ApplyCullMode();
+			this.ApplyColorMask();
 
-			this.stencilBufferState = new StencilBufferState();
-			this.stencilBufferState.SetGraphicsContext(this);
+			this.ApplyStencilTestCap();
+			this.ApplyStencilFunc();
+			this.ApplyStencilOp();
+			this.ApplyStencilWriteMask();
 						
 			this.clearColor = Color4.CornflowerBlue;
 			this.GL.ClearColor(this.clearColor.R / 255.0f, this.clearColor.G / 255.0f, this.clearColor.B / 255.0f, this.clearColor.A / 255.0f);
@@ -269,7 +452,7 @@ namespace Samurai
 			this.textures[index] = false;
 		}
 		
-		internal void ToggleCap(uint cap, bool isEnabled)
+		private void ToggleCap(uint cap, bool isEnabled)
 		{
 			if (isEnabled)
 			{
@@ -279,7 +462,79 @@ namespace Samurai
 			{
 				this.GL.Disable(cap);
 			}
-		}	
+		}
+
+		private void ApplyBlendCap()
+		{
+			this.ToggleCap(GLContext.BlendCap, this.BlendEnabled);
+		}
+
+		private void ApplyBlendFunc()
+		{
+			this.GL.BlendFunc((uint)this.SourceBlendFactor, (uint)this.DestinationBlendFactor);
+		}
+
+		private void ApplyDepthTestCap()
+		{
+			this.ToggleCap(GLContext.DepthTestCap, this.DepthBufferEnabled);
+		}
+
+		private void ApplyDepthFunc()
+		{
+			this.GL.DepthFunc((uint)this.DepthFunction);
+		}
+
+		private void ApplyDepthMask()
+		{
+			this.GL.DepthMask(this.DepthBufferWriteEnabled);
+		}
+
+		private void ApplyFrontFace()
+		{
+			this.GL.FrontFace((uint)this.FrontFace);
+		}
+
+		private void ApplyCullMode()
+		{
+			if (this.CullMode == CullMode.None)
+			{
+				this.ToggleCap(GLContext.CullFaceCap, false);
+			}
+			else
+			{
+				this.ToggleCap(GLContext.CullFaceCap, true);
+				this.GL.CullFace((uint)this.CullMode);
+			}
+		}
+
+		private void ApplyColorMask()
+		{
+			this.GL.ColorMask(
+				(this.ColorMask & ColorMask.Red) == ColorMask.Red,
+				(this.ColorMask & ColorMask.Green) == ColorMask.Green,
+				(this.ColorMask & ColorMask.Blue) == ColorMask.Blue,
+				(this.ColorMask & ColorMask.Alpha) == ColorMask.Alpha);
+		}
+
+		private void ApplyStencilTestCap()
+		{
+			this.ToggleCap(GLContext.StencilTestCap, this.StencilBufferEnabled);
+		}
+
+		private void ApplyStencilFunc()
+		{
+			this.GL.StencilFunc((uint)this.StencilFunction, this.StencilReferenceValue, this.StencilMask);
+		}
+
+		private void ApplyStencilOp()
+		{
+			this.GL.StencilOp((uint)this.StencilFail, (uint)this.StencilDepthFail, (uint)this.StencilPass);
+		}
+
+		private void ApplyStencilWriteMask()
+		{
+			this.GL.StencilMask(this.StencilWriteMask);
+		}
 		
         public void Clear()
         {

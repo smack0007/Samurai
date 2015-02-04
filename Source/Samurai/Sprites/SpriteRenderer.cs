@@ -30,17 +30,7 @@ namespace Samurai.Sprites
 		bool drawInProgress;
 
 		Matrix4 transform;
-
-		BlendState blendState;
-		DepthBufferState depthBufferState;
-		RasterizerState rasterizerState;
-		StencilBufferState stencilBufferState;
-		
-		BlendState oldBlendState;
-		DepthBufferState oldDepthBufferState;
-		RasterizerState oldRasterizerState;
-		StencilBufferState oldStencilBufferState;
-										
+														
 		public SpriteRenderer(GraphicsContext graphics)
             : this(graphics, 1024)
         {
@@ -51,17 +41,17 @@ namespace Samurai.Sprites
         /// </summary>
         /// <param name="graphics"></param>
         /// <param name="maxSprites">The maximum number of sprites which can be batched.</param>
-        public SpriteRenderer(GraphicsContext graphics, int maxSprites)
+		public SpriteRenderer(GraphicsContext graphics, int maxSprites)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
 
-            if (maxSprites <= 0)
-                throw new ArgumentOutOfRangeException("maxSprites", "MaxSprites must be >= 1.");
+			if (maxSprites <= 0)
+				throw new ArgumentOutOfRangeException("maxSprites", "MaxSprites must be >= 1.");
 
 			this.graphics = graphics;
 
-            this.vertices = new Vertex[maxSprites * 4];
+			this.vertices = new Vertex[maxSprites * 4];
 
 			this.vertexBuffer = new DynamicVertexBuffer<Vertex>(this.graphics);
 
@@ -85,22 +75,6 @@ namespace Samurai.Sprites
 				M41 = -1f,
 				M42 = 1f
 			};
-
-			this.blendState = new BlendState()
-			{
-				Enabled = true,
-				SourceFactor = SourceBlendFactor.SourceAlpha,
-				DestinationFactor = DestinationBlendFactor.OneMinusSourceAlpha
-			};
-
-			this.depthBufferState = new DepthBufferState()
-			{
-				Enabled = true,
-				Function = DepthFunction.LessThanOrEqual
-			};
-
-			this.rasterizerState = new RasterizerState();
-			this.stencilBufferState = new StencilBufferState();
 		}
 
 		protected override void DisposeManagedResources()
@@ -127,18 +101,13 @@ namespace Samurai.Sprites
 				throw new InvalidOperationException("Draw already in progress.");
 
 			this.shader = shader;
+						
+			this.graphics.BlendEnabled = true;
+			this.graphics.SourceBlendFactor = SourceBlendFactor.SourceAlpha;
+			this.graphics.DestinationBlendFactor = DestinationBlendFactor.OneMinusSourceAlpha;
 
-			this.oldBlendState = this.graphics.BlendState;
-			this.graphics.BlendState = this.blendState;
-
-			this.oldDepthBufferState = this.graphics.DepthBufferState;
-			this.graphics.DepthBufferState = this.depthBufferState;
-
-			this.oldRasterizerState = this.graphics.RasterizerState;
-			this.graphics.RasterizerState = this.rasterizerState;
-
-			this.oldStencilBufferState = this.graphics.StencilBufferState;
-			this.graphics.StencilBufferState = this.stencilBufferState;
+			this.graphics.DepthBufferEnabled = true;
+			this.graphics.DepthFunction = DepthFunction.LessThanOrEqual;
 
 			this.drawInProgress = true;
 		}
@@ -147,20 +116,8 @@ namespace Samurai.Sprites
 		{
 			this.EnsureDrawInProgress();
 
-			this.Flush();
-
-			this.graphics.BlendState = this.oldBlendState;
-			this.oldBlendState = null;
-
-			this.graphics.DepthBufferState = this.oldDepthBufferState;
-			this.oldDepthBufferState = null;
-
-			this.graphics.RasterizerState = this.oldRasterizerState;
-			this.oldRasterizerState = null;
-
-			this.graphics.StencilBufferState = this.oldStencilBufferState;
-			this.oldStencilBufferState = null;
-
+			this.Flush();		
+			
 			this.shader = null;
 			this.drawInProgress = false;
 		}
