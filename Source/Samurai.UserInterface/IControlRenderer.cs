@@ -1,5 +1,6 @@
 ﻿using System;
 using Samurai.Graphics;
+using Samurai.Graphics.Sprites;
 
 namespace Samurai.UserInterface
 {

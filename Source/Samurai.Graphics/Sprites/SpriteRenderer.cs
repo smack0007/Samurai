@@ -30,11 +30,7 @@ namespace Samurai.Graphics.Sprites
 		bool drawInProgress;
 
 		Matrix4 transform;
-
-		BlendState oldBlendState;
-		DepthBufferState oldDepthBufferState;
-		RasterizerState oldRasterizerState;
-										
+														
 		public SpriteRenderer(GraphicsContext graphics)
             : this(graphics, 1024)
         {
@@ -45,17 +41,17 @@ namespace Samurai.Graphics.Sprites
         /// </summary>
         /// <param name="graphics"></param>
         /// <param name="maxSprites">The maximum number of sprites which can be batched.</param>
-        public SpriteRenderer(GraphicsContext graphics, int maxSprites)
+		public SpriteRenderer(GraphicsContext graphics, int maxSprites)
 		{
 			if (graphics == null)
 				throw new ArgumentNullException("graphics");
 
-            if (maxSprites <= 0)
-                throw new ArgumentOutOfRangeException("maxSprites", "MaxSprites must be >= 1.");
+			if (maxSprites <= 0)
+				throw new ArgumentOutOfRangeException("maxSprites", "MaxSprites must be >= 1.");
 
 			this.graphics = graphics;
 
-            this.vertices = new Vertex[maxSprites * 4];
+			this.vertices = new Vertex[maxSprites * 4];
 
 			this.vertexBuffer = new DynamicVertexBuffer<Vertex>(this.graphics);
 
@@ -105,15 +101,13 @@ namespace Samurai.Graphics.Sprites
 				throw new InvalidOperationException("Draw already in progress.");
 
 			this.shader = shader;
+						
+			this.graphics.BlendEnabled = true;
+			this.graphics.SourceBlendFactor = SourceBlendFactor.SourceAlpha;
+			this.graphics.DestinationBlendFactor = DestinationBlendFactor.OneMinusSourceAlpha;
 
-			this.oldBlendState = this.graphics.BlendState;
-			this.graphics.BlendState = BlendState.AlphaBlend;
-
-			this.oldDepthBufferState = this.graphics.DepthBufferState;
-			this.graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
-
-			this.oldRasterizerState = this.graphics.RasterizerState;
-			this.graphics.RasterizerState = RasterizerState.Default;
+			this.graphics.DepthBufferEnabled = true;
+			this.graphics.DepthFunction = DepthFunction.LessThanOrEqual;
 
 			this.drawInProgress = true;
 		}
@@ -122,17 +116,8 @@ namespace Samurai.Graphics.Sprites
 		{
 			this.EnsureDrawInProgress();
 
-			this.Flush();
-
-			this.graphics.BlendState = this.oldBlendState;
-			this.oldBlendState = null;
-
-			this.graphics.DepthBufferState = this.oldDepthBufferState;
-			this.oldDepthBufferState = null;
-
-			this.graphics.RasterizerState = this.oldRasterizerState;
-			this.oldRasterizerState = null;
-
+			this.Flush();		
+			
 			this.shader = null;
 			this.drawInProgress = false;
 		}
@@ -440,7 +425,7 @@ namespace Samurai.Graphics.Sprites
 			{
 				this.vertexBuffer.SetData(this.vertices, 0, this.vertexCount);
 
-				this.graphics.SetShaderProgram(this.shader.ShaderProgram);
+				this.graphics.ShaderProgram = this.shader.ShaderProgram;
 
 				Rectangle viewport = this.graphics.Viewport;
 				this.transform.M11 = 2f / viewport.Width;

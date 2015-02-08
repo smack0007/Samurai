@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Samurai.Graphics;
+using Samurai.Graphics.Sprites;
 using Samurai.Input;
 
 namespace Samurai.UserInterface

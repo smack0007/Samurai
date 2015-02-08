@@ -45,11 +45,7 @@ namespace Samurai.Graphics.Canvas2D
         DynamicVertexBuffer<Vertex> vertexBuffer;        
                         
         Matrix4 projection;
-
-        BlendState oldBlendState;
-        DepthBufferState oldDepthBufferState;
-        RasterizerState oldRasterizerState;
-
+				
         bool drawInProgress;
         State state;
         CanvasBrush brush;
@@ -98,15 +94,13 @@ namespace Samurai.Graphics.Canvas2D
         {
             if (this.drawInProgress)
                 throw new InvalidOperationException("Draw already in progress.");
-                        
-            this.oldBlendState = this.graphics.BlendState;
-            this.graphics.BlendState = BlendState.AlphaBlend;
 
-            this.oldDepthBufferState = this.graphics.DepthBufferState;
-            this.graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
+			this.graphics.BlendEnabled = true;
+			this.graphics.SourceBlendFactor = SourceBlendFactor.SourceAlpha;
+			this.graphics.DestinationBlendFactor = DestinationBlendFactor.OneMinusSourceAlpha;
 
-            this.oldRasterizerState = this.graphics.RasterizerState;
-            this.graphics.RasterizerState = RasterizerState.Default;
+			this.graphics.DepthBufferEnabled = true;
+			this.graphics.DepthFunction = DepthFunction.LessThanOrEqual;
 
             this.state = State.None;
             this.drawInProgress = true;
@@ -115,16 +109,7 @@ namespace Samurai.Graphics.Canvas2D
         public void End()
         {
             this.EnsureDrawInProgress();
-
-            this.graphics.BlendState = this.oldBlendState;
-            this.oldBlendState = null;
-
-            this.graphics.DepthBufferState = this.oldDepthBufferState;
-            this.oldDepthBufferState = null;
-
-            this.graphics.RasterizerState = this.oldRasterizerState;
-            this.oldRasterizerState = null;
-
+			
             this.brush = null;
             this.drawInProgress = false;
         }
@@ -147,6 +132,26 @@ namespace Samurai.Graphics.Canvas2D
             this.vertices[this.vertexCount].TexCoord = texCoord;
             this.vertexCount++;
         }
+
+		private static void RotateAboutOrigin(ref Vector2 point, ref Vector2 origin, float rotation, out Vector2 result)
+		{
+			Vector2 u = point - origin; // point relative to origin  
+
+			if (u == Vector2.Zero)
+			{
+				result = point;
+				return;
+			}
+
+			float a = (float)Math.Atan2(u.Y, u.X); // angle relative to origin  
+			a += rotation; // rotate  
+
+			// u is now the new point relative to origin
+			float length = u.Length();
+			u = new Vector2((float)Math.Cos(a) * length, (float)Math.Sin(a) * length);
+
+			result = u + origin;
+		}
                 
         public void DrawLine(Vector2 start, Vector2 end, float width, CanvasBrush brush)
         {
@@ -166,19 +171,19 @@ namespace Samurai.Graphics.Canvas2D
 
             Vector2 screenTopLeftTemp = new Vector2(start.X, start.Y - halfWidth);
             Vector2 screenTopLeft;
-            Vector2.RotateAboutOrigin(ref screenTopLeftTemp, ref start, angle, out screenTopLeft);
+            RotateAboutOrigin(ref screenTopLeftTemp, ref start, angle, out screenTopLeft);
 
             Vector2 screenTopRightTemp = new Vector2(start.X + distance, start.Y - halfWidth);
             Vector2 screenTopRight;
-            Vector2.RotateAboutOrigin(ref screenTopRightTemp, ref start, angle, out screenTopRight);
+            RotateAboutOrigin(ref screenTopRightTemp, ref start, angle, out screenTopRight);
 
             Vector2 screenBottomRightTemp = new Vector2(start.X + distance, start.Y + halfWidth);
             Vector2 screenBottomRight;
-            Vector2.RotateAboutOrigin(ref screenBottomRightTemp, ref start, angle, out screenBottomRight);
+            RotateAboutOrigin(ref screenBottomRightTemp, ref start, angle, out screenBottomRight);
 
             Vector2 screenBottomLeftTemp = new Vector2(start.X, start.Y + halfWidth);
             Vector2 screenBottomLeft;
-            Vector2.RotateAboutOrigin(ref screenBottomLeftTemp, ref start, angle, out screenBottomLeft);
+            RotateAboutOrigin(ref screenBottomLeftTemp, ref start, angle, out screenBottomLeft);
 
             Vector2 topLeftTexCoord = Vector2.Zero;
             Vector2 topRightUV = Vector2.UnitX;
@@ -311,13 +316,13 @@ namespace Samurai.Graphics.Canvas2D
             {
                 Vector2 screenPositionTemp = new Vector2(center.X, center.Y - radius);
                 Vector2 screenPosition;
-                Vector2.RotateAboutOrigin(ref screenPositionTemp, ref center, MathHelper.ToRadians(i), out screenPosition);
+                RotateAboutOrigin(ref screenPositionTemp, ref center, MathHelper.ToRadians(i), out screenPosition);
 
                 Vector2 modelPosition = new Vector2(screenPosition.X - topLeft.X, screenPosition.Y - topLeft.Y);
 
                 Vector2 texCoordTemp = new Vector2(0.5f, 0.0f);
                 Vector2 texCoord;
-                Vector2.RotateAboutOrigin(ref screenPositionTemp, ref texCoordCenter, MathHelper.ToRadians(i), out texCoord);
+                RotateAboutOrigin(ref screenPositionTemp, ref texCoordCenter, MathHelper.ToRadians(i), out texCoord);
 
                 this.AddVertex(ref modelPosition, ref screenPosition, ref texCoord);
             }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	public class TextureFontParams
 	{

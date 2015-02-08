@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Samurai.UserInterface;
+using Samurai.Graphics.Sprites;
 
 namespace SamuraiDemo
 {
@@ -91,18 +92,20 @@ namespace SamuraiDemo
 		ControlRenderer controlRenderer;
 		Panel panel;
 		Label label;
-
-		RasterizerState rasterizerState = new RasterizerState(
-			frontFace: FrontFace.Clockwise,
-			cullMode: CullMode.Back);
-
+				
         public DemoGame()
         {
             this.Window.Title = "Samurai Demo";
 
-            this.Graphics.BlendState = BlendState.AlphaBlend;
-            this.Graphics.DepthBufferState = DepthBufferState.LessThanOrEqual;
-            this.Graphics.RasterizerState = this.rasterizerState;
+			this.Graphics.BlendEnabled = true;
+			this.Graphics.SourceBlendFactor = SourceBlendFactor.SourceAlpha;
+			this.Graphics.DestinationBlendFactor = DestinationBlendFactor.OneMinusDestinationAlpha;
+
+			this.Graphics.DepthBufferEnabled = true;
+			this.Graphics.DepthFunction = DepthFunction.LessThanOrEqual;
+
+			this.Graphics.FrontFace = FrontFace.Clockwise;
+			this.Graphics.CullMode = CullMode.Back;
 
             this.shaderProgram = new ShaderProgram(
                 this.Graphics,
@@ -174,7 +177,7 @@ namespace SamuraiDemo
 				Matrix4.LookAt(ref eye, ref target, ref up) * 
 				Matrix4.PerspectiveFOV(120.0f, (float)this.Window.Width / (float)this.Window.Height, 0.1f, 100.0f);
 
-			this.Graphics.SetShaderProgram(this.shaderProgram);
+			this.Graphics.ShaderProgram = this.shaderProgram;
 			this.shaderProgram.SetValue("projection", ref projection);
 			this.shaderProgram.SetValue("texture0", this.texture1);
 

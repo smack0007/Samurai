@@ -51,7 +51,7 @@ namespace FractalSample
 				VertexShader.Compile(this.Graphics, File.ReadAllText("Mandelbrot.vert")),
 				FragmentShader.Compile(this.Graphics, File.ReadAllText("Mandelbrot.frag")));
 
-			this.Graphics.SetShaderProgram(this.shaderProgram);
+			this.Graphics.ShaderProgram = this.shaderProgram;
 
 			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, this.vertexData);
 

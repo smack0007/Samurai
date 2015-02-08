@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	[Flags]
 	public enum TextureFontStyle

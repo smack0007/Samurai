@@ -1,6 +1,4 @@
-﻿#version 330 
-
-uniform sampler2D fragSampler;
+﻿uniform sampler2D fragSampler;
 
 smooth in vec4 fragColor;
 smooth in vec2 fragUV; 

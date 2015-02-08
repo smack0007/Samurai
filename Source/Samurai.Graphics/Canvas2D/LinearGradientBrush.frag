@@ -1,6 +1,4 @@
-﻿#version 330 
-
-uniform vec4 fragStartColor;
+﻿uniform vec4 fragStartColor;
 uniform vec4 fragEndColor;
 uniform vec2 fragFactor;
 

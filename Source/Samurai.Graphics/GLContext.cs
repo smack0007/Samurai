@@ -9,6 +9,11 @@ namespace Samurai.Graphics
 {
 	internal class GLContext : IDisposable
 	{
+		public const int VersionMajor = 3;
+		public const int VersionMinor = 3;
+		
+		public readonly string ShaderVersionDirective = "#version 330";
+
 #if WINDOWS
 		private const string Library = "opengl32.dll";
 		WGLContext platformContext;
@@ -44,11 +49,12 @@ namespace Samurai.Graphics
 		public const uint CullFaceCap = 0x0B44;
 		public const uint DepthTestCap = 0x0B71;
 		public const uint ScissorTestCap = 0x0C11;
+		public const uint StencilTestCap = 0x0B90;
 
 		// Clear
 		public const uint ColorBufferBit = 0x00004000;
 		public const uint DepthBufferBit = 0x00000100;
-		//public const uint StencilBufferBit = 0x00000400;
+		public const uint StencilBufferBit = 0x00000400;
 
 		// DepthFunc
 		public const uint Always = 0x0207;
@@ -104,6 +110,15 @@ namespace Samurai.Graphics
 		public const uint FragmentShader = 0x8B30;
 		public const uint InfoLogLength = 0x8B84;
 		public const uint VertexShader = 0x8B31;
+
+		// StencilOp
+		public const uint Keep = 0x1E00;
+		public const uint Replace = 0x1E01;
+		public const uint Incr = 0x1E02;
+		public const uint IncrWrap = 0x8507;
+		public const uint Decr = 0x1E03;
+		public const uint DecrWrap = 0x8508;
+		public const uint Invert = 0x150A;
 
 		// Textures
 		public const uint ClampToEdge = 0x812F;
@@ -162,6 +177,9 @@ namespace Samurai.Graphics
 		[DllImport(Library, EntryPoint = "glClearColor")]
 		private static extern void _ClearColor(float red, float green, float blue, float alpha);
 
+		[DllImport(Library, EntryPoint = "glColorMask")]
+		private static extern void _ColorMask(bool red, bool green, bool blue, bool alpha);
+
 		private delegate void __CompileShader(uint shader);
 		private __CompileShader _CompileShader;
 
@@ -191,6 +209,9 @@ namespace Samurai.Graphics
 
 		[DllImport(Library, EntryPoint = "glDepthFunc")]
 		private static extern void _DepthFunc(uint func);
+
+		[DllImport(Library, EntryPoint = "glDepthMask")]
+		private static extern void _DepthMask(bool mask);
 
 		[DllImport(Library, EntryPoint = "glDisable")]
 		private static extern void _Disable(uint cap);
@@ -249,8 +270,17 @@ namespace Samurai.Graphics
 		[DllImport(Library, EntryPoint = "glScissor")]
 		private static extern void _Scissor(int x, int y, int width, int height);
 
-		private delegate void __ShaderSource(uint shader, int count, string[] @string, ref int length);
+		private delegate void __ShaderSource(uint shader, int count, ref string @string, ref int length);
 		private __ShaderSource _ShaderSource;
+
+		[DllImport(Library, EntryPoint = "glStencilFunc")]
+		private static extern void _StencilFunc(uint func, int @ref, uint mask);
+
+		[DllImport(Library, EntryPoint = "glStencilMask")]
+		private static extern void _StencilMask(uint mask);
+
+		[DllImport(Library, EntryPoint = "glStencilOp")]
+		private static extern void _StencilOp(uint fail, uint zfail, uint zpass);
 
 		[DllImport(Library, EntryPoint = "glTexImage1D")]
 		private static extern void _TexImage1D(uint target, int level, int internalformat, int width, int border, uint format, uint type, byte[] pixels);
@@ -294,7 +324,7 @@ namespace Samurai.Graphics
 		public GLContext(IntPtr window)
 		{
 #if WINDOWS
-			this.platformContext = new WGLContext(window, 3, 3);
+			this.platformContext = new WGLContext(window, VersionMajor, VersionMinor);
 #endif
 
 			_ActiveTexture = (__ActiveTexture)this.platformContext.GetProcAddress<__ActiveTexture>("glActiveTexture");
@@ -433,6 +463,12 @@ namespace Samurai.Graphics
 			CheckErrors("ClearColor");
 		}
 
+		public void ColorMask(bool red, bool blue, bool green, bool alpha)
+		{
+			_ColorMask(red, green, blue, alpha);
+			CheckErrors("ColorMask");
+		}
+
 		public void CompileShader(uint shader)
 		{
 			_CompileShader(shader);
@@ -514,6 +550,12 @@ namespace Samurai.Graphics
 		{
 			_DepthFunc(func);
 			CheckErrors("DepthFunc");
+		}
+
+		public void DepthMask(bool mask)
+		{
+			_DepthMask(mask);
+			CheckErrors("DepthMask");
 		}
 
 		public void Disable(uint cap)
@@ -662,12 +704,27 @@ namespace Samurai.Graphics
 
 		public void ShaderSource(uint shader, string source)
 		{
-			string[] sources = new string[] { source };
             int length = source.Length;
-
-			_ShaderSource(shader, 1, sources, ref length);
-
+			_ShaderSource(shader, 1, ref source, ref length);
 			CheckErrors("ShaderSource");
+		}
+
+		public void StencilFunc(uint func, int @ref, uint mask)
+		{
+			_StencilFunc(func, @ref, mask);
+			CheckErrors("StencilFunc");
+		}
+
+		public void StencilMask(uint mask)
+		{
+			_StencilMask(mask);
+			CheckErrors("StencilMask");
+		}
+
+		public void StencilOp(uint fail, uint zfail, uint zpass)
+		{
+			_StencilOp(fail, zfail, zpass);
+			CheckErrors("StencilOp");
 		}
 
 		public void TexImage1D(uint target, int level, int internalformat, int width, int border, uint format, uint type, byte[] pixels)

@@ -1,6 +1,4 @@
-﻿#version 330 
-
-uniform mat4 vertTransform; 
+﻿uniform mat4 vertTransform; 
 
 layout(location = 0) in vec3 vertPosition; 
 layout(location = 1) in vec4 vertColor; 

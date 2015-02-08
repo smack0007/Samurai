@@ -2,7 +2,7 @@
 
 namespace Samurai.Graphics
 {
-	public enum DepthFunc : uint
+	public enum DepthFunction : uint
 	{
 		Always = GLContext.Always,
 

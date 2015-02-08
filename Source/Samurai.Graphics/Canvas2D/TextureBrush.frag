@@ -1,6 +1,4 @@
-﻿#version 330 
-
-uniform sampler2D fragTexture;
+﻿uniform sampler2D fragTexture;
 uniform int fragTextureWidth;
 uniform int fragTextureHeight;
 uniform int fragTextureSourceX;

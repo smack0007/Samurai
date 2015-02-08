@@ -1,5 +1,4 @@
 ﻿// http://nuclear.mutantstargoat.com/articles/sdr_fract/
-#version 330 core
 
 in vec2 fragPosition;
 in vec2 fragUV;

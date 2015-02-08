@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	public sealed partial class TextureFont : DisposableObject
 	{

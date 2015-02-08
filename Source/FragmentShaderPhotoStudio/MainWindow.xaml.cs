@@ -155,7 +155,7 @@ void main()
 		{
 			e.Graphics.Clear();
 
-			e.Graphics.SetShaderProgram(this.currentShaderProgram);
+			e.Graphics.ShaderProgram = this.currentShaderProgram;
 
 			Vector2 size = new Vector2(this.currentPicture.Width, this.currentPicture.Height);
 

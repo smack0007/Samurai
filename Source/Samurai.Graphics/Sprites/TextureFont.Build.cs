@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 
-namespace Samurai.Graphics
+namespace Samurai.Graphics.Sprites
 {
 	public sealed partial class TextureFont
 	{

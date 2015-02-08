@@ -43,7 +43,7 @@ namespace Samurai.Graphics.Canvas2D
         {
             Vector2 factor = new Vector2((float)Math.Sin(this.Angle), (float)-Math.Cos(this.Angle));
                        
-            this.Grahpics.SetShaderProgram(this.shader);
+            this.Grahpics.ShaderProgram = this.shader;
             this.shader.SetValue("vertTransform", ref transform);
             this.shader.SetValue("fragStartColor", ref this.startColor);
             this.shader.SetValue("fragEndColor", ref this.endColor);
