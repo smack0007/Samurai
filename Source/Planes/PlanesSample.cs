@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Samurai;
+using Samurai.Content;
 using Samurai.GameFramework;
 using Samurai.Graphics;
 using Samurai.Graphics.Sprites;
@@ -14,6 +15,7 @@ namespace Planes
 		Texture2D planesTexture;
 		SpriteSheet planeSpriteSheet;
 		TextureFont font;
+		ContentManager<string> contentManager;
 				
 		List<Plane> planes;
 
@@ -31,11 +33,17 @@ namespace Planes
 			this.spriteRenderer = new SpriteRenderer(this.Graphics);
 			this.shaderProgram = new BasicSpriteShaderProgram(this.Graphics);
 
-			this.planesTexture = Texture2D.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
-				{
-					ColorKey = Color4.Black,
-					TransparentPixel = Color4.Transparent
-				});
+			this.contentManager = new ContentManager<string>(new FileSystemContentStorage());
+			this.contentManager.AddReader(new Texture2DContentReader(this.Graphics));
+
+			this.contentManager.Register<Texture2D>("planesTexture", new Texture2DContentParams()
+			{
+				FileName = "Planes.png",
+				ColorKey = Color4.Black,
+				TransparentPixel = Color4.Transparent
+			});
+
+			this.planesTexture = this.contentManager.Load<Texture2D>("planesTexture");
 
 			this.planeSpriteSheet = SpriteSheet.Build(this.planesTexture, 64, 64);
 

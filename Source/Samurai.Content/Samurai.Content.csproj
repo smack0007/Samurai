@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{39080DD7-2568-4F40-8B90-FF290BA1A577}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{0E92FC4F-79C4-4F6F-9AA4-17BC342A5978}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Planes</RootNamespace>
-    <AssemblyName>Planes</AssemblyName>
+    <RootNamespace>Samurai.Content</RootNamespace>
+    <AssemblyName>Samurai.Content</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -38,51 +36,19 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlanesSample.cs" />
-    <Compile Include="Plane.cs" />
+    <Compile Include="ContentException.cs" />
+    <Compile Include="ContentManager.cs" />
+    <Compile Include="ContentReader.cs" />
+    <Compile Include="FileSystemContentStorage.cs" />
+    <Compile Include="IContentStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <Compile Include="Texture2DContentParams.cs" />
+    <Compile Include="Texture2DContentReader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Planes.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Samurai.Content\Samurai.Content.csproj">
-      <Project>{0e92fc4f-79c4-4f6f-9aa4-17bc342a5978}</Project>
-      <Name>Samurai.Content</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samurai.GameFramework\Samurai.GameFramework.csproj">
-      <Project>{449baa7e-2062-49b3-9d48-f57606057629}</Project>
-      <Name>Samurai.GameFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Samurai.Graphics\Samurai.Graphics.csproj">
       <Project>{206d7c47-54b6-4562-b49f-c15009d6b8c6}</Project>
       <Name>Samurai.Graphics</Name>

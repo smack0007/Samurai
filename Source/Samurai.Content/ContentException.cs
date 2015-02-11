@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Samurai
+namespace Samurai.Content
 {
-	public class SamuraiException : Exception
+	public class ContentException : SamuraiException
 	{
-		public SamuraiException(string message)
+		public ContentException(string message)
 			: base(message)
 		{
 		}
 
-		public SamuraiException(string message, Exception innerException)
+		public ContentException(string message, Exception innerException)
 			: base(message, innerException)
 		{
 		}
