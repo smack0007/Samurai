@@ -84,6 +84,7 @@
     <Compile Include="Color3.cs" />
     <Compile Include="Color4.cs" />
     <Compile Include="DisposableObject.cs" />
+    <Compile Include="HexHelper.cs" />
     <Compile Include="IHostControl.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Matrix4.cs" />

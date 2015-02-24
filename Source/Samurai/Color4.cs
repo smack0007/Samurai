@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace Samurai
@@ -206,6 +207,55 @@ namespace Samurai
 		{
 			return "{ " + this.R + ", " + this.G + ", " + this.B + ", " + this.A + " }";
 		}
+
+		/// <summary>
+		/// Converts the color to a hex string.
+		/// </summary>
+		/// <returns></returns>
+		public string ToHexString()
+		{
+			char[] chars = new char[8];
+
+			int bits = this.R;
+			chars[0] = HexHelper.HexDigits[bits >> 4];
+			chars[1] = HexHelper.HexDigits[bits & 0xF];
+
+			bits = this.G;
+			chars[2] = HexHelper.HexDigits[bits >> 4];
+			chars[3] = HexHelper.HexDigits[bits & 0xF];
+
+			bits = this.B;
+			chars[4] = HexHelper.HexDigits[bits >> 4];
+			chars[5] = HexHelper.HexDigits[bits & 0xF];
+
+			bits = this.A;
+			chars[6] = HexHelper.HexDigits[bits >> 4];
+			chars[7] = HexHelper.HexDigits[bits & 0xF];
+
+			return new string(chars);
+		}
+
+		/// <summary>
+		/// Creates a color from a hex string.
+		/// </summary>
+		/// <param name="hex"></param>
+		/// <returns></returns>
+		public static Color4 FromHexString(string hex)
+		{
+			if (hex == null)
+				throw new ArgumentNullException("hex");
+
+			if (hex.Length != 8 || !HexHelper.IsValidHexString(hex))
+				throw new SamuraiException("Unable to parse Color4 from string. String must be 8 characters long and a valid hex string.");
+
+			int r = (HexHelper.HexDigitToByte(hex[0]) << 4) + HexHelper.HexDigitToByte(hex[1]);
+			int g = (HexHelper.HexDigitToByte(hex[2]) << 4) + HexHelper.HexDigitToByte(hex[3]);
+			int b = (HexHelper.HexDigitToByte(hex[4]) << 4) + HexHelper.HexDigitToByte(hex[5]);
+			int a = (HexHelper.HexDigitToByte(hex[6]) << 4) + HexHelper.HexDigitToByte(hex[7]);
+
+			return new Color4((byte)r, (byte)g, (byte)b, (byte)a);
+		}
+
 
 		/// <summary>
 		/// Converts the Color4 to a uint.
