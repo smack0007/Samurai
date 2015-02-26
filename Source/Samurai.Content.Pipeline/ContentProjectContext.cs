@@ -12,6 +12,7 @@ namespace Samurai.Content.Pipeline
 	{
 		Dictionary<string, Type> importers;
 		Dictionary<string, Type> processors;
+		Dictionary<Type, Type> serializers;
 		
 		Dictionary<Type, Func<string, object>> typeParsers;
 
@@ -58,7 +59,7 @@ namespace Samurai.Content.Pipeline
 
 				var importerTypes = AppDomain.CurrentDomain.GetAssemblies()
 					.SelectMany(x => x.GetTypes())
-					.Where(x => !x.IsAbstract && typeof(IContentImporter).IsAssignableFrom(x));
+					.Where(x => !x.IsAbstract && typeof(IContentImporter).IsAssignableFrom(x) && x.GetCustomAttribute(typeof(ContentImporterAttribute)) != null);
 
 				foreach (Type importerType in importerTypes)
 				{
@@ -91,7 +92,7 @@ namespace Samurai.Content.Pipeline
 
 				var processorTypes = AppDomain.CurrentDomain.GetAssemblies()
 					.SelectMany(x => x.GetTypes())
-					.Where(x => !x.IsAbstract && typeof(IContentProcessor).IsAssignableFrom(x));
+					.Where(x => !x.IsAbstract && typeof(IContentProcessor).IsAssignableFrom(x) && x.GetCustomAttribute(typeof(ContentProcessorAttribute)) != null);
 
 				foreach (Type processorType in processorTypes)
 				{
@@ -109,6 +110,34 @@ namespace Samurai.Content.Pipeline
 			// TODO: Processor not in dictionary.
 
 			return (IContentProcessor)Activator.CreateInstance(this.processors[name]);
+		}
+
+		public IContentSerializer GetContentSerializer(Type contentType)
+		{
+			if (this.serializers == null)
+			{
+				this.serializers = new Dictionary<Type, Type>();
+
+				var serializerTypes = AppDomain.CurrentDomain.GetAssemblies()
+					.SelectMany(x => x.GetTypes())
+					.Where(x => !x.IsAbstract && typeof(IContentSerializer).IsAssignableFrom(x) && x.GetCustomAttribute(typeof(ContentSerializerAttribute)) != null);
+
+				foreach (Type serializerType in serializerTypes)
+				{
+					ContentSerializerAttribute attribute = (ContentSerializerAttribute)serializerType.GetCustomAttribute(typeof(ContentSerializerAttribute));
+
+					if (attribute != null)
+					{
+						// TODO: Check for conflicting names.
+
+						this.serializers[attribute.ContentType] = serializerType;
+					}
+				}
+			}
+
+			// TODO: Serializer not in dictionary.
+
+			return (IContentSerializer)Activator.CreateInstance(this.serializers[contentType]);
 		}
 
 		public Func<string, object> GetTypeParser(Type type)

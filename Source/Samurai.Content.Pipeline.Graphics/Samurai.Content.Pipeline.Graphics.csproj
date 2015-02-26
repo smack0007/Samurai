@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ImageColorKeyProcessor.cs" />
     <Compile Include="ImageData.cs" />
+    <Compile Include="ImageDataSerializer.cs" />
     <Compile Include="ImageImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

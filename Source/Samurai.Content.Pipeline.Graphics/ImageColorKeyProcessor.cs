@@ -16,7 +16,13 @@ namespace Samurai.Content.Pipeline.Graphics
 		}
 
 		public override ImageData Process(ImageData input, ContentProcessorContext context)
-		{			
+		{
+			for (int i = 0; i < input.Pixels.Length; i++)
+			{
+				if (input.Pixels[i] == this.ColorKey)
+					input.Pixels[i] = Color4.Transparent;
+			}
+
 			return input;
 		}
 	}

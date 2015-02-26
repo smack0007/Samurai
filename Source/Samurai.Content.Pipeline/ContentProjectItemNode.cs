@@ -15,7 +15,13 @@ namespace Samurai.Content.Pipeline
 			private set;
 		}
 
-		public ContentProjectImportNode Import
+		public string InputFileName
+		{
+			get;
+			set;
+		}
+
+		public string OutputFileName
 		{
 			get;
 			set;
@@ -24,7 +30,7 @@ namespace Samurai.Content.Pipeline
 		public List<ContentProjectProcessorNode> Processors
 		{
 			get;
-			set;
+			private set;
 		}
 
 		public ContentProjectItemNode()
@@ -40,26 +46,12 @@ namespace Samurai.Content.Pipeline
 			ContentProjectItemNode item = new ContentProjectItemNode();
 
 			item.Name = element.GetRequiredAttributeValue("Name");
-			
-			var importNode = element.Element("Import");
+			item.InputFileName = element.GetOptionalAttributeValue("InputFileName");
+			item.OutputFileName = element.GetRequiredAttributeValue("OutputFileName");
 
-			if (importNode != null)
-				item.Import = ContentProjectImportNode.FromXElement(importNode);
-
-			var processorsNode = element.Element("Processors");
-
-			if (processorsNode != null)
+			foreach (var processorNode in element.Elements())
 			{
-				foreach (var processorNode in processorsNode.Elements())
-				{
-					if (processorNode.Name == "Processor")
-					{
-						item.Processors.Add(ContentProjectProcessorNode.FromXElement(processorNode));
-					}
-					else
-					{
-					}
-				}
+				item.Processors.Add(ContentProjectProcessorNode.FromXElement(processorNode));
 			}
 
 			return item;
@@ -71,11 +63,17 @@ namespace Samurai.Content.Pipeline
 
 			object content = null;
 
-			if (this.Import != null)
-				content = this.Import.Build(context);
+			if (this.InputFileName != null)
+			{
+				var importer = context.GetContentImporter(this.InputFileName);
+				content = importer.Import(this.InputFileName, new ContentImporterContext(context));
+			}
 
 			foreach (var processor in this.Processors)
 				processor.Build(context, content);
+
+			var serializer = context.GetContentSerializer(content.GetType());
+			serializer.Serialize(content, new ContentWriter());
 
 			context.Logger.EndSection();
 		}

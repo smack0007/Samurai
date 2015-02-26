@@ -20,6 +20,16 @@ namespace Samurai.Content.Pipeline
 			return attribute.Value;
 		}
 
+		public static string GetOptionalAttributeValue(this XElement element, string attributeName)
+		{
+			XAttribute attribute = element.Attribute(attributeName);
+
+			if (attribute == null)
+				return null;
+
+			return attribute.Value;
+		}
+
 		public static string GetOptionalElementValue(this XElement element, string elementName)
 		{
 			XElement child = element.Element(elementName);

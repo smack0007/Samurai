@@ -47,14 +47,17 @@
     <Compile Include="ContentProcessorContext.cs" />
     <Compile Include="ContentProjectProcessorNode.cs" />
     <Compile Include="ContentProjectException.cs" />
-    <Compile Include="ContentProjectImportNode.cs" />
     <Compile Include="ContentProjectItemNode.cs" />
     <Compile Include="ContentProject.cs" />
     <Compile Include="ContentProjectContext.cs" />
     <Compile Include="ContentProjectLogger.cs" />
     <Compile Include="ContentProjectReferenceNode.cs" />
+    <Compile Include="ContentSerializer.cs" />
+    <Compile Include="ContentSerializerAttribute.cs" />
+    <Compile Include="ContentWriter.cs" />
     <Compile Include="IContentImporter.cs" />
     <Compile Include="IContentProcessor.cs" />
+    <Compile Include="IContentSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XElementExtensions.cs" />
   </ItemGroup>

@@ -26,9 +26,9 @@ namespace Samurai.Content.Pipeline
 
 			ContentProjectProcessorNode processor = new ContentProjectProcessorNode();
 
-			processor.Name = element.GetRequiredAttributeValue("Name");
+			processor.Name = element.Name.ToString();
 
-			foreach (XAttribute attribute in element.Attributes().Where(x => x.Name != "Name"))
+			foreach (XAttribute attribute in element.Attributes())
 			{
 				processor.Parameters[attribute.Name.ToString()] = attribute.Value;
 			}
