@@ -6,6 +6,6 @@
 	<Processors>
 	  <ImageColorKey ColorKey="FF00FFFF" />
 	</Processors>
-	<Serialize FileName="Logo.dat" />
+	<Serialize FileName="Logo.dat" Compress="True" />
   </Item>
 </SamuraiContentProject>

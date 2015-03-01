@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace Samurai.Content.Pipeline.Graphics
 {
 	[ContentImporter(new string[] { ".png" })]
-    public class ImageImporter : ContentImporter<ImageData>
+    public class ImageDataImporter : ContentImporter<ImageData>
     {
-		public ImageImporter()
+		public ImageDataImporter()
 		{
 		}
 

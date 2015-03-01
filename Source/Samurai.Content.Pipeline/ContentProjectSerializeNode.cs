@@ -11,6 +11,13 @@ namespace Samurai.Content.Pipeline
 	{
 		public string FileName { get; set; }
 
+		public Dictionary<string, string> Parameters { get; set; }
+
+		public ContentProjectSerializeNode()
+		{
+			this.Parameters = new Dictionary<string, string>();
+		}
+
 		internal static ContentProjectSerializeNode FromXElement(XElement element)
 		{
 			if (element == null)
@@ -20,6 +27,11 @@ namespace Samurai.Content.Pipeline
 
 			serializer.FileName = element.GetRequiredAttributeValue("FileName");
 
+			foreach (XAttribute attribute in element.Attributes().Where(x => x.Name != "FileName"))
+			{
+				serializer.Parameters[attribute.Name.ToString()] = attribute.Value;
+			}
+
 			return serializer;
 		}
 
@@ -28,6 +40,8 @@ namespace Samurai.Content.Pipeline
 			context.Logger.BeginSection(string.Format("Serialize: {0}", this.FileName));
 						
 			var serializer = context.GetContentSerializer(content.GetType());
+
+			ReflectionHelper.ApplyParameters(context, serializer, this.Parameters);
 
 			using (ContentWriter writer = new ContentWriter(this.FileName))
 			{
