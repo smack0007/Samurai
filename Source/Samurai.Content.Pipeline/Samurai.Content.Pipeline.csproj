@@ -45,6 +45,7 @@
     <Compile Include="ContentProcessor.cs" />
     <Compile Include="ContentProcessorAttribute.cs" />
     <Compile Include="ContentProcessorContext.cs" />
+    <Compile Include="ContentProjectImportNode.cs" />
     <Compile Include="ContentProjectProcessorNode.cs" />
     <Compile Include="ContentProjectException.cs" />
     <Compile Include="ContentProjectItemNode.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="ContentProjectContext.cs" />
     <Compile Include="ContentProjectLogger.cs" />
     <Compile Include="ContentProjectReferenceNode.cs" />
+    <Compile Include="ContentProjectSerializeNode.cs" />
     <Compile Include="ContentSerializer.cs" />
     <Compile Include="ContentSerializerAttribute.cs" />
     <Compile Include="ContentWriter.cs" />

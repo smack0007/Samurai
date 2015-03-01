@@ -15,13 +15,7 @@ namespace Samurai.Content.Pipeline
 			private set;
 		}
 
-		public string InputFileName
-		{
-			get;
-			set;
-		}
-
-		public string OutputFileName
+		public ContentProjectImportNode Import
 		{
 			get;
 			set;
@@ -31,6 +25,12 @@ namespace Samurai.Content.Pipeline
 		{
 			get;
 			private set;
+		}
+
+		public ContentProjectSerializeNode Serialize
+		{
+			get;
+			set;
 		}
 
 		public ContentProjectItemNode()
@@ -46,13 +46,26 @@ namespace Samurai.Content.Pipeline
 			ContentProjectItemNode item = new ContentProjectItemNode();
 
 			item.Name = element.GetRequiredAttributeValue("Name");
-			item.InputFileName = element.GetOptionalAttributeValue("InputFileName");
-			item.OutputFileName = element.GetRequiredAttributeValue("OutputFileName");
 
-			foreach (var processorNode in element.Elements())
+			var importNode = element.Element("Import");
+
+			if (importNode != null)
+				item.Import = ContentProjectImportNode.FromXElement(importNode);
+
+			var processorsNode = element.Element("Processors");
+
+			if (processorsNode != null)
 			{
-				item.Processors.Add(ContentProjectProcessorNode.FromXElement(processorNode));
+				foreach (var processorNode in processorsNode.Elements())
+				{
+					item.Processors.Add(ContentProjectProcessorNode.FromXElement(processorNode));
+				}
 			}
+
+			var serializeNode = element.Element("Serialize");
+
+			if (serializeNode != null)
+				item.Serialize = ContentProjectSerializeNode.FromXElement(serializeNode);
 
 			return item;
 		}
@@ -63,17 +76,14 @@ namespace Samurai.Content.Pipeline
 
 			object content = null;
 
-			if (this.InputFileName != null)
-			{
-				var importer = context.GetContentImporter(this.InputFileName);
-				content = importer.Import(this.InputFileName, new ContentImporterContext(context));
-			}
+			if (this.Import != null)
+				content = this.Import.Build(context);
 
 			foreach (var processor in this.Processors)
 				processor.Build(context, content);
 
-			var serializer = context.GetContentSerializer(content.GetType());
-			serializer.Serialize(content, new ContentWriter());
+			if (this.Serialize != null)
+				content = this.Serialize.Build(context, content);
 
 			context.Logger.EndSection();
 		}

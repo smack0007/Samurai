@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SamuraiContentProject>
   <Reference FileName="Samurai.Content.Pipeline.Graphics.dll" />
-  <Item Name="Item1" InputFileName="Logo.png" OutputFileName="">
-	<ImageColorKey ColorKey="FF00FFFF" />
+  <Item Name="Item1">
+	<Import FileName="Logo.png" />
+	<Processors>
+	  <ImageColorKey ColorKey="FF00FFFF" />
+	</Processors>
+	<Serialize FileName="Logo.dat" />
   </Item>
 </SamuraiContentProject>
