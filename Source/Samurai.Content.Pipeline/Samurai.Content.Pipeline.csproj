@@ -56,7 +56,7 @@
     <Compile Include="ContentProjectSerializeNode.cs" />
     <Compile Include="ContentSerializer.cs" />
     <Compile Include="ContentSerializerAttribute.cs" />
-    <Compile Include="ContentWriter.cs" />
+    <Compile Include="ContentSerializerContext.cs" />
     <Compile Include="IContentImporter.cs" />
     <Compile Include="IContentProcessor.cs" />
     <Compile Include="IContentSerializer.cs" />

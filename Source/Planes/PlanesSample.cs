@@ -15,7 +15,7 @@ namespace Planes
 		Texture2D planesTexture;
 		SpriteSheet planeSpriteSheet;
 		TextureFont font;
-		ContentManager<string> contentManager;
+		ContentManager contentManager;
 				
 		List<Plane> planes;
 
@@ -33,17 +33,10 @@ namespace Planes
 			this.spriteRenderer = new SpriteRenderer(this.Graphics);
 			this.shaderProgram = new BasicSpriteShaderProgram(this.Graphics);
 
-			this.contentManager = new ContentManager<string>(new FileSystemContentStorage());
-			this.contentManager.AddReader(new Texture2DContentReader(this.Graphics));
+			this.contentManager = new ContentManager(new FileSystemContentStorage());
+			this.contentManager.AddLoader<Texture2D>(new Texture2DLoader(this.Graphics));
 
-			this.contentManager.Register<Texture2D>("planesTexture", new Texture2DContentParams()
-			{
-				FileName = "Planes.png",
-				ColorKey = Color4.Black,
-				TransparentPixel = Color4.Transparent
-			});
-
-			this.planesTexture = this.contentManager.Load<Texture2D>("planesTexture");
+			this.planesTexture = this.contentManager.Load<Texture2D>("Planes.dat");
 
 			this.planeSpriteSheet = SpriteSheet.Build(this.planesTexture, 64, 64);
 

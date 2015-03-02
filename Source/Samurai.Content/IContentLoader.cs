@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Samurai.Graphics;
 
 namespace Samurai.Content
 {
-	public class Texture2DContentParams : TextureParams
+	public interface IContentLoader
 	{
-		public string FileName
-		{
-			get;
-			set;
-		}
+		object Load(Stream stream); 
 	}
 }

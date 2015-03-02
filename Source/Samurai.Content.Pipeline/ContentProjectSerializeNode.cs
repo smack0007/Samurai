@@ -1,5 +1,6 @@
 ﻿﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,9 +44,9 @@ namespace Samurai.Content.Pipeline
 
 			ReflectionHelper.ApplyParameters(context, serializer, this.Parameters);
 
-			using (ContentWriter writer = new ContentWriter(this.FileName))
+			using (FileStream file = File.Open(this.FileName, FileMode.Create, FileAccess.ReadWrite))
 			{
-				serializer.Serialize(content, writer);
+				serializer.Serialize(content, file, new ContentSerializerContext(context));
 			}
 
 			context.Logger.EndSection();

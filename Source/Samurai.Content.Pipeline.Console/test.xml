@@ -2,10 +2,10 @@
 <SamuraiContentProject>
   <Reference FileName="Samurai.Content.Pipeline.Graphics.dll" />
   <Item Name="Item1">
-	<Import FileName="Logo.png" />
+	<Import FileName="Planes.png" />
 	<Processors>
-	  <ImageColorKey ColorKey="FF00FFFF" />
+	  <ImageColorKey ColorKey="000000FF" />
 	</Processors>
-	<Serialize FileName="Logo.dat" Compress="True" />
+	<Serialize FileName="Planes.dat" Compress="True" />
   </Item>
 </SamuraiContentProject>

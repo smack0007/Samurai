@@ -17,8 +17,10 @@ namespace Samurai.Content.Pipeline.Graphics
 			set;
 		}
 
-		public override void Serialize(ImageData content, ContentWriter writer)
+		public override void Serialize(ImageData content, FileStream file, ContentSerializerContext context)
 		{
+			BinaryWriter writer = new BinaryWriter(file);
+
 			writer.Write(content.Width);
 			writer.Write(content.Height);
 			writer.Write(this.Compress);
