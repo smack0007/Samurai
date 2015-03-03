@@ -9,32 +9,33 @@ namespace Samurai.Content.Pipeline
 {
 	public class ContentProjectLogger
 	{
-		string padding;
-
-		public TextWriter Writer
-		{
-			get;
-			private set;
-		}
+		private readonly TextWriter writer;
+		
+		private string padding;
 
 		public ContentProjectLogger(TextWriter writer)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
 
-			this.Writer = writer;
+			this.writer = writer;
 			this.padding = string.Empty;
 		}
 
 		public void BeginSection(string name)
 		{
-			this.Writer.WriteLine("{0}=== {1} ===", padding, name);
+			this.writer.WriteLine("{0}=== {1} ===", padding, name);
 			this.padding += "\t";
 		}
 
 		public void EndSection()
 		{
 			this.padding = this.padding.Substring(0, this.padding.Length - 1);
+		}
+
+		public void LogInfo(string value)
+		{
+			this.writer.WriteLine("{0}{1}", padding, value);
 		}
 	}
 }

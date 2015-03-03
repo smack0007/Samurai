@@ -29,9 +29,12 @@ namespace Samurai.Content.Pipeline
 			return reference;
 		}
 
-		internal void Load()
+		internal void Build(ContentProjectContext context)
 		{
-			string path = Path.GetFullPath(this.FileName);
+			string fileName = context.ReplaceVariables(this.FileName);
+			string path = Path.GetFullPath(fileName);
+
+			context.Logger.LogInfo(string.Format("Loading assembly {0}...", path));
 
 			if (File.Exists(path))
 			{
@@ -39,7 +42,7 @@ namespace Samurai.Content.Pipeline
 			}
 			else
 			{
-
+				throw new ContentProjectException(string.Format("Unable to load referenced assembly {0}.", fileName));
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 <SamuraiContentProject>
   <Reference FileName="Samurai.Content.Pipeline.Graphics.dll" />
   <Item Name="Item1">
-	<Import FileName="Planes.png" />
+	<Import FileName="$(ProjectDirectory)\Planes.png" />
 	<Processors>
 	  <ImageColorKey ColorKey="000000FF" />
 	</Processors>

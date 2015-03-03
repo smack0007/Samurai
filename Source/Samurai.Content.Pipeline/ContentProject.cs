@@ -61,7 +61,7 @@ namespace Samurai.Content.Pipeline
 				throw new ArgumentNullException("context");
 
 			foreach (ContentProjectReferenceNode reference in this.References)
-				reference.Load();
+				reference.Build(context);
 
 			foreach (ContentProjectItemNode item in this.Items)
 				item.Build(context);

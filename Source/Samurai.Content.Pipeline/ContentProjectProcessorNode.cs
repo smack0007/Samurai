@@ -38,11 +38,14 @@ namespace Samurai.Content.Pipeline
 
 		internal void Build(ContentProjectContext context, object content)
 		{
-			context.Logger.BeginSection(string.Format("Processor: {0}", this.Name));
+			string name = context.ReplaceVariables(this.Name);
+			Dictionary<string, string> parameters = context.ReplaceVariables(this.Parameters);
 
-			var processor = context.GetContentProcessor(this.Name);
+			context.Logger.BeginSection(string.Format("Processor: {0}", name));
 
-			ReflectionHelper.ApplyParameters(context, processor, this.Parameters);
+			var processor = context.GetContentProcessor(name);
+
+			ReflectionHelper.ApplyParameters(context, processor, parameters);
 			
 			processor.Process(content, new ContentProcessorContext(context));
 

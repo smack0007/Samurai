@@ -25,10 +25,12 @@ namespace Samurai.Content.Pipeline
 
 		internal object Build(ContentProjectContext context)
 		{
-			context.Logger.BeginSection(string.Format("Import: {0}", this.FileName));
+			string fileName = context.ReplaceVariables(this.FileName);
 
-			var importer = context.GetContentImporter(this.FileName);
-			object content = importer.Import(this.FileName, new ContentImporterContext(context));
+			context.Logger.BeginSection(string.Format("Import: {0}", fileName));
+
+			var importer = context.GetContentImporter(fileName);
+			object content = importer.Import(fileName, new ContentImporterContext(context));
 
 			context.Logger.EndSection();
 

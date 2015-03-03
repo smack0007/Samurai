@@ -22,12 +22,20 @@ namespace Samurai.Content.Pipeline
 			private set;
 		}
 
+		public Dictionary<string, string> Variables
+		{
+			get;
+			private set;
+		}
+
 		public ContentProjectContext(ContentProjectLogger logger)
 		{
 			if (logger == null)
 				throw new ArgumentNullException("logger");
 
 			this.Logger = logger;
+
+			this.Variables = new Dictionary<string, string>();
 
 			this.typeParsers = new Dictionary<Type, Func<string, object>>()
 			{
@@ -49,6 +57,60 @@ namespace Samurai.Content.Pipeline
 
 				{ typeof(Color4), (x) => Color4.FromHexString(x) }
 			};
+		}
+
+		public string ReplaceVariables(string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+
+			StringBuilder buffer = new StringBuilder(value.Length);
+						
+			for (int i = 0; i < value.Length; i++)
+			{
+				if (value[i] == '$' && i < value.Length - 1 && value[i + 1] == '(')
+				{
+					bool replaced = false;
+					int j = i + 2;
+
+					while (j < value.Length && value[j] != ')')
+						j++;
+
+					if (value[j] == ')')
+					{
+						string variableName = value.Substring(i + 2, j - i - 2);
+						
+						string variableValue;
+						if (this.Variables.TryGetValue(variableName, out variableValue))
+						{
+							buffer.Append(variableValue);
+							i = j;
+							replaced = true;
+						}
+					}
+					
+					if (!replaced)
+						buffer.Append(value[i]);
+				}
+				else
+				{
+					buffer.Append(value[i]);
+				}
+			}
+
+			return buffer.ToString();
+		}
+
+		public Dictionary<string, string> ReplaceVariables(Dictionary<string, string> input)
+		{
+			Dictionary<string, string> result = new Dictionary<string, string>();
+
+			foreach (var pair in input)
+			{
+				result[pair.Key] = this.ReplaceVariables(pair.Value);
+			}
+
+			return result;
 		}
 
 		public IContentImporter GetContentImporter(string fileName)

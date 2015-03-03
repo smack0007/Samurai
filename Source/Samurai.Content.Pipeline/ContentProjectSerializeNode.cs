@@ -38,13 +38,16 @@ namespace Samurai.Content.Pipeline
 
 		internal object Build(ContentProjectContext context, object content)
 		{
-			context.Logger.BeginSection(string.Format("Serialize: {0}", this.FileName));
+			string fileName = context.ReplaceVariables(this.FileName);
+			Dictionary<string, string> parameters = context.ReplaceVariables(this.Parameters);
+
+			context.Logger.BeginSection(string.Format("Serialize: {0}", fileName));
 						
 			var serializer = context.GetContentSerializer(content.GetType());
 
-			ReflectionHelper.ApplyParameters(context, serializer, this.Parameters);
+			ReflectionHelper.ApplyParameters(context, serializer, parameters);
 
-			using (FileStream file = File.Open(this.FileName, FileMode.Create, FileAccess.ReadWrite))
+			using (FileStream file = File.Open(fileName, FileMode.Create, FileAccess.ReadWrite))
 			{
 				serializer.Serialize(content, file, new ContentSerializerContext(context));
 			}
