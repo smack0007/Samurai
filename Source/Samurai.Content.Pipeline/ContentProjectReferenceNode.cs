@@ -32,13 +32,28 @@ namespace Samurai.Content.Pipeline
 		internal void Build(ContentProjectContext context)
 		{
 			string fileName = context.ReplaceVariables(this.FileName);
-			string path = Path.GetFullPath(fileName);
+			bool exists = false;
 
-			context.Logger.LogInfo(string.Format("Loading assembly {0}...", path));
+			context.Logger.LogInfo(string.Format("Loading assembly {0}...", fileName));
 
-			if (File.Exists(path))
+			if (File.Exists(fileName))
 			{
-				Assembly.LoadFile(path);
+				exists = true;
+			}
+			else
+			{
+				string globalPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fileName);
+				if (File.Exists(globalPath))
+				{
+					fileName = globalPath;
+					exists = true;
+				}
+			}
+
+			if (exists)
+			{
+				Assembly assembly = Assembly.LoadFile(Path.GetFullPath(fileName));
+				context.RegisterAssembly(assembly);
 			}
 			else
 			{

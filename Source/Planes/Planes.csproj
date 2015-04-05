@@ -56,9 +56,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="Planes.dat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Content.scproj" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -97,10 +95,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets. -->
+  <!--<UsingTask TaskName="Samurai.Content.Pipeline.MsBuild.BuildContentProject" AssemblyFile="..\Samurai.Content.Pipeline.MsBuild\bin\$(Configuration)\Samurai.Content.Pipeline.MsBuild.dll" />-->
   <Target Name="BeforeBuild">
+    <Exec Command="$(ProjectDir)..\Samurai.Content.Pipeline.Console\bin\$(Configuration)\SamuraiContentPipeline.exe $(ProjectDir)Content.scproj" />
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
 </Project>

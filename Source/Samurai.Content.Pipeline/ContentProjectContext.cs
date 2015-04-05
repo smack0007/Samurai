@@ -10,13 +10,14 @@ namespace Samurai.Content.Pipeline
 {
 	public class ContentProjectContext
 	{
+		List<Assembly> registeredAssemblies;
 		Dictionary<string, Type> importers;
 		Dictionary<string, Type> processors;
 		Dictionary<Type, Type> serializers;
 		
 		Dictionary<Type, Func<string, object>> typeParsers;
 
-		public ContentProjectLogger Logger
+		public IContentProjectLogger Logger
 		{
 			get;
 			private set;
@@ -28,7 +29,7 @@ namespace Samurai.Content.Pipeline
 			private set;
 		}
 
-		public ContentProjectContext(ContentProjectLogger logger)
+		public ContentProjectContext(IContentProjectLogger logger)
 		{
 			if (logger == null)
 				throw new ArgumentNullException("logger");
@@ -36,6 +37,8 @@ namespace Samurai.Content.Pipeline
 			this.Logger = logger;
 
 			this.Variables = new Dictionary<string, string>();
+
+			this.registeredAssemblies = new List<Assembly>();
 
 			this.typeParsers = new Dictionary<Type, Func<string, object>>()
 			{
@@ -113,13 +116,18 @@ namespace Samurai.Content.Pipeline
 			return result;
 		}
 
+		public void RegisterAssembly(Assembly assembly)
+		{
+			this.registeredAssemblies.Add(assembly);
+		}
+
 		public IContentImporter GetContentImporter(string fileName)
 		{
 			if (this.importers == null)
 			{
 				this.importers = new Dictionary<string, Type>();
 
-				var importerTypes = AppDomain.CurrentDomain.GetAssemblies()
+				var importerTypes = this.registeredAssemblies
 					.SelectMany(x => x.GetTypes())
 					.Where(x => !x.IsAbstract && typeof(IContentImporter).IsAssignableFrom(x) && x.GetCustomAttribute(typeof(ContentImporterAttribute)) != null);
 
@@ -152,7 +160,7 @@ namespace Samurai.Content.Pipeline
 			{
 				this.processors = new Dictionary<string, Type>();
 
-				var processorTypes = AppDomain.CurrentDomain.GetAssemblies()
+				var processorTypes = this.registeredAssemblies
 					.SelectMany(x => x.GetTypes())
 					.Where(x => !x.IsAbstract && typeof(IContentProcessor).IsAssignableFrom(x) && x.GetCustomAttribute(typeof(ContentProcessorAttribute)) != null);
 
@@ -180,7 +188,7 @@ namespace Samurai.Content.Pipeline
 			{
 				this.serializers = new Dictionary<Type, Type>();
 
-				var serializerTypes = AppDomain.CurrentDomain.GetAssemblies()
+				var serializerTypes = this.registeredAssemblies
 					.SelectMany(x => x.GetTypes())
 					.Where(x => !x.IsAbstract && typeof(IContentSerializer).IsAssignableFrom(x) && x.GetCustomAttribute(typeof(ContentSerializerAttribute)) != null);
 

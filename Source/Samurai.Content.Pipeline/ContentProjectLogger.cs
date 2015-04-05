@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Samurai.Content.Pipeline
 {
-	public class ContentProjectLogger
+	public class ContentProjectLogger : IContentProjectLogger
 	{
 		private readonly TextWriter writer;
 		

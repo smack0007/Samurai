@@ -29,9 +29,15 @@ namespace Samurai.Content.Pipeline.Console
 
 			Directory.SetCurrentDirectory(Path.GetDirectoryName(Path.GetFullPath(args[0])));
 
-			project.Build(context);
-
-			System.Console.ReadKey();
+			try
+			{
+				project.Build(context);
+			}
+			catch (ContentProjectException ex)
+			{
+				System.Console.ForegroundColor = ConsoleColor.Red;
+				System.Console.Error.WriteLine("ERROR: {0}", ex.Message);
+			}
 
 			return 0;
 		}
