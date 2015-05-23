@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace Samurai.Wpf
 {
-    public class GraphicsControl : HwndHost, IHostControl
+    public class GraphicsControl : HwndHost, IGraphicsHostContext
     {
         private const string WindowClass = "SamuraiWpfGraphicsControlClass";
 
@@ -20,17 +20,17 @@ namespace Samurai.Wpf
 
         int oldWindowWidth, oldWindowHeight;        
 
-        IntPtr IHostControl.Handle
+        IntPtr IGraphicsHostContext.Handle
         {
             get { return this.hWnd; }
         }
 
-        int IHostControl.Width
+        int IGraphicsHostContext.Width
         {
             get { return (int)this.ActualWidth; }
         }
 
-        int IHostControl.Height
+        int IGraphicsHostContext.Height
         {
             get { return (int)this.ActualHeight; }
         }

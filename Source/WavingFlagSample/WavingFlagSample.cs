@@ -1,5 +1,5 @@
 ﻿using Samurai;
-using Samurai.GameFramework;
+using Samurai.GLFW;
 using Samurai.Graphics;
 using System;
 using System.Collections.Generic;
@@ -82,7 +82,7 @@ namespace WavingFlagSample
 			this.indexBuffer = new StaticIndexBuffer<ushort>(this.Graphics, indexData);
 		}
 				
-		protected override void Draw(TimingState time)
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 
@@ -96,7 +96,7 @@ namespace WavingFlagSample
 				M42 = 1f
 			};
 
-			totalElapsedSeconds += (float)time.ElapsedTime.TotalSeconds;
+			totalElapsedSeconds += (float)elapsed.TotalSeconds;
 
 			this.shader.SetValue("projection", ref projection);
 			this.shader.SetValue("startX", (float)((this.Window.Width - this.texture.Width) / 2));

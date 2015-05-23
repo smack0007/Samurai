@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Samurai.GameFramework;
+using Samurai.GLFW;
 using Samurai.Graphics;
 
 namespace Samurai.Samples.MiniTri
@@ -74,7 +74,7 @@ void main()
 			base.Dispose(disposing);
 		}
 
-		protected override void Draw(TimingState elapsed)
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear();
 

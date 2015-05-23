@@ -7,7 +7,7 @@ namespace Samurai.Graphics
 {
 	public class GraphicsContext : DisposableObject
 	{
-        IHostControl host;
+        IGraphicsHostContext host;
 
 		Color4 clearColor;
 		Rectangle viewport;
@@ -352,14 +352,14 @@ namespace Samurai.Graphics
 
 		public bool PrependShaderVersionDirective { get; set; }
 		
-		public GraphicsContext(IHostControl host)
+		public GraphicsContext(IGraphicsHostContext host)
 		{
             if (host == null)
                 throw new ArgumentNullException("host");
 
             this.host = host;
 
-			this.GL = new GLContext(this.host.Handle);
+			this.GL = new GLContext(this.host);
 
 			this.textures = new bool[32];
 
@@ -410,8 +410,6 @@ namespace Samurai.Graphics
 			}
 
 			this.graphicsObjects.Clear();
-
-			this.GL.Dispose();
 		}
 		
 		internal void RegisterGraphicsObject(GraphicsObject obj)

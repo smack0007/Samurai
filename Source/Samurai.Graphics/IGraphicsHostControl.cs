@@ -1,14 +1,9 @@
 ﻿using System;
 
-namespace Samurai
+namespace Samurai.Graphics
 {
-	public interface IHostControl
+	public interface IGraphicsHostContext
 	{
-		/// <summary>
-		/// Gets a handle to the window.
-		/// </summary>
-		IntPtr Handle { get; }
-
 		/// <summary>
 		/// Gets the width of the display area of the host.
 		/// </summary>
@@ -18,5 +13,11 @@ namespace Samurai
 		/// Gets the height of the display area of the host.
 		/// </summary>
 		int Height { get; }
+
+		IntPtr GetProcAddress(string name);
+
+		bool MakeCurrent();
+
+		void SwapBuffers();
 	}
 }

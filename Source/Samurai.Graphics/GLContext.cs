@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Samurai.Graphics
 {
-	internal class GLContext : IDisposable
+	internal class GLContext
 	{
 		public const int VersionMajor = 3;
 		public const int VersionMinor = 3;
@@ -16,7 +16,7 @@ namespace Samurai.Graphics
 
 #if WINDOWS
 		private const string Library = "opengl32.dll";
-		WGLContext platformContext;
+		IGraphicsHostContext host;
 #endif
 		// Blend
 		public const uint DstAlpha = 0x0304;
@@ -321,47 +321,52 @@ namespace Samurai.Graphics
 		[DllImport(Library, EntryPoint = "glViewport")]
 		private static extern void _Viewport(int x, int y, int width, int height);
 
-		public GLContext(IntPtr window)
+		public GLContext(IGraphicsHostContext host)
 		{
-#if WINDOWS
-			this.platformContext = new WGLContext(window, VersionMajor, VersionMinor);
-#endif
+			this.host = host;
 
-			_ActiveTexture = (__ActiveTexture)this.platformContext.GetProcAddress<__ActiveTexture>("glActiveTexture");
-			_AttachShader = (__AttachShader)this.platformContext.GetProcAddress<__AttachShader>("glAttachShader");
-			_BindAttribLocation = (__BindAttribLocation)this.platformContext.GetProcAddress<__BindAttribLocation>("glBindAttribLocation");
-			_BindBuffer = (__BindBuffer)this.platformContext.GetProcAddress<__BindBuffer>("glBindBuffer");
-			_BindVertexArray = (__BindVertexArray)this.platformContext.GetProcAddress<__BindVertexArray>("glBindVertexArray");
-			_BufferData = (__BufferData)this.platformContext.GetProcAddress<__BufferData>("glBufferData");
-			_CompileShader = (__CompileShader)this.platformContext.GetProcAddress<__CompileShader>("glCompileShader");
-			_CreateProgram = (__CreateProgram)this.platformContext.GetProcAddress<__CreateProgram>("glCreateProgram");
-			_CreateShader = (__CreateShader)this.platformContext.GetProcAddress<__CreateShader>("glCreateShader");
-			_DeleteBuffers = (__DeleteBuffers)this.platformContext.GetProcAddress<__DeleteBuffers>("glDeleteBuffers");
-			_DeleteProgram = (__DeleteProgram)this.platformContext.GetProcAddress<__DeleteProgram>("glDeleteProgram");
-			_DeleteShader = (__DeleteShader)this.platformContext.GetProcAddress<__DeleteShader>("glDeleteShader");
-			_DeleteVertexArrays = (__DeleteVertexArrays)this.platformContext.GetProcAddress<__DeleteVertexArrays>("glDeleteVertexArrays");
-			_EnableVertexAttribArray = (__EnableVertexAttribArray)this.platformContext.GetProcAddress<__EnableVertexAttribArray>("glEnableVertexAttribArray");
-			_GenBuffers = (__GenBuffers)this.platformContext.GetProcAddress<__GenBuffers>("glGenBuffers");
-			_GenVertexArrays = (__GenVertexArrays)this.platformContext.GetProcAddress<__GenVertexArrays>("glGenVertexArrays");
-			_GetShaderInfoLog = (__GetShaderInfoLog)this.platformContext.GetProcAddress<__GetShaderInfoLog>("glGetShaderInfoLog");
-			_GetShaderiv = (__GetShaderiv)this.platformContext.GetProcAddress<__GetShaderiv>("glGetShaderiv");
-			_GetStringi = (__GetStringi)this.platformContext.GetProcAddress<__GetStringi>("glGetStringi");
-			_GetUniformLocation = (__GetUniformLocation)this.platformContext.GetProcAddress<__GetUniformLocation>("glGetUniformLocation");
-			_LinkProgram = (__LinkProgram)this.platformContext.GetProcAddress<__LinkProgram>("glLinkProgram");
-			_ShaderSource = (__ShaderSource)this.platformContext.GetProcAddress<__ShaderSource>("glShaderSource");
-			_Uniform1f = (__Uniform1f)this.platformContext.GetProcAddress<__Uniform1f>("glUniform1f");
-			_Uniform1i = (__Uniform1i)this.platformContext.GetProcAddress<__Uniform1i>("glUniform1i");
-            _Uniform2f = (__Uniform2f)this.platformContext.GetProcAddress<__Uniform2f>("glUniform2f");
-            _Uniform3f = (__Uniform3f)this.platformContext.GetProcAddress<__Uniform3f>("glUniform3f");
-            _Uniform4f = (__Uniform4f)this.platformContext.GetProcAddress<__Uniform4f>("glUniform4f");
-			_UniformMatrix4fv = (__UniformMatrix4fv)this.platformContext.GetProcAddress<__UniformMatrix4fv>("glUniformMatrix4fv");
-			_UseProgram = (__UseProgram)this.platformContext.GetProcAddress<__UseProgram>("glUseProgram");
-			_VertexAttribPointer = (__VertexAttribPointer)this.platformContext.GetProcAddress<__VertexAttribPointer>("glVertexAttribPointer");
+			_ActiveTexture = (__ActiveTexture)GetProcAddress<__ActiveTexture>(host, "glActiveTexture");
+			_AttachShader = (__AttachShader)GetProcAddress<__AttachShader>(host, "glAttachShader");
+			_BindAttribLocation = (__BindAttribLocation)GetProcAddress<__BindAttribLocation>(host, "glBindAttribLocation");
+			_BindBuffer = (__BindBuffer)GetProcAddress<__BindBuffer>(host, "glBindBuffer");
+			_BindVertexArray = (__BindVertexArray)GetProcAddress<__BindVertexArray>(host, "glBindVertexArray");
+			_BufferData = (__BufferData)GetProcAddress<__BufferData>(host, "glBufferData");
+			_CompileShader = (__CompileShader)GetProcAddress<__CompileShader>(host, "glCompileShader");
+			_CreateProgram = (__CreateProgram)GetProcAddress<__CreateProgram>(host, "glCreateProgram");
+			_CreateShader = (__CreateShader)GetProcAddress<__CreateShader>(host, "glCreateShader");
+			_DeleteBuffers = (__DeleteBuffers)GetProcAddress<__DeleteBuffers>(host, "glDeleteBuffers");
+			_DeleteProgram = (__DeleteProgram)GetProcAddress<__DeleteProgram>(host, "glDeleteProgram");
+			_DeleteShader = (__DeleteShader)GetProcAddress<__DeleteShader>(host, "glDeleteShader");
+			_DeleteVertexArrays = (__DeleteVertexArrays)GetProcAddress<__DeleteVertexArrays>(host, "glDeleteVertexArrays");
+			_EnableVertexAttribArray = (__EnableVertexAttribArray)GetProcAddress<__EnableVertexAttribArray>(host, "glEnableVertexAttribArray");
+			_GenBuffers = (__GenBuffers)GetProcAddress<__GenBuffers>(host, "glGenBuffers");
+			_GenVertexArrays = (__GenVertexArrays)GetProcAddress<__GenVertexArrays>(host, "glGenVertexArrays");
+			_GetShaderInfoLog = (__GetShaderInfoLog)GetProcAddress<__GetShaderInfoLog>(host, "glGetShaderInfoLog");
+			_GetShaderiv = (__GetShaderiv)GetProcAddress<__GetShaderiv>(host, "glGetShaderiv");
+			_GetStringi = (__GetStringi)GetProcAddress<__GetStringi>(host, "glGetStringi");
+			_GetUniformLocation = (__GetUniformLocation)GetProcAddress<__GetUniformLocation>(host, "glGetUniformLocation");
+			_LinkProgram = (__LinkProgram)GetProcAddress<__LinkProgram>(host, "glLinkProgram");
+			_ShaderSource = (__ShaderSource)GetProcAddress<__ShaderSource>(host, "glShaderSource");
+			_Uniform1f = (__Uniform1f)GetProcAddress<__Uniform1f>(host, "glUniform1f");
+			_Uniform1i = (__Uniform1i)GetProcAddress<__Uniform1i>(host, "glUniform1i");
+			_Uniform2f = (__Uniform2f)GetProcAddress<__Uniform2f>(host, "glUniform2f");
+			_Uniform3f = (__Uniform3f)GetProcAddress<__Uniform3f>(host, "glUniform3f");
+			_Uniform4f = (__Uniform4f)GetProcAddress<__Uniform4f>(host, "glUniform4f");
+			_UniformMatrix4fv = (__UniformMatrix4fv)GetProcAddress<__UniformMatrix4fv>(host, "glUniformMatrix4fv");
+			_UseProgram = (__UseProgram)GetProcAddress<__UseProgram>(host, "glUseProgram");
+			_VertexAttribPointer = (__VertexAttribPointer)GetProcAddress<__VertexAttribPointer>(host, "glVertexAttribPointer");
 		}
 
-		public void Dispose()
+		private static object GetProcAddress<T>(IGraphicsHostContext host, string name)
 		{
-			this.platformContext.Dispose();
+			Type delegateType = typeof(T);
+
+			IntPtr proc = host.GetProcAddress(name);
+
+			if (proc == IntPtr.Zero)
+				throw new SamuraiException(string.Format("Failed to load GL extension function: {0}.", name));
+
+			return Marshal.GetDelegateForFunctionPointer(proc, delegateType);
 		}
 
 		private static void ThrowExceptionForErrorCode(string functionName, uint errorCode)
@@ -807,12 +812,12 @@ namespace Samurai.Graphics
 
         public bool MakeCurrent()
         {
-            return this.platformContext.MakeCurrent();
+            return this.host.MakeCurrent();
         }
 
 		public void SwapBuffers()
 		{
-			this.platformContext.SwapBuffers();
+			this.host.SwapBuffers();
 		}
 	}
 }

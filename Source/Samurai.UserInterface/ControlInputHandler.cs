@@ -11,7 +11,7 @@ namespace Samurai.UserInterface
 	{
 		Mouse mouse;
 				
-		public ControlInputHandler(IHostControl hostControl)
+		public ControlInputHandler(IGraphicsHostControl hostControl)
 		{
 			this.mouse = new Mouse(hostControl);
 		}

@@ -82,6 +82,7 @@
     <Compile Include="Canvas2D\SolidColorBrush.cs" />
     <Compile Include="ColorMask.cs" />
     <Compile Include="GraphicsContextDescription.cs" />
+    <Compile Include="IGraphicsHostControl.cs" />
     <Compile Include="ShaderCompilationException.cs" />
     <Compile Include="Sprites\BasicSpriteShaderProgram.cs" />
     <Compile Include="BitmapHelper.cs" />

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Samurai;
 using Samurai.Content;
-using Samurai.GameFramework;
+using Samurai.GLFW;
 using Samurai.Graphics;
 using Samurai.Graphics.Sprites;
 
@@ -61,15 +61,15 @@ namespace Planes
 			}
 		}
 
-		protected override void Update(TimingState time)
+		protected override void Update(TimeSpan elapsed)
 		{
 			foreach (Plane plane in this.planes)
 			{
-				plane.Update(time.ElapsedTime);
+				plane.Update(elapsed);
 			}
 		}
 
-		protected override void Draw(TimingState time)
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.Black);
 
@@ -108,7 +108,7 @@ namespace Planes
 			this.Graphics.SwapBuffers();
 
 			this.fpsCount++;
-			this.fpsTimer += (float)time.ElapsedTime.TotalSeconds;
+			this.fpsTimer += (float)elapsed.TotalSeconds;
 			if (this.fpsTimer >= 1.0f)
 			{
 				this.fps = this.fpsCount;
