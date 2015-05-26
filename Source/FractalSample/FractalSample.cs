@@ -1,7 +1,6 @@
 ﻿using Samurai;
-using Samurai.GameFramework;
+using Samurai.GLFW;
 using Samurai.Graphics;
-using Samurai.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,39 +60,39 @@ namespace FractalSample
 					WrapT = TextureWrap.Repeat
 				});
 
-			this.keyboard = new Keyboard();
+			this.keyboard = new Keyboard(this.Window);
 		}
 
-		protected override void Update(TimingState time)
+		protected override void Update(TimeSpan elapsed)
 		{
-			this.keyboard.Update();
-
 			if (this.keyboard.IsKeyDown(Key.Left))
-				this.centerX -= 1.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.centerX -= (2f * this.scale) * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Right))
-				this.centerX += 1.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.centerX += (2f * this.scale) * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Up))
-				this.centerY -= 1.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.centerY -= (2f * this.scale) * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Down))
-				this.centerY += 1.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.centerY += (2f * this.scale) * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.A))
-				this.scale -= 1.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.scale -= 0.5f * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Z))
-				this.scale += 1.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.scale += 0.5f * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.Q))
-				this.iterations -= 100.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.iterations -= 10.0f * (float)elapsed.TotalSeconds;
 
 			if (this.keyboard.IsKeyDown(Key.W))
-				this.iterations += 100.0f * (float)time.ElapsedTime.TotalSeconds;
+				this.iterations += 10.0f * (float)elapsed.TotalSeconds;
+
+			this.keyboard.SwapBuffers();
 		}
 		
-		protected override void Draw(TimingState time)
+		protected override void Draw(TimeSpan elapsed)
 		{
 			this.Graphics.Clear(Color4.CornflowerBlue);
 						

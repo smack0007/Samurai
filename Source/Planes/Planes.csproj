@@ -76,10 +76,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Samurai.Content\Samurai.Content.csproj">
-      <Project>{0e92fc4f-79c4-4f6f-9aa4-17bc342a5978}</Project>
-      <Name>Samurai.Content</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Samurai.GLFW\Samurai.GLFW.csproj">
       <Project>{3ceef1df-9d87-46f4-9fb5-2436f3feba82}</Project>
       <Name>Samurai.GLFW</Name>
