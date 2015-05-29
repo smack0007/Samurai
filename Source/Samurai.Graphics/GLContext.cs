@@ -438,7 +438,14 @@ namespace Samurai.Graphics
 			CheckErrors("BlendFunc");
 		}
 
-		public void BufferData<T>(uint target, T[] data, int index, int length, uint usage)
+		public void BufferData(uint target, IntPtr data, int offset, int length, uint usage)
+		{
+			IntPtr ptr = IntPtr.Add(data, offset);
+			_BufferData(target, (IntPtr)(length), ptr, usage);
+			CheckErrors("BufferData");
+		}
+
+		public void BufferData<T>(uint target, T[] data, int index, int count, uint usage)
 		{
 			int sizeOfT = Marshal.SizeOf(typeof(T));
 			GCHandle dataPtr = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -446,7 +453,7 @@ namespace Samurai.Graphics
 
 			try
 			{
-				_BufferData(target, (IntPtr)(sizeOfT * length), ptr, usage);
+				_BufferData(target, (IntPtr)(sizeOfT * count), ptr, usage);
 			}
 			finally
 			{

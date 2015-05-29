@@ -19,11 +19,18 @@ namespace Samurai.Samples.MiniTri
 			public Color4 Color;
 		};
 
-		static Vertex[] verticies = new Vertex[]
+		//static Vertex[] verticies = new Vertex[]
+		//{
+		//	new Vertex() { Position = new Vector3(0.0f, 0.5f, 0.5f), Color = new Color4(255, 0, 0, 255) },
+		//	new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.5f), Color = new Color4(0, 255, 0, 255) },
+		//	new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.5f), Color = new Color4(0, 0, 255, 255) }
+		//};
+
+		static float[] verticies = new float[]
 		{
-			new Vertex() { Position = new Vector3(0.0f, 0.5f, 0.5f), Color = new Color4(255, 0, 0, 255) },
-            new Vertex() { Position = new Vector3(0.5f, -0.5f, 0.5f), Color = new Color4(0, 255, 0, 255) },
-			new Vertex() { Position = new Vector3(-0.5f, -0.5f, 0.5f), Color = new Color4(0, 0, 255, 255) }
+			0.0f, 0.5f, 0.5f, 1f, 0, 0, 1f,
+            0.5f, -0.5f, 0.5f, 0, 1f, 0, 1f,
+			-0.5f, -0.5f, 0.5f, 0, 0, 1f, 1f
 		};
 		
 		const string vertexShaderCode = @"
@@ -48,7 +55,8 @@ void main()
 	outColor = fragColor;
 }";
 
-		StaticVertexBuffer<Vertex> vertexBuffer;
+		//StaticVertexBuffer<Vertex> vertexBuffer;
+		StaticVertexBuffer vertexBuffer;
 		ShaderProgram shaderProgram;
 
 		public MiniTriSample()
@@ -57,7 +65,18 @@ void main()
 
 			this.Graphics.ClearColor = Color4.CornflowerBlue;
 
-			this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, verticies);
+			//this.vertexBuffer = new StaticVertexBuffer<Vertex>(this.Graphics, verticies);
+
+			VertexElement[] elements = new VertexElement[]
+			{
+				new VertexElement(VertexElementType.Float, 3),
+				new VertexElement(VertexElementType.Float, 4)
+			};
+
+			using (DataBuffer data = DataBuffer.Create(verticies))
+			{
+				this.vertexBuffer = new StaticVertexBuffer(this.Graphics, elements, data);
+			}
 
 			this.shaderProgram = new ShaderProgram(this.Graphics,
 				VertexShader.Compile(this.Graphics, vertexShaderCode),

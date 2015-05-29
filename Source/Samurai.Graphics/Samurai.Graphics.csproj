@@ -125,6 +125,8 @@
     <Compile Include="TextureParams.cs" />
     <Compile Include="TextureWrap.cs" />
     <Compile Include="VertexBuffer.cs" />
+    <Compile Include="VertexElement.cs" />
+    <Compile Include="VertexElementType.cs" />
     <Compile Include="VertexShader.cs" />
     <Compile Include="WGLContext.cs" />
     <Compile Include="Win32.cs" />

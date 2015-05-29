@@ -2,6 +2,26 @@
 
 namespace Samurai.Graphics
 {
+	public class DynamicVertexBuffer : VertexBuffer
+	{
+		public DynamicVertexBuffer(GraphicsContext graphics, VertexElement[] vertexElements)
+			: base(graphics)
+		{
+			if (vertexElements == null)
+				throw new ArgumentNullException("vertexElements");
+
+			this.SetVertexDescription(vertexElements);
+		}
+
+		public void SetData(DataBuffer data)
+		{
+			if (data == null)
+				throw new ArgumentNullException("data");
+
+			this.SetDataInternal(data, 0, data.Length, GLContext.DynamicDraw);
+		}
+	}
+
 	/// <summary>
 	/// A VertexBuffer which can be written to dynamically.
 	/// </summary>

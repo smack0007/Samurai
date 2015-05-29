@@ -561,17 +561,15 @@ namespace Samurai.Graphics
 			this.GL.SwapBuffers();
 		}
 
-		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer)
-			where T : struct
+		public void Draw(PrimitiveType type, VertexBuffer vertexBuffer)
 		{
 			if (vertexBuffer == null)
 				throw new ArgumentNullException("vertexBuffer");
 
-			this.Draw(type, vertexBuffer, 0, vertexBuffer.Count);
+			this.Draw(type, vertexBuffer, 0, vertexBuffer.Length);
 		}
 
-		public void Draw<T>(PrimitiveType type, VertexBuffer<T> vertexBuffer, int startVertex, int vertexCount)
-			where T : struct
+		public void Draw(PrimitiveType type, VertexBuffer vertexBuffer, int startVertex, int vertexCount)
 		{
 			if (vertexBuffer == null)
 				throw new ArgumentNullException("vertexBuffer");
@@ -580,8 +578,7 @@ namespace Samurai.Graphics
 			this.GL.DrawArrays((uint)type, startVertex, vertexCount);
 		}
 
-		public void Draw<TVertex, TIndex>(PrimitiveType type, VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer)
-			where TVertex : struct
+		public void Draw<TIndex>(PrimitiveType type, VertexBuffer vertexBuffer, IndexBuffer<TIndex> indexBuffer)
 			where TIndex : struct
 		{
 			if (vertexBuffer == null)
@@ -593,8 +590,7 @@ namespace Samurai.Graphics
 			this.Draw(type, vertexBuffer, indexBuffer, 0, indexBuffer.Count);
 		}
 
-		public void Draw<TVertex, TIndex>(PrimitiveType type, VertexBuffer<TVertex> vertexBuffer, IndexBuffer<TIndex> indexBuffer, int startIndex, int indexCount)
-			where TVertex : struct
+		public void Draw<TIndex>(PrimitiveType type, VertexBuffer vertexBuffer, IndexBuffer<TIndex> indexBuffer, int startIndex, int indexCount)
 			where TIndex : struct
 		{
 			if (vertexBuffer == null)

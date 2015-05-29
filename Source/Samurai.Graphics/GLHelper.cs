@@ -16,37 +16,5 @@ namespace Samurai.Graphics
 			b = (byte)((pixel & 0x0000FF00) >> 8);
 			a = (byte)((pixel & 0x000000FF));
 		}
-
-		public static uint GetVertexAttribPointerTypeForType(Type type)
-		{
-			if (type == typeof(Color3) || type == typeof(Color4))
-			{
-				return GLContext.UnsignedByte;
-			}
-			else if (type == typeof(Vector2) || type == typeof(Vector3))
-			{
-				return GLContext.Float;
-			}
-			
-			throw new SamuraiException(string.Format("Unable to determine GL type for .NET type {0}.", type));
-		}
-
-		public static int GetVertexAttribPointerSizeForType(Type type)
-		{
-			if (type == typeof(Vector2))
-			{
-				return 2;
-			}
-			else if (type == typeof(Color3) || type == typeof(Vector3))
-			{
-				return 3;
-			}
-			else if (type == typeof(Color4))
-			{
-				return 4;
-			}
-
-			throw new SamuraiException(string.Format("Unable to determine GL size for .NET type {0}.", type));
-		}
 	}
 }
