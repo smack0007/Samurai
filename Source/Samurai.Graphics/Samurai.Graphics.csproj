@@ -128,8 +128,6 @@
     <Compile Include="VertexElement.cs" />
     <Compile Include="VertexElementType.cs" />
     <Compile Include="VertexShader.cs" />
-    <Compile Include="WGLContext.cs" />
-    <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Samurai\Samurai.csproj">
