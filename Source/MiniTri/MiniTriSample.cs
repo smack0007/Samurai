@@ -28,9 +28,15 @@ namespace Samurai.Samples.MiniTri
 
 		static float[] verticies = new float[]
 		{
-			0.0f, 0.5f, 0.5f, 1f, 0, 0, 1f,
-            0.5f, -0.5f, 0.5f, 0, 1f, 0, 1f,
-			-0.5f, -0.5f, 0.5f, 0, 0, 1f, 1f
+			// Positions
+			0.0f, 0.5f, 0.5f, 
+			0.5f, -0.5f, 0.5f, 
+			-0.5f, -0.5f, 0.5f, 
+
+			// Colors
+			1f, 0, 0, 1f,
+			0, 1f, 0, 1f,
+			0, 0, 1f, 1f
 		};
 		
 		const string vertexShaderCode = @"
@@ -69,8 +75,8 @@ void main()
 
 			VertexElement[] elements = new VertexElement[]
 			{
-				new VertexElement(VertexElementType.Float, 3),
-				new VertexElement(VertexElementType.Float, 4)
+				new VertexElement(VertexElementType.Float, 3, 0, 12),
+				new VertexElement(VertexElementType.Float, 4, 36, 16)
 			};
 
 			using (DataBuffer data = DataBuffer.Create(verticies))

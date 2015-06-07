@@ -6,12 +6,18 @@ namespace Samurai.Graphics
 	{
 		public VertexElementType Type;
 
-		public int Size;
+		public int Count;
 
-		public VertexElement(VertexElementType type, int size)
+		public int Offset;
+
+		public int Stride;
+
+		public VertexElement(VertexElementType type, int count, int offset, int stride)
 		{
 			this.Type = type;
-			this.Size = size;
+			this.Count = count;
+			this.Offset = offset;
+			this.Stride = stride;
 		}
 	}
 }

@@ -37,44 +37,12 @@ namespace Samurai.Graphics
 			this.Graphics.GL.DeleteBuffer(this.buffer);
 		}
 
-		private static int GetSizeInBytes(VertexElementType type)
-		{
-			switch (type)
-			{
-				case VertexElementType.Double:
-					return 8;
-
-				case VertexElementType.Float:
-				case VertexElementType.Int:
-				case VertexElementType.UnsignedInt:
-					return 4;
-
-				case VertexElementType.Short:
-					return 2;
-					
-				case VertexElementType.UnsignedByte:
-					return 1;
-			}
-
-			throw new SamuraiException(string.Format("Unable to determine size in bytes for VertexElementType {0}.", type));
-		}
-
 		internal void SetVertexDescription(VertexElement[] elements)
 		{			
-			int vertexSize = 0;
-			uint offset = 0;
-
-			for (int i = 0; i < elements.Length; i++)
-			{
-				vertexSize += elements[i].Size * GetSizeInBytes(elements[i].Type);
-			}
-
 			for (int i = 0; i < elements.Length; i++)
 			{
 				this.Graphics.GL.EnableVertexAttribArray((uint)i);
-				this.Graphics.GL.VertexAttribPointer((uint)i, elements[i].Size, (uint)elements[i].Type, true, vertexSize, (IntPtr)offset);
-
-				offset += (uint)(elements[i].Size * GetSizeInBytes(elements[i].Type));
+				this.Graphics.GL.VertexAttribPointer((uint)i, elements[i].Count, (uint)elements[i].Type, true, elements[i].Stride, (IntPtr)elements[i].Offset);
 			}
 		}
 
@@ -98,8 +66,11 @@ namespace Samurai.Graphics
 			var vertexElements = new VertexElement[fields.Length];
 
 			int i = 0;
+			int offset = 0;
 			foreach (var field in fields.OrderBy(x => x.MetadataToken))
 			{
+				vertexElements[i].Offset = offset;
+
 				if (field.FieldType == typeof(Color3) || field.FieldType == typeof(Color4))
 				{
 					vertexElements[i].Type = VertexElementType.UnsignedByte;
@@ -115,22 +86,29 @@ namespace Samurai.Graphics
 
 				if (field.FieldType == typeof(Vector2))
 				{
-					vertexElements[i].Size = 2;
+					vertexElements[i].Count = 2;
 				}
 				else if (field.FieldType == typeof(Color3) || field.FieldType == typeof(Vector3))
 				{
-					vertexElements[i].Size = 3;
+					vertexElements[i].Count = 3;
 				}
 				else if (field.FieldType == typeof(Color4))
 				{
-					vertexElements[i].Size = 4;
+					vertexElements[i].Count = 4;
 				}
 				else
 				{
 					throw new SamuraiException(string.Format("Unable to determine size of VertexElement for .NET type {0}.", field.FieldType));
 				}
-				
+
+				offset += vertexElements[i].Count * vertexElements[i].Type.GetSizeInBytes();
 				i++;
+			}
+
+			// offset is now equivelent to the size of the vertex.
+			for (i = 0; i < vertexElements.Length; i++)
+			{
+				vertexElements[i].Stride = offset;
 			}
 
 			this.SetVertexDescription(vertexElements);
