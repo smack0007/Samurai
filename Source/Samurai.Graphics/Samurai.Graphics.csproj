@@ -81,6 +81,7 @@
     <Compile Include="Canvas2D\LinearGradientBrush.cs" />
     <Compile Include="Canvas2D\SolidColorBrush.cs" />
     <Compile Include="ColorMask.cs" />
+    <Compile Include="FrameBuffer.cs" />
     <Compile Include="GraphicsContextDescription.cs" />
     <Compile Include="IGraphicsHostControl.cs" />
     <Compile Include="ShaderCompilationException.cs" />

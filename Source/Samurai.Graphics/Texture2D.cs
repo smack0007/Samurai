@@ -28,6 +28,30 @@ namespace Samurai.Graphics
 		{
 		}
 
+		public Texture2D(
+			GraphicsContext graphics,
+			int width,
+			int height)
+			: base(graphics)
+		{
+			graphics.GL.ActiveTexture(GLContext.Texture0 + this.Index);
+			graphics.GL.BindTexture(GLContext.Texture2D, this.Handle);
+
+			graphics.GL.TexImage2D(
+				GLContext.Texture2D,
+				0,
+				(int)GLContext.Rgba8,
+				width,
+				height,
+				0,
+				GLContext.Rgba,
+				(int)GLContext.UnsignedByte,
+				null);
+
+			this.Width = width;
+			this.Height = height;
+		}
+
 		public static Texture2D LoadFromFile(GraphicsContext graphics, string fileName, TextureParams parameters)
 		{
 			if (graphics == null)

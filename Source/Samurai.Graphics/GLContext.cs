@@ -66,13 +66,6 @@ namespace Samurai.Graphics
 		public const uint Never = 0x0200;
 		public const uint Notequal = 0x0205;
 
-		// Faces
-		public const uint Back = 0x0405;
-		public const uint Cw = 0x0900;
-		public const uint Ccw = 0x0901;
-		public const uint Front = 0x0404;
-		public const uint FrontAndBack = 0x0408;
-
 		// Error Codes
 		public const uint InvalidEnum = 0x0500;
 		public const uint InvalidFramebufferOperation = 0x0506;
@@ -83,6 +76,19 @@ namespace Samurai.Graphics
 		public const uint StackOverflow = 0x0503;
 		public const uint StackUnderflow = 0x0504;
 		public const uint TableTooLarge = 0x8031;
+
+		// Faces
+		public const uint Back = 0x0405;
+		public const uint Cw = 0x0900;
+		public const uint Ccw = 0x0901;
+		public const uint Front = 0x0404;
+		public const uint FrontAndBack = 0x0408;
+
+		// Framebuffers
+		public const uint DrawFramebuffer = 0x8CA9;
+		public const uint Framebuffer = 0x8D40;
+		public const uint FramebufferComplete = 0x8CD5;
+		public const uint ReadFramebuffer = 0x8CA8;
 
 		// Get
 		public const uint NumExtensions = 0x821D;
@@ -159,6 +165,9 @@ namespace Samurai.Graphics
 		private delegate void __BindBuffer(uint target, uint buffer);
 		private __BindBuffer _BindBuffer;
 
+		private delegate void __BindFramebuffer(uint target, uint framebuffer);
+		private __BindFramebuffer _BindFramebuffer;
+
 		[DllImport(Library, EntryPoint = "glBindTexture")]
 		private static extern void _BindTexture(uint target, uint texture);
 
@@ -170,6 +179,9 @@ namespace Samurai.Graphics
 
 		private delegate void __BufferData(uint target, IntPtr size, IntPtr data, uint usage);
 		private __BufferData _BufferData;
+
+		private delegate uint __CheckFramebufferStatus(uint target);
+		private __CheckFramebufferStatus _CheckFramebufferStatus;
 
 		[DllImport(Library, EntryPoint = "glClear")]
 		private static extern void _Clear(uint mask);
@@ -194,6 +206,9 @@ namespace Samurai.Graphics
 
 		private delegate void __DeleteBuffers(int n, uint[] buffers);
 		private __DeleteBuffers _DeleteBuffers;
+
+		private delegate void __DeleteFramebuffers(int n, uint[] framebuffers);
+		private __DeleteFramebuffers _DeleteFramebuffers;
 				
 		private delegate void __DeleteProgram(uint program);
 		private __DeleteProgram _DeleteProgram;
@@ -242,6 +257,9 @@ namespace Samurai.Graphics
 
 		private delegate void __GenBuffers(int n, [Out] uint[] buffers);
 		private __GenBuffers _GenBuffers;
+
+		private delegate void __GenFramebuffers(int n, [Out] uint[] buffers);
+		private __GenFramebuffers _GenFramebuffers;
 
 		[DllImport(Library, EntryPoint = "glGenTextures")]
 		private static extern void _GenTextures(int n, [Out] uint[] textures);
@@ -329,17 +347,21 @@ namespace Samurai.Graphics
 			_AttachShader = (__AttachShader)GetProcAddress<__AttachShader>(host, "glAttachShader");
 			_BindAttribLocation = (__BindAttribLocation)GetProcAddress<__BindAttribLocation>(host, "glBindAttribLocation");
 			_BindBuffer = (__BindBuffer)GetProcAddress<__BindBuffer>(host, "glBindBuffer");
+			_BindFramebuffer = (__BindFramebuffer)GetProcAddress<__BindFramebuffer>(host, "glBindFramebuffer");
 			_BindVertexArray = (__BindVertexArray)GetProcAddress<__BindVertexArray>(host, "glBindVertexArray");
 			_BufferData = (__BufferData)GetProcAddress<__BufferData>(host, "glBufferData");
+			_CheckFramebufferStatus = (__CheckFramebufferStatus)GetProcAddress<__CheckFramebufferStatus>(host, "glCheckFramebufferStatus");
 			_CompileShader = (__CompileShader)GetProcAddress<__CompileShader>(host, "glCompileShader");
 			_CreateProgram = (__CreateProgram)GetProcAddress<__CreateProgram>(host, "glCreateProgram");
 			_CreateShader = (__CreateShader)GetProcAddress<__CreateShader>(host, "glCreateShader");
 			_DeleteBuffers = (__DeleteBuffers)GetProcAddress<__DeleteBuffers>(host, "glDeleteBuffers");
+			_DeleteFramebuffers = (__DeleteFramebuffers)GetProcAddress<__DeleteFramebuffers>(host, "glDeleteFramebuffers");
 			_DeleteProgram = (__DeleteProgram)GetProcAddress<__DeleteProgram>(host, "glDeleteProgram");
 			_DeleteShader = (__DeleteShader)GetProcAddress<__DeleteShader>(host, "glDeleteShader");
 			_DeleteVertexArrays = (__DeleteVertexArrays)GetProcAddress<__DeleteVertexArrays>(host, "glDeleteVertexArrays");
 			_EnableVertexAttribArray = (__EnableVertexAttribArray)GetProcAddress<__EnableVertexAttribArray>(host, "glEnableVertexAttribArray");
 			_GenBuffers = (__GenBuffers)GetProcAddress<__GenBuffers>(host, "glGenBuffers");
+			_GenFramebuffers = (__GenFramebuffers)GetProcAddress<__GenFramebuffers>(host, "glGenFramebuffers");
 			_GenVertexArrays = (__GenVertexArrays)GetProcAddress<__GenVertexArrays>(host, "glGenVertexArrays");
 			_GetShaderInfoLog = (__GetShaderInfoLog)GetProcAddress<__GetShaderInfoLog>(host, "glGetShaderInfoLog");
 			_GetShaderiv = (__GetShaderiv)GetProcAddress<__GetShaderiv>(host, "glGetShaderiv");
@@ -420,6 +442,12 @@ namespace Samurai.Graphics
 			CheckErrors("BindBuffer");
 		}
 
+		public void BindFramebuffer(uint target, uint framebuffer)
+		{
+			_BindFramebuffer(target, framebuffer);
+			CheckErrors("BindFramebuffer");
+		}
+
 		public void BindTexture(uint target, uint texture)
 		{
 			_BindTexture(target, texture);
@@ -461,6 +489,13 @@ namespace Samurai.Graphics
 			}
 
 			CheckErrors("BufferData");
+		}
+
+		public uint CheckFramebufferStatus(uint target)
+		{
+			uint result = _CheckFramebufferStatus(target);
+			CheckErrors("CheckFramebufferStatus");
+			return result;
 		}
 
 		public void Clear(uint mask)
@@ -634,12 +669,11 @@ namespace Samurai.Graphics
 			return UintArraySizeOne[0];
 		}
 
-		public uint[] GenBuffers(int n)
+		public uint GenFramebuffer()
 		{
-			uint[] buffers = new uint[n];
-			_GenBuffers(n, buffers);
-			CheckErrors("GenBuffers");
-			return buffers;
+			_GenFramebuffers(1, UintArraySizeOne);
+			CheckErrors("GenFramebuffers");
+			return UintArraySizeOne[0];
 		}
 
 		public uint GenTexture()
@@ -648,30 +682,14 @@ namespace Samurai.Graphics
 			CheckErrors("GenTextures");
 			return UintArraySizeOne[0];
 		}
-
-		public uint[] GenTextures(int n)
-		{
-			uint[] textures = new uint[n];
-			_GenTextures(n, textures);
-			CheckErrors("GenTextures");
-			return textures;
-		}
-
+				
 		public uint GenVertexArray()
 		{
 			_GenVertexArrays(1, UintArraySizeOne);
 			CheckErrors("GenVertexArrays");
 			return UintArraySizeOne[0];
 		}
-
-		public uint[] GenVertexArrays(int n)
-		{
-			uint[] arrays = new uint[n];
-			_GenVertexArrays(n, arrays);
-			CheckErrors("GenVertexArrays");
-			return arrays;
-		}
-
+		
 		public string GetShaderInfoLog(uint shader)
 		{
 			StringBuilder infoLog = new StringBuilder(1024);
