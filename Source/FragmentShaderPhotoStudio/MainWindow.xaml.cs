@@ -32,8 +32,7 @@ namespace FragmentShaderPhotoStudio
 	public partial class MainWindow : Window
 	{
 		private static readonly string vertexShaderCode =
-@"#version 330 
-
+@"
 uniform vec2 vertSize; 
 uniform mat4 vertTransform; 
 
@@ -47,9 +46,7 @@ void main()
 	gl_Position = vertTransform * vec4(vertPosition.x * vertSize.x, vertPosition.y * vertSize.y, 1.0, 1.0); 
     pixelCoords = vertTexCoords; 
 }";
-
-		private static readonly string versionHeader = "#version 330" + Environment.NewLine;
-
+        		
 		private static readonly string defaultFragmentShaderCode =
 @"uniform sampler2D picture;
 uniform vec2 pictureSize;
@@ -144,7 +141,7 @@ void main()
 			this.currentShaderProgram = new ShaderProgram(
 				e.Graphics,
 				VertexShader.Compile(e.Graphics, vertexShaderCode),
-				FragmentShader.Compile(e.Graphics, versionHeader + defaultFragmentShaderCode));
+				FragmentShader.Compile(e.Graphics, defaultFragmentShaderCode));
 
 			this.currentPicture = Texture2D.LoadFromFile(e.Graphics, "SamuraiLogo.png", new TextureParams());
 
@@ -201,7 +198,7 @@ void main()
 
 			try
 			{
-				fragmentShader = FragmentShader.Compile(this.GraphicsBox.Graphics, versionHeader + this.ShaderCodeBox.Text);
+				fragmentShader = FragmentShader.Compile(this.GraphicsBox.Graphics, this.ShaderCodeBox.Text);
 
 				shaderProgram = new ShaderProgram(this.GraphicsBox.Graphics, vertexShader, fragmentShader);
 

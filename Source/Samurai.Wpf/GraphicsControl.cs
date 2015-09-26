@@ -1,11 +1,7 @@
 ﻿using Samurai.Graphics;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -16,14 +12,11 @@ namespace Samurai.Wpf
     {
         private const string WindowClass = "SamuraiWpfGraphicsControlClass";
 
-        IntPtr hWnd;
+        private IntPtr hWnd;
+        private IntPtr hDC;
+        private IntPtr hRC;
 
         int oldWindowWidth, oldWindowHeight;        
-
-        IntPtr IGraphicsHostContext.Handle
-        {
-            get { return this.hWnd; }
-        }
 
         int IGraphicsHostContext.Width
         {
@@ -63,6 +56,8 @@ namespace Samurai.Wpf
 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                this.CreateWglContext();
+
                 this.Graphics = new GraphicsContext(this);
                 this.Graphics.Viewport = new Rectangle(0, 0, (int)this.ActualWidth, (int)this.ActualHeight);
                 this.OnGraphicsContextCreated(new GraphicsContextEventArgs(this.Graphics));
@@ -71,6 +66,68 @@ namespace Samurai.Wpf
             }
 
             return new HandleRef(this, this.hWnd);
+        }
+
+        private void CreateWglContext()
+        {
+            this.hDC = Win32.GetDC(hWnd);
+
+            if (this.hDC == IntPtr.Zero)
+                throw new SamuraiException("Could not get a device context (hDC).");
+
+            Win32.PixelFormatDescriptor pfd = new Win32.PixelFormatDescriptor();
+            pfd.nSize = (ushort)Marshal.SizeOf(typeof(Win32.PixelFormatDescriptor));
+            pfd.nVersion = 1;
+            pfd.dwFlags = (Win32.PFD_SUPPORT_OPENGL | Win32.PFD_DRAW_TO_WINDOW | Win32.PFD_DOUBLEBUFFER);
+            pfd.iPixelType = (byte)Win32.PFD_TYPE_RGBA;
+            pfd.cColorBits = (byte)Win32.GetDeviceCaps(this.hDC, Win32.BITSPIXEL);
+            pfd.cDepthBits = 32;
+            pfd.iLayerType = (byte)Win32.PFD_MAIN_PLANE;
+
+            int pixelformat = Win32.ChoosePixelFormat(this.hDC, ref pfd);
+
+            if (pixelformat == 0)
+                throw new SamuraiException("Could not find A suitable pixel format.");
+
+            if (Win32.SetPixelFormat(this.hDC, pixelformat, ref pfd) == 0)
+                throw new SamuraiException("Could not set the pixel format.");
+
+            IntPtr tempContext = WGL.CreateContext(this.hDC);
+
+            if (tempContext == IntPtr.Zero)
+                throw new SamuraiException("Unable to create temporary render context.");
+
+            if (!WGL.MakeCurrent(hDC, tempContext))
+                throw new SamuraiException("Unable to make temporary render context current.");
+
+            int[] attribs = new int[]
+            {
+                (int)WGL.ContextMajorVersionArb, 3,
+                (int)WGL.ContextMinorVersionArb, 3,
+                (int)WGL.ContextFlagsArb, (int)0,
+                0
+            };
+
+            IntPtr proc = this.GetProcAddress("wglCreateContextAttribsARB");
+            WGL.CreateContextAttribsARB createContextAttribs = (WGL.CreateContextAttribsARB)Marshal.GetDelegateForFunctionPointer(proc, typeof(WGL.CreateContextAttribsARB));
+            this.hRC = createContextAttribs(this.hDC, IntPtr.Zero, attribs);
+
+            WGL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
+            WGL.DeleteContext(tempContext);
+
+            if (this.hRC == IntPtr.Zero)
+                throw new SamuraiException("Unable to create render context.");
+
+            if (!WGL.MakeCurrent(this.hDC, this.hRC))
+                throw new SamuraiException("Unable to make render context current.");
+        }
+
+        private void DeleteWglContext()
+        {
+            WGL.MakeCurrent(IntPtr.Zero, IntPtr.Zero);
+            WGL.DeleteContext(this.hRC);
+
+            Win32.ReleaseDC(this.hWnd, this.hDC);
         }
 
         private void CompositionTarget_Rendering(object sender, EventArgs e)
@@ -85,6 +142,7 @@ namespace Samurai.Wpf
         protected override void DestroyWindowCore(HandleRef hwnd)
         {
             this.Graphics.Dispose();
+            this.DeleteWglContext();
             Win32.DestroyWindow(this.hWnd);
             this.hWnd = IntPtr.Zero;
         }
@@ -151,6 +209,9 @@ namespace Samurai.Wpf
                     oldViewport.Height + ((int)this.ActualHeight - this.oldWindowHeight));
             }
 
+            this.oldWindowWidth = (int)this.ActualWidth;
+            this.oldWindowHeight = (int)this.ActualHeight;
+
             base.OnRenderSizeChanged(sizeInfo);
         }
 
@@ -167,6 +228,21 @@ namespace Samurai.Wpf
         {
             if (this.Render != null)
                 this.Render(this, e);
+        }
+
+        public IntPtr GetProcAddress(string name)
+        {
+            return WGL.GetProcAddress(name);
+        }
+
+        public bool MakeCurrent()
+        {
+            return WGL.MakeCurrent(this.hDC, this.hRC);
+        }
+
+        public void SwapBuffers()
+        {
+            WGL.SwapBuffers(this.hDC);
         }
     }
 }

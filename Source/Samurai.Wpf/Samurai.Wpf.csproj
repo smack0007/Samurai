@@ -46,6 +46,7 @@
     <Compile Include="GraphicsContextEventArgs.cs" />
     <Compile Include="GraphicsControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WGL.cs" />
     <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>
