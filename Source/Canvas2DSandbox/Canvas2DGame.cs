@@ -1,5 +1,5 @@
 ﻿using Samurai;
-using Samurai.GameFramework;
+using Samurai.GLFW;
 using Samurai.Graphics;
 using Samurai.Graphics.Canvas2D;
 using System;
@@ -59,8 +59,8 @@ namespace Canvas2DSandbox
             this.polygonPositions[6] = new Vector2(700, 550);
             this.polygonPositions[7] = new Vector2(750, 150);
         }
-                
-        protected override void Draw(TimingState time)
+
+        protected override void Draw(TimeSpan elapsed)
         {
             this.Graphics.Clear();
 
@@ -96,7 +96,7 @@ namespace Canvas2DSandbox
             this.textureBrush.Source = new Rectangle(96, 96, 64, 64);
             this.canvas.DrawRectangle(new Rectangle((int)center.X - 32, (int)center.Y - 32, 64, 64), this.textureBrush);
                                   
-            this.rotation += (float)time.ElapsedTime.TotalSeconds * 36.0f;
+            this.rotation += (float)elapsed.TotalSeconds * 36.0f;
 
             this.textureBrush.Texture = this.lineStripe;
             this.textureBrush.Tint = Color4.Red;
