@@ -98,6 +98,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Samurai.GLFW\Samurai.GLFW.csproj">
+      <Project>{3ceef1df-9d87-46f4-9fb5-2436f3feba82}</Project>
+      <Name>Samurai.GLFW</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Samurai.Graphics\Samurai.Graphics.csproj">
       <Project>{206d7c47-54b6-4562-b49f-c15009d6b8c6}</Project>
       <Name>Samurai.Graphics</Name>
