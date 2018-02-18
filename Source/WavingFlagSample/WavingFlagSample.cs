@@ -2,16 +2,12 @@
 using Samurai.GLFW;
 using Samurai.Graphics;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WavingFlagSample
 {
-	public class WavingFlagSample : Game
+    public class WavingFlagSample : Game
 	{
 		[StructLayout(LayoutKind.Sequential)]
 		struct Vertex

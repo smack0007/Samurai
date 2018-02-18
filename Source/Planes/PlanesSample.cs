@@ -32,16 +32,16 @@ namespace Planes
 			this.shaderProgram = new BasicSpriteShaderProgram(this.Graphics);
 						
 			this.planesTexture = Texture2D.LoadFromFile(this.Graphics, "Planes.png", new TextureParams()
-				{
-				});
+			{
+			});
 
 			this.planeSpriteSheet = SpriteSheet.Build(this.planesTexture, 64, 64);
 
 			this.font = TextureFont.Build(this.Graphics, "Segoe UI", 72, new TextureFontParams()
-				{
-					Color = Color4.White,
-					BackgroundColor = Color4.Transparent,
-				});
+			{
+				Color = Color4.White,
+				BackgroundColor = Color4.Transparent,
+			});
 						
 			Random random = new Random();
 
